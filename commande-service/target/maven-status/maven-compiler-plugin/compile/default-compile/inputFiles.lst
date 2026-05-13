@@ -1,9 +1,0 @@
-/mnt/c/Users/bde_v/IdeaProjects/Services Platform/commande-service/src/main/java/org/gestion/commande/CommandServiceApplication.java
-/mnt/c/Users/bde_v/IdeaProjects/Services Platform/commande-service/src/main/java/org/gestion/commande/config/SecurityConfig.java
-/mnt/c/Users/bde_v/IdeaProjects/Services Platform/commande-service/src/main/java/org/gestion/commande/dto/CommandeRequest.java
-/mnt/c/Users/bde_v/IdeaProjects/Services Platform/commande-service/src/main/java/org/gestion/commande/dto/CommandeResponse.java
-/mnt/c/Users/bde_v/IdeaProjects/Services Platform/commande-service/src/main/java/org/gestion/commande/handler/CommandeHandler.java
-/mnt/c/Users/bde_v/IdeaProjects/Services Platform/commande-service/src/main/java/org/gestion/commande/model/Commande.java
-/mnt/c/Users/bde_v/IdeaProjects/Services Platform/commande-service/src/main/java/org/gestion/commande/repository/CommandeRepository.java
-/mnt/c/Users/bde_v/IdeaProjects/Services Platform/commande-service/src/main/java/org/gestion/commande/router/CommandeRouter.java
-/mnt/c/Users/bde_v/IdeaProjects/Services Platform/commande-service/src/main/java/org/gestion/commande/service/CommandeService.java

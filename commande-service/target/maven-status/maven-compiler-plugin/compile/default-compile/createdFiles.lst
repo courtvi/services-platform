@@ -1,9 +1,0 @@
-org/gestion/commande/CommandServiceApplication.class
-org/gestion/commande/model/Commande.class
-org/gestion/commande/dto/CommandeResponse.class
-org/gestion/commande/dto/CommandeRequest.class
-org/gestion/commande/handler/CommandeHandler.class
-org/gestion/commande/service/CommandeService.class
-org/gestion/commande/repository/CommandeRepository.class
-org/gestion/commande/router/CommandeRouter.class
-org/gestion/commande/config/SecurityConfig.class

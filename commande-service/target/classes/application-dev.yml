@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: commande-service
+
+  r2dbc:
+    url: r2dbc:h2:mem:///commandedb;DB_CLOSE_DELAY=-1;NON_KEYWORDS=VALUE
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  sql:
+    init:
+      mode: always        # ✅ exécute schema.sql au démarrage
+      schema-locations: classpath:schema.sql
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://keycloak:8080/realms/camping-haller
+          jwk-set-uri: http://keycloak:8080/realms/camping-haller/protocol/openid-connect/certs
+
+server:
+  port: 8082
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+management:
+  endpoints:
+    web:
+      base-path: /manage
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+

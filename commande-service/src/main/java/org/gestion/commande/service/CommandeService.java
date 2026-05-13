@@ -1,33 +1,63 @@
 package org.gestion.commande.service;
 
+import org.gestion.commande.dto.CommandeAvecLignes;
 import org.gestion.commande.dto.CommandeRequest;
 import org.gestion.commande.dto.CommandeResponse;
 import org.gestion.commande.model.Commande;
+import org.gestion.commande.model.LigneCommande;
 import org.gestion.commande.repository.CommandeRepository;
+import org.gestion.commande.repository.LigneCommandeRepository;
 import org.springframework.stereotype.Service;
+
+import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class CommandeService {
 
     private final CommandeRepository commandeRepository;
+    private final LigneCommandeRepository ligneCommandeRepository;
+    private final TransactionalOperator transactionalOperator;
 
-    public CommandeService(CommandeRepository commandeRepository) {
+    public CommandeService(CommandeRepository commandeRepository,
+                           LigneCommandeRepository ligneCommandeRepository,
+                           TransactionalOperator transactionalOperator) {
         this.commandeRepository = commandeRepository;
+        this.ligneCommandeRepository = ligneCommandeRepository;
+        this.transactionalOperator = transactionalOperator;
     }
 
-    // ✅ CREATE — userId extrait du JWT dans le Controller
     public Mono<CommandeResponse> createCommande(CommandeRequest request, String userId) {
+
         Commande commande = new Commande();
         commande.setUserId(userId);
         commande.setReference(request.reference());
-        commande.setStatut("CREEE");                    // imposé côté serveur
-        commande.setDateCommande(LocalDateTime.now());  // imposé côté serveur
+        commande.setStatut("CREEE");
+        commande.setDateCommande(LocalDateTime.now());
 
-        return commandeRepository.save(commande)
+        return transactionalOperator.execute(status ->
+
+                        commandeRepository.save(commande)
+                                .flatMap(saved -> {
+
+                                    List<LigneCommande> lignes = request.lignes().stream()
+                                            .map(dto -> {
+                                                LigneCommande l = new LigneCommande();
+                                                l.setCommandeId(saved.getId());
+                                                l.setArticle(dto.article());
+                                                l.setQuantite(dto.quantite());
+                                                return l;
+                                            })
+                                            .toList();
+
+                                    return ligneCommandeRepository.saveAll(lignes)
+                                            .then(Mono.just(saved));
+                                })
+                ).next()
                 .map(this::toResponse);
     }
 
@@ -97,5 +127,21 @@ public class CommandeService {
                 commande.getStatut(),
                 commande.getDateCommande()
         );
+    }
+
+
+    public Mono<CommandeAvecLignes> getCommande(Long id) {
+
+        Mono<Commande> commandeMono = commandeRepository.findById(id);
+
+        Mono<List<LigneCommande>> lignesMono =
+                ligneCommandeRepository.findByCommandeId(id)
+                        .collectList();
+
+        return Mono.zip(commandeMono, lignesMono)
+                .map(tuple -> new CommandeAvecLignes(
+                        tuple.getT1(),
+                        tuple.getT2()
+                ));
     }
 }

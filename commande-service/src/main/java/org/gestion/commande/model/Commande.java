@@ -2,9 +2,12 @@ package org.gestion.commande.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Table(name = "COMMANDES")
 public class Commande {
@@ -24,6 +27,7 @@ public class Commande {
     @Column("DATE_COMMANDE")
     private LocalDateTime dateCommande;
 
+
     // constructeurs, getters, setters...
 
     public Commande(Long id, String userId, String reference,
@@ -33,6 +37,7 @@ public class Commande {
         this.reference = reference;
         this.statut = statut;
         this.dateCommande = dateCommande;
+
     }
     public Commande() {
 
@@ -53,6 +58,6 @@ public class Commande {
 
     public LocalDateTime getDateCommande() { return dateCommande; }
     public void setDateCommande(LocalDateTime dateCommande) {
-        this.dateCommande = dateCommande;
-    }
+        this.dateCommande = dateCommande;    }
+
 }
