@@ -1,0 +1,61 @@
+spring:
+  application:
+    name: api-gateway
+
+  # ✅ Keycloak — realm camping-haller
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9090/realms/camping-haller
+          jwk-set-uri: http://localhost:9090/realms/camping-haller/protocol/openid-connect/certs
+
+server:
+  port: 8090
+
+cloud:
+  gateway:
+    # ✅ Propagation automatique du JWT aux microservices
+    default-filters:
+      - TokenRelay=
+    routes:
+      # ✅ Route → commande-service
+      - id: commande-service
+        uri: lb://commande-service
+        predicates:
+        - Path=/api/commandes/**
+        filters:
+        - RewritePath=/api/commandes/(?<segment>.*), /api/commandes/${segment}
+
+      # ✅ Route → product-service
+      - id: product-service
+        uri: lb://product-service
+        predicates:
+        - Path=/api/products/**
+
+      # ✅ Route → client-service
+      - id: client-service
+        uri: lb://client-service
+        predicates:
+        - Path=/api/clients/**
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://eureka-service:8761/eureka
+
+management:
+  endpoints:
+    web:
+      base-path: /manage
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+

@@ -1,0 +1,48 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: commande-service
+  namespace: camping-haller
+  labels:
+    app: commande-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: commande-service
+  template:
+    metadata:
+      labels:
+        app: commande-service
+    spec:
+      containers:
+        - name: commande-service
+          image: commande-service:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8082
+          env:
+            - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
+              value: http://keycloak:8080/realms/camping-haller
+            - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI
+              value: http://keycloak:8080/realms/camping-haller/protocol/openid-connect/certs
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: http://eureka-service:8761/eureka
+            - name: SPRING_R2DBC_URL
+              value: r2dbc:h2:mem:///commandedb;DB_CLOSE_DELAY=-1
+            - name: SERVER_PORT
+              value: "8082"
+          readinessProbe:
+            httpGet:
+              path: /manage/health
+              port: 8082
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 5
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"

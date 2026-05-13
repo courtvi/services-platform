@@ -1,0 +1,35 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: product-service
+
+  r2dbc:
+    url: r2dbc:h2:mem:///testdb
+  sql:
+    init:
+      mode: always
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    enabled: false
+    register-with-eureka: false
+    fetch-registry: false
+  service-url:
+    defaultZone: http://localhost:8761/eureka
+
+management:
+  endpoints:
+    web:
+      base-path: /manage
+      exposure:
+        include: "*"
+
+logging:
+  level:
+    org.springframework.r2dbc: DEBUG
+    io.r2dbc.h2: DEBUG
+    org.springframework.r2dbc.core: DEBUG

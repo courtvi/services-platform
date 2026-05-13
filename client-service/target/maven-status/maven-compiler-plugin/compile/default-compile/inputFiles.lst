@@ -1,0 +1,6 @@
+/mnt/c/Users/bde_v/IdeaProjects/Services Platform/client-service/src/main/java/org/gestion/client/ClientServiceApplication.java
+/mnt/c/Users/bde_v/IdeaProjects/Services Platform/client-service/src/main/java/org/gestion/client/dto/ClientRequest.java
+/mnt/c/Users/bde_v/IdeaProjects/Services Platform/client-service/src/main/java/org/gestion/client/dto/ClientResponse.java
+/mnt/c/Users/bde_v/IdeaProjects/Services Platform/client-service/src/main/java/org/gestion/client/model/Client.java
+/mnt/c/Users/bde_v/IdeaProjects/Services Platform/client-service/src/main/java/org/gestion/client/repository/ClientRepository.java
+/mnt/c/Users/bde_v/IdeaProjects/Services Platform/client-service/src/main/java/org/gestion/client/service/ClientService.java

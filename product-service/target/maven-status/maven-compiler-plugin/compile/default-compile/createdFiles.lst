@@ -1,0 +1,10 @@
+org/gestion/product/reactivewebservice/ProductClient.class
+org/gestion/product/service/ProductService.class
+org/gestion/product/ProductServiceApplication.class
+org/gestion/product/reactivewebservice/ProductHandler.class
+org/gestion/product/dto/ProductRequest.class
+org/gestion/product/reactivewebservice/ProductRouter.class
+org/gestion/product/mapper/ProductMapper.class
+org/gestion/product/model/Product.class
+org/gestion/product/repository/ProductRepository.class
+org/gestion/product/dto/ProductResponse.class

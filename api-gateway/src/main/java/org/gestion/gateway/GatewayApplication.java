@@ -1,0 +1,35 @@
+package org.gestion.gateway;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.gateway.route.RouteLocator;
+import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
+import org.springframework.context.annotation.Bean;
+
+@SpringBootApplication
+public class GatewayApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(GatewayApplication.class, args);
+    }
+
+    @Bean
+    public RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route( r-> r.path("/api/products/**")
+                        .filters(f->f.rewritePath("/api/products/(?<remains>.*)","/${remains}"))
+                        .uri("lb://product-service/")
+
+                )
+                .route( r-> r.path("/api/commandes/**")
+                        .filters(f->f.rewritePath("/api/commandes/(?<remains>.*)","/${remains}"))
+                        .uri("lb://commande-service/")
+
+                )
+                .route(r->r.path("/api/auth/**")
+                        .filters(f->f.rewritePath("/api/auth/(?<remains>.*)","/${remains}"))
+                        .uri("lb://auth-service")
+
+                ).build();
+    }
+}
