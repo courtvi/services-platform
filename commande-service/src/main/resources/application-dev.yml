@@ -14,14 +14,14 @@ spring:
 
   sql:
     init:
-      mode: always        # ✅ exécute schema.sql au démarrage
+      mode: always
       schema-locations: classpath:schema.sql
 
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://keycloak:8080/realms/camping-haller
+          issuer-uri: http://localhost:30090/realms/camping-haller
           jwk-set-uri: http://keycloak:8080/realms/camping-haller/protocol/openid-connect/certs
 
 server:
@@ -34,7 +34,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://eureka-service:8761/eureka
 
 management:
   endpoints:

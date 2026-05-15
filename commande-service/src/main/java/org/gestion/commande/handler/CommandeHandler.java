@@ -34,7 +34,6 @@ public class CommandeHandler {
                 .map(principal -> (Authentication) principal);
     }
 
-    // POST /api/commandes
     public Mono<ServerResponse> createCommande(ServerRequest request) {
         return extractUserId(request)
                 .flatMap(userId ->
@@ -51,7 +50,6 @@ public class CommandeHandler {
                 );
     }
 
-    // GET /api/commandes — ROLE_CLIENT : ses commandes / ROLE_ADMIN : toutes
     public Mono<ServerResponse> getCommandes(ServerRequest request) {
         return extractAuthentication(request)
                 .flatMap(authentication -> {
@@ -79,7 +77,19 @@ public class CommandeHandler {
                 );
     }
 
-    // GET /api/commandes/{id}
+    // GET /api/commandes/{id}/detail — avec lignes
+    public Mono<ServerResponse> getCommandeAvecLignes(ServerRequest request) {
+        Long id = Long.parseLong(request.pathVariable("id"));
+
+        return commandeService.getCommande(id)
+                .flatMap(response ->
+                        ServerResponse.ok().bodyValue(response)
+                )
+                .onErrorResume(e ->
+                        ServerResponse.status(404).bodyValue(e.getMessage())
+                );
+    }
+
     public Mono<ServerResponse> getCommandeById(ServerRequest request) {
         Long id = Long.parseLong(request.pathVariable("id"));
 
@@ -95,7 +105,6 @@ public class CommandeHandler {
                 );
     }
 
-    // PUT /api/commandes/{id}
     public Mono<ServerResponse> updateCommande(ServerRequest request) {
         Long id = Long.parseLong(request.pathVariable("id"));
 
@@ -114,7 +123,6 @@ public class CommandeHandler {
                 );
     }
 
-    // DELETE /api/commandes/{id}
     public Mono<ServerResponse> annulerCommande(ServerRequest request) {
         Long id = Long.parseLong(request.pathVariable("id"));
 

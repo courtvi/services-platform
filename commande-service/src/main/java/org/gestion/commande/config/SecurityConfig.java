@@ -1,5 +1,6 @@
 package org.gestion.commande.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -28,11 +29,11 @@ import java.util.stream.Collectors;
 @EnableWebFluxSecurity
 public class SecurityConfig {
 
-    private static final String JWK_SET_URI =
-            "http://localhost:9090/realms/camping-haller/protocol/openid-connect/certs";
+    @Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}")
+    private String jwkSetUri;
 
-    private static final String ISSUER_URI =
-            "http://localhost:9090/realms/camping-haller";
+    @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
+    private String issuerUri;
 
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
@@ -65,11 +66,11 @@ public class SecurityConfig {
     @Bean
     public ReactiveJwtDecoder jwtDecoder() {
         NimbusReactiveJwtDecoder decoder = NimbusReactiveJwtDecoder
-                .withJwkSetUri(JWK_SET_URI)
+                .withJwkSetUri(jwkSetUri)
                 .build();
 
         OAuth2TokenValidator<Jwt> validator = new DelegatingOAuth2TokenValidator<>(
-                new JwtIssuerValidator(ISSUER_URI),
+                new JwtIssuerValidator(issuerUri),
                 new JwtTimestampValidator()
         );
 

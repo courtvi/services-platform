@@ -1,4 +1,4 @@
-﻿apiVersion: apps/v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: keycloak
@@ -18,47 +18,42 @@ spec:
       containers:
         - name: keycloak
           image: quay.io/keycloak/keycloak:26.2.4
-
-          args: [ "start-dev", "--import-realm" ]
-
+          args: ["start-dev", "--import-realm"]
           ports:
-              - containerPort: 8080
-
+            - containerPort: 8080
           env:
-              - name: KEYCLOAK_ADMIN
-                value: admin
-
-              - name: KEYCLOAK_ADMIN_PASSWORD
-                value: admin
-
-              - name: KC_HTTP_ENABLED
-                value: "true"
-
-              - name: KC_HOSTNAME_STRICT
-                value: "false"
-
-              - name: KC_IMPORT_STRATEGY
-                value: OVERWRITE_EXISTING
-
+            - name: KEYCLOAK_ADMIN
+              value: admin
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              value: admin
+            - name: KC_HTTP_ENABLED
+              value: "true"
+            - name: KC_HOSTNAME_STRICT
+              value: "false"
+            - name: KC_HOSTNAME_STRICT_BACKCHANNEL
+              value: "false"
+            - name: KC_IMPORT_STRATEGY
+              value: OVERWRITE_EXISTING
+            - name: KC_HOSTNAME
+              value: "localhost"
+            - name: KC_HOSTNAME_PORT
+              value: "30090"
           volumeMounts:
             - name: realm-config
               mountPath: /opt/keycloak/data/import
-
           readinessProbe:
             httpGet:
               path: /realms/master
               port: 8080
-            initialDelaySeconds: 40
+            initialDelaySeconds: 60
             periodSeconds: 15
             failureThreshold: 5
-
           livenessProbe:
             httpGet:
               path: /realms/master
               port: 8080
-            initialDelaySeconds: 80
+            initialDelaySeconds: 90
             periodSeconds: 20
-
           resources:
             requests:
               memory: "512Mi"
@@ -66,7 +61,6 @@ spec:
             limits:
               memory: "1Gi"
               cpu: "500m"
-
       volumes:
         - name: realm-config
           configMap:

@@ -21,7 +21,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://keycloak:8080/realms/camping-haller
+          issuer-uri: http://localhost:30090/realms/camping-haller
           jwk-set-uri: http://keycloak:8080/realms/camping-haller/protocol/openid-connect/certs
 
 server:

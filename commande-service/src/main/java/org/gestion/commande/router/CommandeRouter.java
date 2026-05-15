@@ -20,6 +20,7 @@ public class CommandeRouter {
                         .POST("",        handler::createCommande)
                         .GET("",         handler::getCommandes)
                         .GET("/{id}",    handler::getCommandeById)
+                        .GET("/{id}/detail",   handler::getCommandeAvecLignes)
                         .PUT("/{id}",    handler::updateCommande)
                         .DELETE("/{id}", handler::annulerCommande)
                         .GET("/debug", request ->

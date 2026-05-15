@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: api-gateway
   namespace: camping-haller
+  labels:
+    app: api-gateway
 spec:
   replicas: 1
   selector:
@@ -22,3 +24,25 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: "kubernetes"
+            - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
+              value: "http://localhost:30090/realms/camping-haller"
+            - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI
+              value: "http://keycloak:8080/realms/camping-haller/protocol/openid-connect/certs"
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: "http://eureka:8761/eureka"
+            - name: SERVER_PORT
+              value: "8090"
+          readinessProbe:
+            httpGet:
+              path: /manage/health
+              port: 8090
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 5
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"

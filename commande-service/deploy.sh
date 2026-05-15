@@ -9,7 +9,7 @@ fi
 
 echo "🚀 Deploying $SERVICE..."
 
-PROJECT_DIR="/mnt/c/Users/bde_v/IdeaProjects/Services Platform/$SERVICE"
+PROJECT_DIR="/mnt/c/Users/bde_v/IdeaProjects/services-platform/$SERVICE"
 
 echo "📦 Step 1: Maven build"
 cd "$PROJECT_DIR" || exit

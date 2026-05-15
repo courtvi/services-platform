@@ -7,8 +7,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://keycloak:9090/realms/camping-haller
-          jwk-set-uri: http://keycloak:9090/realms/camping-haller/protocol/openid-connect/certs
+          issuer-uri: http://keycloak:9080/realms/camping-haller
+          jwk-set-uri: http://keycloak:8080/realms/camping-haller/protocol/openid-connect/certs
 
 server:
   port: 8090
@@ -46,7 +46,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://eureka:8761/eureka
 
 management:
   endpoints:
