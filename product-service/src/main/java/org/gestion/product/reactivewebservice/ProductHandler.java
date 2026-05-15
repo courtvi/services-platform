@@ -41,15 +41,4 @@ public class ProductHandler {
                                 .bodyValue(savedProduct)
                 );
     }
-
-    /*
-    public Mono<ServerResponse> createProduct(ServerRequest request) {
-        return request.bodyToMono(ProductRequest.class)
-                .flatMap(saved ->
-                        ServerResponse
-                                .status(HttpStatus.CREATED)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .bodyValue(saved)
-                );
-    }*/
 }

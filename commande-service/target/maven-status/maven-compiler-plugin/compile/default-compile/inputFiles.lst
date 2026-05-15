@@ -1,4 +1,5 @@
 /mnt/c/Users/bde_v/IdeaProjects/services-platform/commande-service/src/main/java/org/gestion/commande/CommandServiceApplication.java
+/mnt/c/Users/bde_v/IdeaProjects/services-platform/commande-service/src/main/java/org/gestion/commande/config/ApplicationConfig.java
 /mnt/c/Users/bde_v/IdeaProjects/services-platform/commande-service/src/main/java/org/gestion/commande/config/SecurityConfig.java
 /mnt/c/Users/bde_v/IdeaProjects/services-platform/commande-service/src/main/java/org/gestion/commande/dto/CommandeAvecLignes.java
 /mnt/c/Users/bde_v/IdeaProjects/services-platform/commande-service/src/main/java/org/gestion/commande/dto/CommandeRequest.java

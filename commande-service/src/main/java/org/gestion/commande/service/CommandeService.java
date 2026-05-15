@@ -7,14 +7,17 @@ import org.gestion.commande.model.Commande;
 import org.gestion.commande.model.LigneCommande;
 import org.gestion.commande.repository.CommandeRepository;
 import org.gestion.commande.repository.LigneCommandeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CommandeService {
@@ -40,9 +43,12 @@ public class CommandeService {
         commande.setDateCommande(LocalDateTime.now());
 
         return transactionalOperator.execute(status ->
-
                         commandeRepository.save(commande)
                                 .flatMap(saved -> {
+                                    // ✅ Lignes optionnelles
+                                    if (request.lignes() == null || request.lignes().isEmpty()) {
+                                        return Mono.just(saved);
+                                    }
 
                                     List<LigneCommande> lignes = request.lignes().stream()
                                             .map(dto -> {
@@ -55,9 +61,11 @@ public class CommandeService {
                                             .toList();
 
                                     return ligneCommandeRepository.saveAll(lignes)
-                                            .then(Mono.just(saved));
+                                            .collectList()
+                                            .map(l -> saved);
                                 })
-                ).next()
+                )
+                .single()
                 .map(this::toResponse);
     }
 

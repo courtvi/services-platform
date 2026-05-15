@@ -4,7 +4,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- ✅ Pointe vers votre parent mono-repo -->
     <parent>
         <groupId>org.gestion</groupId>
         <artifactId>services-platform</artifactId>
@@ -13,17 +12,13 @@
 
     <artifactId>commande-service</artifactId>
 
-    <!-- ✅ Pas de properties redondantes, héritées du parent -->
 
     <dependencies>
-
-        <!-- ✅ Réactif R2DBC -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-r2dbc</artifactId>
         </dependency>
 
-        <!-- ✅ H2 R2DBC (driver réactif) -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
@@ -35,7 +30,6 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- ✅ Sécurité OAuth2 Resource Server (Keycloak JWT) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
@@ -45,13 +39,12 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-        <!-- ✅ Eureka client (découverte de services) -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
 
-        <!-- ✅ Actuator -->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>

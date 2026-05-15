@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8071
 
 spring:
   application:
@@ -8,15 +8,6 @@ spring:
   r2dbc:
     url: r2dbc:h2:mem:///testdb;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false
 
-eureka:
-  instance:
-    prefer-ip-address: true
-
-  client:
-    register-with-eureka: false
-    fetch-registry: false
-    service-url:
-      defaultZone: http://localhost:8761/eureka
 
 management:
   endpoints:

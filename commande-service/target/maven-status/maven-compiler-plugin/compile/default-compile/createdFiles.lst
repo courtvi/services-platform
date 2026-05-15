@@ -5,6 +5,7 @@ org/gestion/commande/repository/CommandeRepository.class
 org/gestion/commande/repository/LigneCommandeRepository.class
 org/gestion/commande/config/SecurityConfig.class
 org/gestion/commande/CommandServiceApplication.class
+org/gestion/commande/config/ApplicationConfig.class
 org/gestion/commande/model/Commande.class
 org/gestion/commande/dto/CommandeResponse.class
 org/gestion/commande/dto/LigneCommandeRequest.class

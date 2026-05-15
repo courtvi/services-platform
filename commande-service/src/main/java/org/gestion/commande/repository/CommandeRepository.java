@@ -7,11 +7,10 @@ import reactor.core.publisher.Mono;
 
 public interface CommandeRepository extends R2dbcRepository<Commande, Long> {
 
-    // ✅ Trouve toutes les commandes d'un utilisateur spécifique
+
     Flux<Commande> findByUserId(String userId);
 
-    // ✅ Trouve une commande spécifique d'un utilisateur (sécurité : évite qu'un user voie celle d'un autre)
+
     Mono<Commande> findByIdAndUserId(Long id, String userId);
 
 }
-// ✅ Trouve les co

@@ -1,10 +1,9 @@
-/mnt/c/Users/bde_v/IdeaProjects/Services Platform/product-service/src/main/java/org/gestion/product/ProductServiceApplication.java
-/mnt/c/Users/bde_v/IdeaProjects/Services Platform/product-service/src/main/java/org/gestion/product/dto/ProductRequest.java
-/mnt/c/Users/bde_v/IdeaProjects/Services Platform/product-service/src/main/java/org/gestion/product/dto/ProductResponse.java
-/mnt/c/Users/bde_v/IdeaProjects/Services Platform/product-service/src/main/java/org/gestion/product/mapper/ProductMapper.java
-/mnt/c/Users/bde_v/IdeaProjects/Services Platform/product-service/src/main/java/org/gestion/product/model/Product.java
-/mnt/c/Users/bde_v/IdeaProjects/Services Platform/product-service/src/main/java/org/gestion/product/reactivewebservice/ProductClient.java
-/mnt/c/Users/bde_v/IdeaProjects/Services Platform/product-service/src/main/java/org/gestion/product/reactivewebservice/ProductHandler.java
-/mnt/c/Users/bde_v/IdeaProjects/Services Platform/product-service/src/main/java/org/gestion/product/reactivewebservice/ProductRouter.java
-/mnt/c/Users/bde_v/IdeaProjects/Services Platform/product-service/src/main/java/org/gestion/product/repository/ProductRepository.java
-/mnt/c/Users/bde_v/IdeaProjects/Services Platform/product-service/src/main/java/org/gestion/product/service/ProductService.java
+C:\Users\bde_v\IdeaProjects\services-platform\product-service\src\main\java\org\gestion\product\dto\ProductRequest.java
+C:\Users\bde_v\IdeaProjects\services-platform\product-service\src\main\java\org\gestion\product\dto\ProductResponse.java
+C:\Users\bde_v\IdeaProjects\services-platform\product-service\src\main\java\org\gestion\product\mapper\ProductMapper.java
+C:\Users\bde_v\IdeaProjects\services-platform\product-service\src\main\java\org\gestion\product\model\Product.java
+C:\Users\bde_v\IdeaProjects\services-platform\product-service\src\main\java\org\gestion\product\ProductServiceApplication.java
+C:\Users\bde_v\IdeaProjects\services-platform\product-service\src\main\java\org\gestion\product\reactivewebservice\ProductHandler.java
+C:\Users\bde_v\IdeaProjects\services-platform\product-service\src\main\java\org\gestion\product\reactivewebservice\ProductRouter.java
+C:\Users\bde_v\IdeaProjects\services-platform\product-service\src\main\java\org\gestion\product\repository\ProductRepository.java
+C:\Users\bde_v\IdeaProjects\services-platform\product-service\src\main\java\org\gestion\product\service\ProductService.java
