@@ -43,7 +43,7 @@ class CommandServiceTest {
 
         // -------- GIVEN --------
         CommandeRequest request = new CommandeRequest("REF-001", List.of(
-                new LigneCommandeRequest("baguette", 1)
+                new LigneCommandeRequest("baguette", 1, 1.30F, 1.30F)
         ));
 
         Commande saved = new Commande();

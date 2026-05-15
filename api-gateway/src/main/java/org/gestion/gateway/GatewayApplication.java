@@ -22,8 +22,7 @@ public class GatewayApplication {
 
                 )
                 .route( r-> r.path("/api/commandes/**")
-                        .filters(f->f.rewritePath("/api/commandes/(?<remains>.*)","/${remains}"))
-                        .uri("lb://commande-service/")
+                         .uri("lb://commande-service/")
 
                 )
                 .route(r->r.path("/api/auth/**")

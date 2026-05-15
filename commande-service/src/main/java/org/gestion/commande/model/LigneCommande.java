@@ -20,10 +20,20 @@ public class LigneCommande {
     @Column("QUANTITE")
     private Integer quantite;
 
-    public LigneCommande(Long id, String article, Integer quantite) {
+    @Column("PRIX")
+    private Float prixUnitaire;
+
+    @Column("TOTAL")
+    private Float total;
+
+
+
+    public LigneCommande(Long id, String article, Integer quantite, Float prixUnitaire, Float total) {
         this.id = id;
         this.article = article;
         this.quantite = quantite;
+        this.prixUnitaire = prixUnitaire;
+        this.total = total;
     }
     public LigneCommande() {
     }
@@ -44,5 +54,11 @@ public class LigneCommande {
 
     public Integer getQuantite() { return quantite; }
     public void setQuantite(Integer quantite) { this.quantite = quantite; }
+
+    public Float getPrixUnitaire() { return prixUnitaire; }
+    public void setPrixUnitaire(Float prixUnitaire) { this.prixUnitaire = prixUnitaire; }
+
+    public Float getTotal() { return total; }
+    public void setTotal(Float total) { this.total = total; }
 
 }

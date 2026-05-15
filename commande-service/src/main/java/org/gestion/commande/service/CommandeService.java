@@ -56,6 +56,8 @@ public class CommandeService {
                                                 l.setCommandeId(saved.getId());
                                                 l.setArticle(dto.article());
                                                 l.setQuantite(dto.quantite());
+                                                l.setPrixUnitaire(dto.prixUnitaire());
+                                                l.setTotal(dto.total());
                                                 return l;
                                             })
                                             .toList();

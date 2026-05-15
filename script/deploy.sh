@@ -12,9 +12,9 @@ kubectl get namespace $NAMESPACE &>/dev/null || kubectl create namespace $NAMESP
 
 echo "📦 STEP 1 - Build Docker images"
 docker build -t frontend:latest ../frontend
-docker build -t api-gateway:latest ../api-gateway
-docker build -t eureka-server:latest ../eureka-server
-docker build -t commande-service:latest ../commande-service
+docker build --no-cache -t api-gateway:latest ../api-gateway
+docker build --no-cache -t eureka-server:latest ../eureka-server
+docker build --no-cache -t commande-service:latest ../commande-service
 
 echo "📥 STEP 2 - Load images into Kind"
 kind load docker-image frontend:latest --name $CLUSTER
@@ -23,11 +23,10 @@ kind load docker-image eureka-server:latest --name $CLUSTER
 kind load docker-image commande-service:latest --name $CLUSTER
 
 echo "☸️ STEP 3 - Apply Kubernetes manifests"
-kubectl apply -f ../k8s/keycloak/ -n $NAMESPACE
-kubectl apply -f ../k8s/eureka-server/ -n $NAMESPACE
-kubectl apply -f ../k8s/api-gateway/ -n $NAMESPACE
-kubectl apply -f ../k8s/commande-service/ -n $NAMESPACE
-kubectl apply -f ../k8s/front-end/ -n $NAMESPACE
+kubectl rollout restart deployment/frontend -n $NAMESPACE
+kubectl rollout restart deployment/api-gateway -n $NAMESPACE
+kubectl rollout restart deployment/eureka -n $NAMESPACE
+kubectl rollout restart deployment/commande-service -n $NAMESPACE
 
 echo "⏳ STEP 4 - Waiting for pods"
 kubectl rollout status deployment/keycloak -n $NAMESPACE --timeout=180s
