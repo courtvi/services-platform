@@ -7,5 +7,6 @@ public record CommandeResponse(
         String userId,
         String reference,
         String statut,
-        LocalDateTime dateCommande
+        LocalDateTime dateCommande,
+        LocalDateTime dateLivraison
 ) {}

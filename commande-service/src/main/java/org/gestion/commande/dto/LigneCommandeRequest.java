@@ -1,8 +1,10 @@
 package org.gestion.commande.dto;
 
+import java.time.LocalDateTime;
+
 public record LigneCommandeRequest(
         String article,
         Integer quantite,
-        Float prixUnitaire,
-        Float total
+        Double prixUnitaire,
+        Double total
 ) {}

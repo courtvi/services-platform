@@ -12,6 +12,7 @@ public class LigneCommande {
     @Id
     private Long id;
 
+    @Column("COMMANDE_ID")
     private Long commandeId;
 
     @Column("ARTICLE")
@@ -20,15 +21,15 @@ public class LigneCommande {
     @Column("QUANTITE")
     private Integer quantite;
 
-    @Column("PRIX")
-    private Float prixUnitaire;
+    @Column("PRIX_UNITAIRE")
+    private Double prixUnitaire;
 
     @Column("TOTAL")
-    private Float total;
+    private Double total;
 
 
 
-    public LigneCommande(Long id, String article, Integer quantite, Float prixUnitaire, Float total) {
+    public LigneCommande(Long id, String article, Integer quantite, Double prixUnitaire, Double total) {
         this.id = id;
         this.article = article;
         this.quantite = quantite;
@@ -55,10 +56,10 @@ public class LigneCommande {
     public Integer getQuantite() { return quantite; }
     public void setQuantite(Integer quantite) { this.quantite = quantite; }
 
-    public Float getPrixUnitaire() { return prixUnitaire; }
-    public void setPrixUnitaire(Float prixUnitaire) { this.prixUnitaire = prixUnitaire; }
+    public Double getPrixUnitaire() { return prixUnitaire; }
+    public void setPrixUnitaire(Double prixUnitaire) { this.prixUnitaire = prixUnitaire; }
 
-    public Float getTotal() { return total; }
-    public void setTotal(Float total) { this.total = total; }
+    public Double getTotal() { return total; }
+    public void setTotal(Double total) { this.total = total; }
 
 }

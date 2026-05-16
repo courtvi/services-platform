@@ -3,6 +3,8 @@ package org.gestion.commande.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Table(name = "COMMANDES")
@@ -24,16 +26,18 @@ public class Commande {
     @Column("DATE_COMMANDE")
     private LocalDateTime dateCommande;
 
-
+    @Column("DATE_LIVRAISON")
+    private LocalDateTime dateLivraison;
 
 
     public Commande(Long id, String userId, String reference,
-                    String statut, LocalDateTime dateCommande) {
+                    String statut, LocalDateTime dateCommande, LocalDateTime dateLivraison) {
         this.id = id;
         this.userId = userId;
         this.reference = reference;
         this.statut = statut;
         this.dateCommande = dateCommande;
+        this.dateLivraison = dateLivraison;
 
     }
     public Commande() {
@@ -56,5 +60,9 @@ public class Commande {
     public LocalDateTime getDateCommande() { return dateCommande; }
     public void setDateCommande(LocalDateTime dateCommande) {
         this.dateCommande = dateCommande;    }
+
+    public LocalDateTime getDateLivraison() { return dateLivraison; }
+    public void setDateLivraison(LocalDateTime dateLivraison) {
+        this.dateLivraison = dateLivraison;    }
 
 }

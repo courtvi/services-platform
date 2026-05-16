@@ -41,7 +41,7 @@ public class CommandeService {
         commande.setReference(request.reference());
         commande.setStatut("CREEE");
         commande.setDateCommande(LocalDateTime.now());
-
+        commande.setDateLivraison(request.dateLivraison());
         return transactionalOperator.execute(status ->
                         commandeRepository.save(commande)
                                 .flatMap(saved -> {
@@ -128,14 +128,15 @@ public class CommandeService {
                 });
     }
 
-    // ✅ Mapping entité → record DTO
+
     private CommandeResponse toResponse(Commande commande) {
         return new CommandeResponse(
                 commande.getId(),
                 commande.getUserId(),
                 commande.getReference(),
                 commande.getStatut(),
-                commande.getDateCommande()
+                commande.getDateCommande(),
+                commande.getDateLivraison()
         );
     }
 

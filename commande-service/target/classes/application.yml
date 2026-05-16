@@ -46,3 +46,15 @@ management:
     health:
       show-details: always
 
+logging:
+  level:
+    org.springframework.web: DEBUG
+    com.fasterxml.jackson: DEBUG
+    org.springframework.http.converter: DEBUG
+    org.springframework.http.codec: DEBUG
+
+
+    root: ERROR
+    org.gestion: DEBUG
+    org.springframework.web.server: DEBUG
+    org.springframework.core.codec: DEBUG
