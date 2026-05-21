@@ -138,4 +138,11 @@ public class CommandeHandler {
                         ServerResponse.badRequest().bodyValue(e.getMessage())
                 );
     }
+
+    public Mono<ServerResponse> passerEnCours(ServerRequest request) {
+        Long id = Long.parseLong(request.pathVariable("id"));
+        return commandeService.passerEnCours(id)
+                .flatMap(response -> ServerResponse.ok().bodyValue(response))
+                .onErrorResume(e -> ServerResponse.status(400).bodyValue(e.getMessage()));
+    }
 }

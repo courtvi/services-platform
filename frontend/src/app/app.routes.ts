@@ -50,7 +50,6 @@ export const routes: Routes = [
     ]
   },
 
-  // ✅ Page 404
   {
     path: '**',
     loadComponent: () =>

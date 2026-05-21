@@ -1,0 +1,67 @@
+{
+  "nav": {
+    "commandes": "Mes commandes",
+    "admin": "Admin"
+  },
+  "lang": {
+    "fr": "Français",
+    "de": "Deutsch",
+    "en": "English",
+    "lb": "Lëtzebuergesch"
+  },
+  "commande": {
+    "selectionArticles": "Sélection des articles",
+    "commander": "Commander",
+    "nouvelle": "Nouvelle commande",
+    "reference": "Référence",
+    "actions": "Actions",
+    "detail": "Détail",
+    "annuler": "Annuler",
+    "aucune": "Aucune commande",
+    "titre": "Commande",
+    "statut": "Statut",
+    "date": "Date",
+    "dateCommande": "Date de commande",
+    "dateLivraison": "Date de livraison",
+    "utilisateur": "Utilisateur",
+    "article": "Article",
+    "quantite": "Quantité",
+    "prixUnitaire": "Prix unitaire",
+    "total": "Total",
+    "totalCommande": "Total",
+    "erreur": "Erreur lors du chargement de la commande.",
+    "chargement": "Chargement..."
+  },
+  "statuts": {
+    "CREEE": "Créée",
+    "EN_COURS": "En cours",
+    "LIVREE": "Livrée",
+    "ANNULEE": "Annulée"
+  },
+  "auth": {
+    "deconnexion": "Se déconnecter"
+  },
+  "articles": {
+    "petit_pain_blanc": "Petit pain blanc",
+    "petit_pain_cereales": "Petit pain céréales",
+    "baguette_blanche": "Baguette blanche",
+    "baguette_cereale": "Baguette céréale",
+    "pain_6_cereales": "Pain 6 céréales",
+    "pain_chef": "Pain du Chef (levain)",
+    "pain_campagne": "Pain Campagne",
+    "pain_blanc": "Pain blanc",
+    "pain_6_cereales_coupe": "Pain 6 céréales (coupé)",
+    "pain_chef_coupe": "Pain du Chef (levain) coupé",
+    "pain_campagne_coupe": "Pain Campagne (coupé)",
+    "pain_blanc_coupe": "Pain blanc (coupé)",
+    "croissant": "Croissant",
+    "viennoiserie": "Viennoiserie",
+    "coupe": "Coupé"
+  },
+  "groupe": {
+    "petits_pains": "Petits pains",
+    "baguettes": "Baguettes",
+    "pains": "Pains",
+    "viennoiseries": "Viennoiseries"
+  }
+}

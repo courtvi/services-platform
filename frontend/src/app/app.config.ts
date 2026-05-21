@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideZoneChangeDetection, importProvidersFrom } from '@angular/core';
+import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter, withRouterConfig } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -15,7 +15,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     provideHttpClient(withInterceptors([authInterceptor])),
     provideKeycloakAngular(),
-    provideTranslateService({ defaultLanguage: 'fr' }),
-    ...provideTranslateHttpLoader({ prefix: '/i18n/', suffix: '.json' })
+    provideTranslateService({ fallbackLang: 'fr' }),
+    ...provideTranslateHttpLoader()
   ]
 };

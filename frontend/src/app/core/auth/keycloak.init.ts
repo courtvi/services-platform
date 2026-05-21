@@ -12,11 +12,13 @@ export const provideKeycloakAngular = () =>
       onLoad: 'login-required',
       pkceMethod: 'S256',
       checkLoginIframe: false
-    },
+    }
+  /*,
     features: [
       withAutoRefreshToken({
         onInactivityTimeout: 'logout',
         sessionTimeout: 60000
       })
     ]
+  */
   });

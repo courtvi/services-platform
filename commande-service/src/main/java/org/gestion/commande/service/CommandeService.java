@@ -68,13 +68,13 @@ public class CommandeService {
                                 })
                 )
                 .single()
-                .map(this::toResponse);
+                .flatMap(this::toResponseWithTotal);
     }
 
     // ✅ READ ONE — ROLE_CLIENT : seulement sa commande
     public Mono<CommandeResponse> getCommandeByIdForUser(Long id, String userId) {
         return commandeRepository.findByIdAndUserId(id, userId)
-                .map(this::toResponse)
+                .flatMap(this::toResponseWithTotal)
                 .switchIfEmpty(Mono.error(
                         new RuntimeException("Commande introuvable ou accès refusé")
                 ));
@@ -83,13 +83,13 @@ public class CommandeService {
     // ✅ READ ALL — ROLE_CLIENT : seulement ses commandes
     public Flux<CommandeResponse> getCommandesByUser(String userId) {
         return commandeRepository.findByUserId(userId)
-                .map(this::toResponse);
+                .flatMap(this::toResponseWithTotal);
     }
 
     // ✅ READ ALL — ROLE_ADMIN : toutes les commandes
     public Flux<CommandeResponse> getAllCommandes() {
         return commandeRepository.findAll()
-                .map(this::toResponse);
+                .flatMap(this::toResponseWithTotal);
     }
 
     // ✅ UPDATE — modification de la référence uniquement (statut géré séparément)
@@ -108,7 +108,7 @@ public class CommandeService {
                     commande.setReference(request.reference());
                     return commandeRepository.save(commande);
                 })
-                .map(this::toResponse);
+                .flatMap(this::toResponseWithTotal);
     }
 
     // ✅ DELETE (annulation) — seulement si statut CREEE
@@ -129,15 +129,20 @@ public class CommandeService {
     }
 
 
-    private CommandeResponse toResponse(Commande commande) {
-        return new CommandeResponse(
-                commande.getId(),
-                commande.getUserId(),
-                commande.getReference(),
-                commande.getStatut(),
-                commande.getDateCommande(),
-                commande.getDateLivraison()
-        );
+    private Mono<CommandeResponse> toResponseWithTotal(Commande commande) {
+        System.out.println(">>> getId: " + commande.getId());
+        return ligneCommandeRepository.findByCommandeId(commande.getId())
+                .map(LigneCommande::getTotal)
+                .reduce(0.0, Double::sum)
+                .map(total -> new CommandeResponse(
+                        commande.getId(),
+                        commande.getUserId(),
+                        commande.getReference(),
+                        commande.getStatut(),
+                        commande.getDateCommande(),
+                        commande.getDateLivraison(),
+                        commande.getTotal()
+                ));
     }
 
 
@@ -154,5 +159,18 @@ public class CommandeService {
                         tuple.getT1(),
                         tuple.getT2()
                 ));
+    }
+
+    public Mono<CommandeResponse> passerEnCours(Long id) {
+        return commandeRepository.findById(id)
+                .switchIfEmpty(Mono.error(new RuntimeException("Commande introuvable")))
+                .flatMap(commande -> {
+                    if (!"CREEE".equals(commande.getStatut())) {
+                        return Mono.error(new RuntimeException("Impossible de passer en cours une commande " + commande.getStatut()));
+                    }
+                    commande.setStatut("EN_COURS");
+                    return commandeRepository.save(commande);
+                })
+                .flatMap(this::toResponseWithTotal);
     }
 }

@@ -23,6 +23,7 @@ public class CommandeRouter {
                         .GET("/{id}/detail",   handler::getCommandeAvecLignes)
                         .PUT("/{id}",    handler::updateCommande)
                         .DELETE("/{id}", handler::annulerCommande)
+                        .PATCH("/{id}/en-cours", handler::passerEnCours)
                         .GET("/debug", request ->
                                 ReactiveSecurityContextHolder.getContext()
                                         .map(ctx -> ctx.getAuthentication())

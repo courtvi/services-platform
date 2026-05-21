@@ -4,10 +4,12 @@ import { CommonModule } from '@angular/common';
 import { CommandeService } from '../../../core/services/commande.service';
 import { CommandeAvecLignes } from '../../../core/models/commande.model';
 import { TranslateModule } from '@ngx-translate/core';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-commande-detail',
-  imports: [CommonModule, TranslateModule],
+  standalone: true,
+  imports: [CommonModule, TranslateModule, CurrencyPipe],
   templateUrl: './commande-detail.html',
   styles: ``
 })
@@ -31,5 +33,9 @@ export class CommandeDetail implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  getTotalCommande(): number {
+    return this.commande?.lignes.reduce((acc, ligne) => acc + ligne.total, 0) ?? 0;
   }
 }

@@ -53,8 +53,9 @@ class CommandeHandlerTest {
                 "CMD-TEST-001",
                 "CREEE",
                 LocalDateTime.of(2026, 5, 16, 0, 0),
-                LocalDateTime.of(2026, 5, 17, 0, 0)
-        );
+                LocalDateTime.of(2026, 5, 17, 0, 0),
+                6.70
+       );
 
         Jwt jwt = Jwt.withTokenValue("token")
                 .header("alg", "RS256")
@@ -158,4 +159,76 @@ class CommandeHandlerTest {
                 .expectNextMatches(r -> r.statusCode().value() == 204)
                 .verifyComplete();
     }
+
+    @Test
+    void getCommandes_shouldReturnTotalInResponse() {
+        Jwt jwt = Jwt.withTokenValue("token")
+                .header("alg", "RS256")
+                .claim("sub", "admin-123")
+                .build();
+        JwtAuthenticationToken adminAuth = new JwtAuthenticationToken(
+                jwt,
+                List.of(() -> "ROLE_ADMIN")
+        );
+
+        CommandeResponse avecTotal = new CommandeResponse(
+                1L,
+                "user-alice",
+                "CMD-ALICE-001",
+                "CREEE",
+                LocalDateTime.of(2026, 5, 21, 20, 52),
+                LocalDateTime.of(2026, 5, 22, 20, 52),
+                6.70
+        );
+
+        when(commandeService.getAllCommandes()).thenReturn(Flux.just(avecTotal));
+
+        MockServerRequest serverRequest = MockServerRequest.builder()
+                .principal(adminAuth)
+                .build();
+
+        commandeHandler.getCommandes(serverRequest).block();
+
+        verify(commandeService).getAllCommandes();
+    }
+
+    @Test
+    void getCommandes_shouldRouteToUserCommandesForNonAdmin() {
+        when(commandeService.getCommandesByUser(eq("user-123")))
+                .thenReturn(Flux.just(response));
+
+        MockServerRequest serverRequest = MockServerRequest.builder()
+                .principal(authToken)
+                .build();
+
+        commandeHandler.getCommandes(serverRequest).block();
+
+        verify(commandeService).getCommandesByUser("user-123");
+        verify(commandeService, never()).getAllCommandes();
+    }
+
+    @Test
+    void createCommande_shouldReturnTotalInResponse() {
+        CommandeResponse avecTotal = new CommandeResponse(
+                1L,
+                "user-123",
+                "CMD-TEST-001",
+                "CREEE",
+                LocalDateTime.of(2026, 5, 16, 0, 0),
+                LocalDateTime.of(2026, 5, 17, 0, 0),
+                1.10
+        );
+
+        when(commandeService.createCommande(any(), eq("user-123")))
+                .thenReturn(Mono.just(avecTotal));
+
+        MockServerRequest serverRequest = MockServerRequest.builder()
+                .principal(authToken)
+                .body(Mono.just(request));
+
+        StepVerifier.create(commandeHandler.createCommande(serverRequest))
+                .expectNextMatches(r -> r.statusCode().value() == 201)
+                .verifyComplete();
+    }
+
 }

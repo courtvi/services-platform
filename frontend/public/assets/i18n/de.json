@@ -1,0 +1,67 @@
+{
+  "nav": {
+    "commandes": "Meine Bestellungen",
+    "admin": "Admin"
+  },
+  "lang": {
+    "fr": "Français",
+    "de": "Deutsch",
+    "en": "English",
+    "lb": "Lëtzebuergesch"
+  },
+  "commande": {
+    "selectionArticles": "Artikel auswählen",
+    "commander": "Bestellen",
+    "nouvelle": "Neue Bestellung",
+    "reference": "Referenz",
+    "actions": "Aktionen",
+    "detail": "Detail",
+    "annuler": "Stornieren",
+    "aucune": "Keine Bestellungen",
+    "titre": "Bestellung",
+    "statut": "Status",
+    "date": "Datum",
+    "dateCommande": "Bestelldatum",
+    "dateLivraison": "Lieferdatum",
+    "utilisateur": "Benutzer",
+    "article": "Artikel",
+    "quantite": "Menge",
+    "prixUnitaire": "Stückpreis",
+    "total": "Gesamt",
+    "totalCommande": "Gesamtbetrag",
+    "erreur": "Fehler beim Laden der Bestellung.",
+    "chargement": "Wird geladen..."
+  },
+  "statuts": {
+    "CREEE": "Erstellt",
+    "EN_COURS": "In Bearbeitung",
+    "LIVREE": "Geliefert",
+    "ANNULEE": "Storniert"
+  },
+  "auth": {
+    "deconnexion": "Abmelden"
+  },
+  "articles": {
+    "petit_pain_blanc": "Kleines Weißbrötchen",
+    "petit_pain_cereales": "Kleines Körnerbrötchen",
+    "baguette_blanche": "Weiße Baguette",
+    "baguette_cereale": "Körner-Baguette",
+    "pain_6_cereales": "6-Korn-Brot",
+    "pain_chef": "Chefbrot (Sauerteig)",
+    "pain_campagne": "Landbrot",
+    "pain_blanc": "Weißbrot",
+    "pain_6_cereales_coupe": "6-Korn-Brot (aufgeschnitten)",
+    "pain_chef_coupe": "Chefbrot (Sauerteig, aufgeschnitten)",
+    "pain_campagne_coupe": "Landbrot (aufgeschnitten)",
+    "pain_blanc_coupe": "Weißbrot (aufgeschnitten)",
+    "croissant": "Croissant",
+    "viennoiserie": "Feingebäck",
+    "coupe": "Aufgeschnitten"
+  },
+  "groupe": {
+    "petits_pains": "Brötchen",
+    "baguettes": "Baguettes",
+    "pains": "Brote",
+    "viennoiseries": "Feingebäck"
+  }
+}

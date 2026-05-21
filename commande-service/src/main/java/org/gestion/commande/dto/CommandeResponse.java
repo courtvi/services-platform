@@ -8,5 +8,6 @@ public record CommandeResponse(
         String reference,
         String statut,
         LocalDateTime dateCommande,
-        LocalDateTime dateLivraison
+        LocalDateTime dateLivraison,
+        Double total
 ) {}

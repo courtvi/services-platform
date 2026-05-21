@@ -1,31 +1,62 @@
 <div class="container">
-    <h2>{{ 'commande.nouvelle' | translate }}</h2>
-    <h3>{{ 'commande.selectionArticles' | translate }}</h3>
+  <h2>{{ 'commande.nouvelle' | translate }}</h2>
+  <h3>{{ 'commande.selectionArticles' | translate }}</h3>
 
-    <form [formGroup]="form" (ngSubmit)="submit()">
-        <div formArrayName="articles">
-            @for (article of articles.controls; track $index) {
-            <div [formGroupName]="$index" class="article-item">
-                <img src="baguette.png" class="article-image">
-                <span class="article-name">{{ 'articles.baguette' | translate }}</span>
-                <div class="qty-control">
-                    <button mat-icon-button type="button" (click)="decreaseQuantity($index)">
-                        <mat-icon>remove</mat-icon>
-                    </button>
-                    <span class="qty-value">{{ article.get('quantite')?.value }}</span>
-                    <button mat-icon-button type="button" (click)="increaseQuantity($index)">
-                        <mat-icon>add</mat-icon>
-                    </button>
-                </div>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'commande.dateLivraison' | translate }}</mat-label>
+      <input matInput type="date" formControlName="dateLivraison" [min]="getTomorrow()">
+    </mat-form-field>
+
+    <div formArrayName="articles">
+      @for (groupe of GROUPES; track groupe.key) {
+      <div class="groupe-section">
+        <h3 class="groupe-label">{{ groupe.label | translate }}</h3>
+        <div class="groupe-articles">
+          @for (item of getArticlesByGroupe(groupe.key); track item.index) {
+          <div class="article-wrapper">
+            <div [formGroupName]="item.index" class="article-item">
+              <img [src]="item.control.get('article')?.value + '.png'"
+                   class="article-image"
+                   onerror="this.src='default.png'"
+                   [alt]="'articles.' + item.control.get('article')?.value | translate">
+              <span class="article-name">
+                    {{ 'articles.' + item.control.get('article')?.value | translate }}
+                  </span>
+              <span class="article-prix">
+                    {{ item.control.get('prixUnitaire')?.value | currency:'EUR' }}
+                  </span>
+              <div class="qty-control">
+                <button type="button" (click)="decreaseQuantity(item.index)"
+                        [disabled]="item.control.get('quantite')?.value <= 0">
+                  <mat-icon>remove</mat-icon>
+                </button>
+                <span class="qty-value">{{ item.control.get('quantite')?.value }}</span>
+                <button type="button" (click)="increaseQuantity(item.index)">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+            </div>
+            @if (groupe.coupe) {
+            <div class="coupe-row" [formGroupName]="item.index">
+              <mat-slide-toggle formControlName="coupe"
+                                (change)="onCoupeToggle(item.index)">
+                {{ 'articles.coupe' | translate }} (+0,10€)
+              </mat-slide-toggle>
             </div>
             }
+          </div>
+          }
         </div>
+      </div>
+      }
+    </div>
 
-        <div class="actions">
-            <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || loading">
-                <mat-icon>shopping_cart</mat-icon>
-                {{ 'commande.commander' | translate }}
-            </button>
-        </div>
-    </form>
+    <div class="actions">
+      <button type="submit" [disabled]="form.invalid || loading">
+        <mat-icon>shopping_cart</mat-icon>
+        {{ 'commande.commander' | translate }}
+      </button>
+    </div>
+  </form>
 </div>

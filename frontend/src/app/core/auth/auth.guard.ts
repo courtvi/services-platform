@@ -1,14 +1,12 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { KeycloakService } from 'keycloak-angular';
+import Keycloak from 'keycloak-js';
 
 export const authGuard: CanActivateFn = async () => {
-  const keycloak = inject(KeycloakService);
+  const keycloak = inject(Keycloak) as Keycloak;
   const router = inject(Router);
 
-  const isLoggedIn = await keycloak.isLoggedIn();
-
-  if (isLoggedIn) {
+  if (keycloak.authenticated) {
     return true;
   }
 
@@ -20,17 +18,15 @@ export const authGuard: CanActivateFn = async () => {
 };
 
 export const adminGuard: CanActivateFn = async () => {
-  const keycloak = inject(KeycloakService);
+  const keycloak = inject(Keycloak) as Keycloak;
   const router = inject(Router);
 
-  const isLoggedIn = await keycloak.isLoggedIn();
-
-  if (!isLoggedIn) {
+  if (!keycloak.authenticated) {
     await keycloak.login();
     return false;
   }
 
-  const hasAdminRole = keycloak.isUserInRole('ADMIN', 'haller');
+  const hasAdminRole = keycloak.hasResourceRole('ADMIN', 'haller');
 
   if (!hasAdminRole) {
     return router.createUrlTree(['/commandes']);

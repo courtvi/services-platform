@@ -1,0 +1,67 @@
+{
+  "nav": {
+    "commandes": "Meng Bestellungen",
+    "admin": "Admin"
+  },
+  "lang": {
+    "fr": "Français",
+    "de": "Deutsch",
+    "en": "English",
+    "lb": "Lëtzebuergesch"
+  },
+  "commande": {
+    "selectionArticles": "Artikelen auswielen",
+    "commander": "Bestellen",
+    "nouvelle": "Nei Bestellung",
+    "reference": "Referenz",
+    "actions": "Aktiounen",
+    "detail": "Detail",
+    "annuler": "Annuléieren",
+    "aucune": "Keng Bestellungen",
+    "titre": "Bestellung",
+    "statut": "Status",
+    "date": "Datum",
+    "dateCommande": "Bestelldatum",
+    "dateLivraison": "Liwwerungsdatum",
+    "utilisateur": "Benotzer",
+    "article": "Artikel",
+    "quantite": "Quantitéit",
+    "prixUnitaire": "Eenzelpreis",
+    "total": "Total",
+    "totalCommande": "Total",
+    "erreur": "Fehler beim Luede vun der Bestellung.",
+    "chargement": "Lueden..."
+  },
+  "statuts": {
+    "CREEE": "Erstallt",
+    "EN_COURS": "A Beaarbechtung",
+    "LIVREE": "Geliwwert",
+    "ANNULEE": "Annuléiert"
+  },
+  "auth": {
+    "deconnexion": "Ofmellen"
+  },
+  "articles": {
+    "petit_pain_blanc": "Klenge wäisse Brëtchen",
+    "petit_pain_cereales": "Klenge Kären-Brëtchen",
+    "baguette_blanche": "Wäiss Baguette",
+    "baguette_cereale": "Kären-Baguette",
+    "pain_6_cereales": "6-Kären-Brout",
+    "pain_chef": "Chefbrout (Sauerteig)",
+    "pain_campagne": "Lanzbrout",
+    "pain_blanc": "Wäissbrout",
+    "pain_6_cereales_coupe": "6-Kären-Brout (opgeschnidden)",
+    "pain_chef_coupe": "Chefbrout (Sauerteig) opgeschnidden",
+    "pain_campagne_coupe": "Lanzbrout (opgeschnidden)",
+    "pain_blanc_coupe": "Wäissbrout (opgeschnidden)",
+    "croissant": "Croissant",
+    "viennoiserie": "Feingebäck",
+    "coupe": "Opgeschnidden"
+  },
+  "groupe": {
+    "petits_pains": "Kleng Brëtchen",
+    "baguettes": "Baguetten",
+    "pains": "Brout",
+    "viennoiseries": "Feingebäck"
+  }
+}
