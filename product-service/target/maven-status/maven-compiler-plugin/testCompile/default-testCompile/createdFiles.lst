@@ -1,2 +1,2 @@
-org\gestion\product\dto\ProductResponseTest.class
-org\gestion\product\dto\ProductRequestTest.class
+org/gestion/product/dto/ProductResponseTest.class
+org/gestion/product/dto/ProductRequestTest.class

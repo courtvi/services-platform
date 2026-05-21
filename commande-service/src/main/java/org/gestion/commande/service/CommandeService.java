@@ -141,7 +141,7 @@ public class CommandeService {
                         commande.getStatut(),
                         commande.getDateCommande(),
                         commande.getDateLivraison(),
-                        commande.getTotal()
+                        total
                 ));
     }
 

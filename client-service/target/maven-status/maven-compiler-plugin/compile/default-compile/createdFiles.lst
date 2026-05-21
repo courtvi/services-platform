@@ -1,0 +1,6 @@
+org/gestion/client/ClientServiceApplication.class
+org/gestion/client/repository/ClientRepository.class
+org/gestion/client/dto/ClientRequest.class
+org/gestion/client/service/ClientService.class
+org/gestion/client/model/Client.class
+org/gestion/client/dto/ClientResponse.class

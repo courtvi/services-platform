@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: org.gestion.commande.repository.CommandeRepositoryTest
 -------------------------------------------------------------------------------
-Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.595 s -- in org.gestion.commande.repository.CommandeRepositoryTest
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.009 s -- in org.gestion.commande.repository.CommandeRepositoryTest
