@@ -75,8 +75,12 @@ export class CommandeForm {
     if (this.form.invalid) return;
     this.loading = true;
 
+     const now = new Date().toISOString();
+
     const payload: CommandeRequest = {
       reference: this.generateReference(),
+        dateCommande: now,
+        dateLivraison: now,
       lignes: this.form.value.articles.map((p: any) => ({
         article: p.article,
         quantite: p.quantite,

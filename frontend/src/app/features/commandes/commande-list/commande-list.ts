@@ -12,6 +12,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Commande } from '../../../core/models/commande.model';
 import { CommandeService } from '../../../core/services/commande.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-commande-list',
@@ -35,6 +36,7 @@ export class CommandeList implements OnInit {
   private readonly snackBar = inject(MatSnackBar);
 
   commandes = signal<Commande[]>([]);
+
   loading = signal(true);
   error = signal<string | null>(null);
   displayedColumns = ['reference', 'statut', 'dateCommande', 'actions'];
