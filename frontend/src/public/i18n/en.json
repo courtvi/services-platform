@@ -1,0 +1,44 @@
+{
+  "nav": {
+    "commandes": "My orders",
+    "admin": "Admin"
+  },
+  "lang": {
+    "fr": "Français",
+    "de": "Deutsch",
+    "en": "English",
+    "lb": "Lëtzebuergesch"
+  },
+  "commande": {
+    "nouvelle": "New order",
+    "reference": "Reference",
+    "actions": "Actions",
+    "detail": "Detail",
+    "annuler": "Cancel",
+    "aucune": "No orders",
+    "titre": "Order",
+    "statut": "Status",
+    "date": "Date",
+    "utilisateur": "User",
+    "article": "Item",
+    "quantite": "Quantity",
+    "prixUnitaire": "Unit price",
+    "total": "Total",
+    "erreur": "Error loading order.",
+    "chargement": "Loading...",
+    "selectionArticles": "Item selection",
+    "commander": "Order"
+  },
+  "statuts": {
+    "CREEE": "Created",
+    "EN_COURS": "In progress",
+    "LIVREE": "Delivered",
+    "ANNULEE": "Cancelled"
+  },
+  "articles": {
+    "baguette": "Baguette"
+  },
+  "auth": {
+    "deconnexion": "Sign out"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "nav": {
+    "commandes": "Meng Bestellungen",
+    "admin": "Admin"
+  },
+  "lang": {
+    "fr": "Français",
+    "de": "Deutsch",
+    "en": "English",
+    "lb": "Lëtzebuergesch"
+  },
+  "commande": {
+    "nouvelle": "Nei Bestellung",
+    "reference": "Referenz",
+    "actions": "Aktiounen",
+    "detail": "Detail",
+    "annuler": "Ofbriechen",
+    "aucune": "Keng Bestellung",
+    "titre": "Bestellung",
+    "statut": "Status",
+    "date": "Datum",
+    "utilisateur": "Benotzer",
+    "article": "Artikel",
+    "quantite": "Quantitéit",
+    "prixUnitaire": "Eenzelcpräis",
+    "total": "Gesamt",
+    "erreur": "Feeler beim Lueden vun der Bestellung.",
+    "chargement": "Gëtt gelueden...",
+    "selectionArticles": "Artikelauswiel",
+    "commander": "Bestellen"
+  },
+  "statuts": {
+    "CREEE": "Erstallt",
+    "EN_COURS": "A goen",
+    "LIVREE": "Geliwwert",
+    "ANNULEE": "Ofgesot"
+  },
+  "articles": {
+    "baguette": "Baguette"
+  },
+  "auth": {
+    "deconnexion": "Ofmellen"
+  }
+}

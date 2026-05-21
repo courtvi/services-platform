@@ -1,0 +1,31 @@
+<div class="container">
+    <h2>{{ 'commande.nouvelle' | translate }}</h2>
+    <h3>{{ 'commande.selectionArticles' | translate }}</h3>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+        <div formArrayName="articles">
+            @for (article of articles.controls; track $index) {
+            <div [formGroupName]="$index" class="article-item">
+                <img src="baguette.png" class="article-image">
+                <span class="article-name">{{ 'articles.baguette' | translate }}</span>
+                <div class="qty-control">
+                    <button mat-icon-button type="button" (click)="decreaseQuantity($index)">
+                        <mat-icon>remove</mat-icon>
+                    </button>
+                    <span class="qty-value">{{ article.get('quantite')?.value }}</span>
+                    <button mat-icon-button type="button" (click)="increaseQuantity($index)">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+            </div>
+            }
+        </div>
+
+        <div class="actions">
+            <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || loading">
+                <mat-icon>shopping_cart</mat-icon>
+                {{ 'commande.commander' | translate }}
+            </button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,44 @@
+{
+  "nav": {
+    "commandes": "Meine Bestellungen",
+    "admin": "Admin"
+  },
+  "lang": {
+    "fr": "Français",
+    "de": "Deutsch",
+    "en": "English",
+    "lb": "Lëtzebuergesch"
+  },
+  "commande": {
+    "nouvelle": "Neue Bestellung",
+    "reference": "Referenz",
+    "actions": "Aktionen",
+    "detail": "Detail",
+    "annuler": "Stornieren",
+    "aucune": "Keine Bestellung",
+    "titre": "Bestellung",
+    "statut": "Status",
+    "date": "Datum",
+    "utilisateur": "Benutzer",
+    "article": "Artikel",
+    "quantite": "Menge",
+    "prixUnitaire": "Stückpreis",
+    "total": "Gesamt",
+    "erreur": "Fehler beim Laden der Bestellung.",
+    "chargement": "Wird geladen...",
+    "selectionArticles": "Artikelauswahl",
+    "commander": "Bestellen"
+  },
+  "statuts": {
+    "CREEE": "Erstellt",
+    "EN_COURS": "In Bearbeitung",
+    "LIVREE": "Geliefert",
+    "ANNULEE": "Storniert"
+  },
+  "articles": {
+    "baguette": "Baguette"
+  },
+  "auth": {
+    "deconnexion": "Abmelden"
+  }
+}

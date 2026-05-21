@@ -1,0 +1,59 @@
+<div class="container">
+    <div class="header">
+        <h1>{{ 'nav.commandes' | translate }}</h1>
+        <button mat-raised-button color="primary" (click)="nouvelleCommande()">
+            <mat-icon>add</mat-icon> {{ 'commande.nouvelle' | translate }}
+        </button>
+    </div>
+
+    @if (loading()) {
+    <div class="spinner-container"><mat-spinner /></div>
+    }
+
+    @if (error()) {
+    <p class="error">{{ error() }}</p>
+    }
+
+    @if (!loading() && !error()) {
+    <mat-table [dataSource]="commandes()">
+        <ng-container matColumnDef="reference">
+            <mat-header-cell *matHeaderCellDef>{{ 'commande.reference' | translate }}</mat-header-cell>
+            <mat-cell *matCellDef="let c">{{ c.reference }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="statut">
+            <mat-header-cell *matHeaderCellDef>{{ 'commande.statut' | translate }}</mat-header-cell>
+            <mat-cell *matCellDef="let c">
+                <mat-chip [color]="statutColor(c.statut)" highlighted>
+                    {{ 'statuts.' + c.statut | translate }}
+                </mat-chip>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="dateCommande">
+            <mat-header-cell *matHeaderCellDef>{{ 'commande.date' | translate }}</mat-header-cell>
+            <mat-cell *matCellDef="let c">{{ c.dateCommande | date:'dd/MM/yyyy HH:mm' }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+            <mat-header-cell *matHeaderCellDef>{{ 'commande.actions' | translate }}</mat-header-cell>
+            <mat-cell *matCellDef="let c">
+                <button mat-icon-button color="primary" (click)="voirDetail(c.id)" matTooltip="{{ 'commande.detail' | translate }}">
+                    <mat-icon>visibility</mat-icon>
+                </button>
+                @if (c.statut === 'CREEE') {
+                <button mat-icon-button color="warn" (click)="annuler(c.id)" matTooltip="{{ 'commande.annuler' | translate }}">
+                    <mat-icon>cancel</mat-icon>
+                </button>
+                }
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns" />
+        <mat-row *matRowDef="let row; columns: displayedColumns;" />
+        <div *matNoDataRow style="text-align:center;padding:2rem;color:#999">
+            {{ 'commande.aucune' | translate }}
+        </div>
+    </mat-table>
+    }
+</div>

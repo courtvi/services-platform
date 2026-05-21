@@ -1,0 +1,138 @@
+<div class="container" [class.light]="!darkMode()">
+    <div class="header">
+        <h1>Commandes</h1>
+        <span>{{ commandes().length }} au total</span>
+        <button class="toggle-theme" (click)="toggleDarkMode()">
+            {{ darkMode() ? '☀ Light' : '☾ Dark' }}
+        </button>
+        <button
+                class="btn-action"
+                [disabled]="enCoursLoading() || compterParStatut('CREEE') === 0"
+                (click)="passerToutesEnCours()">
+            {{ enCoursLoading() ? 'En cours...' : 'Confirmer les nouvelles commandes CREEE -> EN COURS (' + compterParStatut('CREEE') + ')' }}
+        </button>
+    </div>
+
+    <div class="filters">
+        @for (statut of statuts; track statut) {
+        <button
+                class="filter-btn"
+                [class.active]="filtreStatut() === statut"
+                (click)="setFiltre(statut)">
+            {{ statut }} ({{ compterParStatut(statut) }})
+        </button>
+        }
+    </div>
+
+    @if (loading()) {
+    <div class="loading">Chargement...</div>
+    } @else if (error()) {
+    <div class="error">{{ error() }}</div>
+    } @else if (commandesFiltrees.length === 0) {
+    <div class="empty">Aucune commande</div>
+    } @else {
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Référence</th>
+                <th>User</th>
+                <th>Statut</th>
+                <th>Date commande</th>
+                <th>Date livraison</th>
+                <th class="text-right">Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            @for (commande of commandesFiltrees; track commande.id) {
+            <tr
+                    [class.clickable]="filtreStatut() === 'CREEE'"
+                    (click)="filtreStatut() === 'CREEE' ? toggleDetail(commande.id) : null">
+                <td>{{ commande.id }}</td>
+                <td class="reference">
+                    {{ commande.reference }}
+                    @if (filtreStatut() === 'CREEE') {
+                    <span class="chevron">{{ isOuverte(commande.id) ? '▲' : '▼' }}</span>
+                    }
+                </td>
+                <td class="user-id">{{ commande.userId }}</td>
+                <td>
+                    <span class="badge badge-{{ commande.statut }}">{{ commande.statut }}</span>
+                </td>
+                <td>{{ formatDate(commande.dateCommande) }}</td>
+                <td>{{ formatDate(commande.dateLivraison) }}</td>
+                <td class="total">{{ commande.total | number:'1.2-2' }} €</td>
+            </tr>
+
+            @if (isOuverte(commande.id) && commandesAvecLignes().get(commande.id)) {
+            <tr class="lignes-row">
+                <td colspan="7">
+                    <table class="lignes-table">
+                        <thead>
+                        <tr>
+                            <th>Article</th>
+                            <th>Quantité</th>
+                            <th>Prix unitaire</th>
+                            <th>Total</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @for (ligne of commandesAvecLignes().get(commande.id).lignes; track ligne.id) {
+                        <tr>
+                            <td>{{ ligne.article }}</td>
+                            <td>{{ ligne.quantite }}</td>
+                            <td>{{ ligne.prixUnitaire | number:'1.2-2' }} €</td>
+                            <td>{{ ligne.total | number:'1.2-2' }} €</td>
+                        </tr>
+                        }
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            }
+            }
+            </tbody>
+        </table>
+    </div>
+
+    @if (filtreStatut() === 'CREEE' && articlesAgreges.length > 0) {
+    <div class="section-title">Récapitulatif des articles</div>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+            <tr>
+                <th>Article</th>
+                <th>Qté totale</th>
+                <th>Prix unitaire</th>
+                <th>Commandes</th>
+                <th class="text-right">Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            @for (article of articlesAgreges; track article.article) {
+            <tr>
+                <td class="reference">{{ article.article }}</td>
+                <td>{{ article.quantiteTotale }}</td>
+                <td>{{ article.prixUnitaire | number:'1.2-2' }} €</td>
+                <td>
+                    @for (ref of article.commandes; track ref) {
+                    <span class="tag">{{ ref }}</span>
+                    }
+                </td>
+                <td class="total">{{ article.total | number:'1.2-2' }} €</td>
+            </tr>
+            }
+            </tbody>
+            <tfoot>
+            <tr class="total-row">
+                <td colspan="4" class="text-right">Total général</td>
+                <td class="total">{{ totalGeneral | number:'1.2-2' }} €</td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+    }
+    }
+</div>

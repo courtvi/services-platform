@@ -1,0 +1,34 @@
+@if (loading) {
+<p>{{ 'commande.chargement' | translate }}</p>
+} @else if (error) {
+<p>{{ 'commande.erreur' | translate }}</p>
+} @else if (commande) {
+
+<div class="commande-info">
+    <h2>{{ 'commande.titre' | translate }} #{{ commande.commande.reference }}</h2>
+    <p><strong>{{ 'commande.statut' | translate }} :</strong> {{ 'statuts.' + commande.commande.statut | translate }}</p>
+    <p><strong>{{ 'commande.date' | translate }} :</strong> {{ commande.commande.dateCommande | date:'dd/MM/yyyy' }}</p>
+    <p><strong>{{ 'commande.utilisateur' | translate }} :</strong> {{ commande.commande.userId }}</p>
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <th>{{ 'commande.article' | translate }}</th>
+        <th>{{ 'commande.quantite' | translate }}</th>
+        <th>{{ 'commande.prixUnitaire' | translate }}</th>
+        <th>{{ 'commande.total' | translate }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    @for (ligne of commande.lignes; track ligne.id) {
+    <tr>
+        <td>{{ ligne.article }}</td>
+        <td>{{ ligne.quantite }}</td>
+        <td>{{ ligne.prixUnitaire | currency:'EUR' }}</td>
+        <td>{{ ligne.total | currency:'EUR' }}</td>
+    </tr>
+    }
+    </tbody>
+</table>
+}
