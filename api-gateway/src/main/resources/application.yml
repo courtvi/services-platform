@@ -7,8 +7,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:30090/realms/camping-haller
-          jwk-set-uri: http://keycloak:9090/realms/camping-haller/protocol/openid-connect/certs
+          issuer-uri: http://keycloak:8080/realms/camping-haller
+          jwk-set-uri: http://keycloak:8080/realms/camping-haller/protocol/openid-connect/certs
 
 server:
   port: 8090
@@ -18,6 +18,20 @@ cloud:
     # ✅ Propagation automatique du JWT aux microservices
     default-filters:
       - TokenRelay=
+    corsConfigurations:
+      '[/**]':
+        allowedOrigins:
+          - "http://localhost:30080"
+        allowedMethods:
+          - GET
+          - POST
+          - PUT
+          - PATCH
+          - DELETE
+          - OPTIONS
+        allowedHeaders:
+          - "*"
+        allowCredentials: true
     routes:
       # ✅ Route → commande-service
       - id: commande-service
@@ -46,7 +60,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     serviceUrl:
-      defaultZone: http://eureka-service:8761/eureka
+      defaultZone: http://eureka:8761/eureka
 
 management:
   endpoints:
