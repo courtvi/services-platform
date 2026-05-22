@@ -1,0 +1,4 @@
+
+script/*.tar
+target/
+*.jar
