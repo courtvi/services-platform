@@ -1,43 +1,17 @@
 #!/bin/bash
+cd /mnt/c/Users/bde_v/IdeaProjects/services-platform/commande-service
+export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
+export PATH="$JAVA_HOME/bin:$PATH"
 
-SERVICE=$1
-
-if [ -z "$SERVICE" ]; then
-  echo "❌ Usage: ./deploy.sh <service-name>"
-  exit 1
-fi
-
-echo "🚀 Deploying $SERVICE..."
-
-PROJECT_DIR="/mnt/c/Users/bde_v/IdeaProjects/services-platform/$SERVICE"
-
-echo "📦 Step 1: Maven build"
-cd "$PROJECT_DIR" || exit
+echo "📦 Maven build..."
 mvn clean package -DskipTests
 
-if [ $? -ne 0 ]; then
-  echo "❌ Maven build failed"
-  exit 1
-fi
+echo "🐳 Docker build..."
+docker build -t commande-service:latest .
 
-echo "🐳 Step 2: Docker build"
-docker build -t $SERVICE:latest .
+echo "📥 Kind load..."
+kind load docker-image commande-service:latest --name kind
 
-if [ $? -ne 0 ]; then
-  echo "❌ Docker build failed"
-  exit 1
-fi
-
-echo "📦 Step 3: Load image into Kind"
-kind load docker-image $SERVICE:latest
-
-echo "🔁 Step 4: Restart Kubernetes deployment"
-kubectl rollout restart deployment $SERVICE -n camping-haller
-
-echo "⏳ Step 5: Waiting for rollout..."
-kubectl rollout status deployment $SERVICE -n camping-haller
-
-echo "📜 Step 6: Last logs"
-kubectl logs deployment/$SERVICE -n camping-haller --tail=50
-
-echo "✅ Deployment of $SERVICE completed!"
+echo "🔁 Restart..."
+kubectl rollout restart deployment/commande-service -n camping-haller
+kubectl rollout status deployment/commande-service -n camping-haller

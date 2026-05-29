@@ -36,6 +36,7 @@ public class CommandeHandler {
                 .map(principal -> (Authentication) principal);
     }
 
+    /*
     public Mono<ServerResponse> createCommande(ServerRequest request) {
         return extractUserId(request)
                 .flatMap(userId ->
@@ -49,6 +50,27 @@ public class CommandeHandler {
                 )
                 .onErrorResume(e -> {
                     e.printStackTrace(); // ← ajoute ça
+                    return ServerResponse.badRequest().bodyValue(e.getMessage());
+                });
+    }
+    */
+    public Mono<ServerResponse> createCommande(ServerRequest request) {
+        return request.principal()
+                .cast(JwtAuthenticationToken.class)
+                .flatMap(auth -> {
+                    String userId = auth.getToken().getSubject();
+                    String userEmail = auth.getToken().getClaimAsString("email"); // ✅ email extrait
+
+                    return request.bodyToMono(CommandeRequest.class)
+                            .flatMap(commandeRequest ->
+                                    commandeService.createCommande(commandeRequest, userId, userEmail)
+                            );
+                })
+                .flatMap(response ->
+                        ServerResponse.status(201).bodyValue(response)
+                )
+                .onErrorResume(e -> {
+                    e.printStackTrace();
                     return ServerResponse.badRequest().bodyValue(e.getMessage());
                 });
     }

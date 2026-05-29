@@ -10,11 +10,25 @@ kubectl cluster-info
 
 kubectl get namespace $NAMESPACE &>/dev/null || kubectl create namespace $NAMESPACE
 
-echo "📦 STEP 1 - Build Docker images"
+echo "📦 STEP 1 - Build Maven + Docker images"
+
+export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
+export PATH="$JAVA_HOME/bin:$PATH"
+
+echo "➡️ Maven build api-gateway"
+cd ../api-gateway && mvn clean package -DskipTests && cd ../script
+
+echo "➡️ Maven build eureka-server"
+cd ../eureka-server && mvn clean package -DskipTests && cd ../script
+
+echo "➡️ Maven build commande-service"
+cd ../commande-service && mvn clean package -DskipTests && cd ../script
+
+echo "➡️ Docker builds"
 docker build -t frontend:latest ../frontend
-docker build --no-cache -t api-gateway:latest ../api-gateway
-docker build --no-cache -t eureka-server:latest ../eureka-server
-docker build --no-cache -t commande-service:latest ../commande-service
+docker build -t api-gateway:latest ../api-gateway
+docker build -t eureka-server:latest ../eureka-server
+docker build -t commande-service:latest ../commande-service
 
 echo "📥 STEP 2 - Load images into Kind"
 kind load docker-image frontend:latest --name $CLUSTER
@@ -23,17 +37,17 @@ kind load docker-image eureka-server:latest --name $CLUSTER
 kind load docker-image commande-service:latest --name $CLUSTER
 
 echo "☸️ STEP 3 - Apply Kubernetes manifests"
+kubectl apply -f ../k8s/keycloak/ -n $NAMESPACE
+kubectl apply -f ../k8s/eureka-server/ -n $NAMESPACE
+kubectl apply -f ../k8s/api-gateway/ -n $NAMESPACE
+kubectl apply -f ../k8s/commande-service/ -n $NAMESPACE
+kubectl apply -f ../k8s/front-end/ -n $NAMESPACE
+
+echo "⏳ STEP 4 - Waiting for pods"
 kubectl rollout restart deployment/frontend -n $NAMESPACE
 kubectl rollout restart deployment/api-gateway -n $NAMESPACE
 kubectl rollout restart deployment/eureka -n $NAMESPACE
 kubectl rollout restart deployment/commande-service -n $NAMESPACE
-
-echo "⏳ STEP 4 - Waiting for pods"
-kubectl rollout status deployment/keycloak -n $NAMESPACE --timeout=180s
-kubectl rollout status deployment/eureka -n $NAMESPACE --timeout=60s
-kubectl rollout status deployment/commande-service -n $NAMESPACE --timeout=60s
-kubectl rollout status deployment/api-gateway -n $NAMESPACE --timeout=60s
-kubectl rollout status deployment/frontend -n $NAMESPACE --timeout=60s
 
 echo "🔍 STEP 5 - Health checks"
 kubectl get pods -n $NAMESPACE -o wide
@@ -47,20 +61,32 @@ echo "Eureka:      http://localhost:8761"
 
 echo "✅ DONE - Cluster ready"
 
+# ✅ STEP 7 - Port-forwards avec auto-restart
 echo "🚀 STEP 7 - Port-forwards"
-# ✅ Tuez les anciens port-forwards avant de relancer
 pkill -f "kubectl port-forward" 2>/dev/null || true
 sleep 1
 
-kubectl port-forward service/keycloak 30090:8080 -n $NAMESPACE &
-kubectl port-forward service/eureka 8761:8761 -n $NAMESPACE &
-kubectl port-forward service/commande-service 8082:8082 -n $NAMESPACE &
-kubectl port-forward service/api-gateway 31803:8090 -n $NAMESPACE &
-kubectl port-forward service/frontend 30080:80 -n $NAMESPACE &
+watch_and_forward() {
+  local SERVICE=$1
+  local LOCAL_PORT=$2
+  local REMOTE_PORT=$3
+  local NAMESPACE=$4
+  while true; do
+    kubectl port-forward --address 0.0.0.0 service/$SERVICE $LOCAL_PORT:$REMOTE_PORT -n $NAMESPACE 2>/dev/null
+    sleep 2
+  done
+}
+
+watch_and_forward keycloak 30090 8080 $NAMESPACE &
+watch_and_forward eureka 8761 8761 $NAMESPACE &
+watch_and_forward commande-service 8082 8082 $NAMESPACE &
+watch_and_forward api-gateway 31803 8090 $NAMESPACE &
+watch_and_forward frontend 30080 80 $NAMESPACE &
 
 sleep 3
-echo "✅ Tous les port-forwards sont actifs !"
-echo "➡️  Ouvrez http://localhost:30080 dans Chrome"
+echo "✅ Port-forwards avec auto-restart actifs !"
+sleep 3
+echo "✅ Port-forwards avec auto-restart actifs !"
 
 # ✅ STEP 8 - Recréez l'utilisateur Keycloak automatiquement
 echo "🔐 STEP 8 - Setup Keycloak user"

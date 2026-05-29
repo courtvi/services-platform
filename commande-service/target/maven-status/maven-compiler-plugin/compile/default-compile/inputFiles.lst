@@ -12,3 +12,4 @@
 /mnt/c/Users/bde_v/IdeaProjects/services-platform/commande-service/src/main/java/org/gestion/commande/repository/LigneCommandeRepository.java
 /mnt/c/Users/bde_v/IdeaProjects/services-platform/commande-service/src/main/java/org/gestion/commande/router/CommandeRouter.java
 /mnt/c/Users/bde_v/IdeaProjects/services-platform/commande-service/src/main/java/org/gestion/commande/service/CommandeService.java
+/mnt/c/Users/bde_v/IdeaProjects/services-platform/commande-service/src/main/java/org/gestion/commande/service/MailService.java

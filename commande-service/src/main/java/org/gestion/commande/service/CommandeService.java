@@ -7,17 +7,15 @@ import org.gestion.commande.model.Commande;
 import org.gestion.commande.model.LigneCommande;
 import org.gestion.commande.repository.CommandeRepository;
 import org.gestion.commande.repository.LigneCommandeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CommandeService {
@@ -25,16 +23,22 @@ public class CommandeService {
     private final CommandeRepository commandeRepository;
     private final LigneCommandeRepository ligneCommandeRepository;
     private final TransactionalOperator transactionalOperator;
+    private final MailService mailService;
+
+    @Value("${spring.mail.username}")
+    private String adminEmail;
 
     public CommandeService(CommandeRepository commandeRepository,
                            LigneCommandeRepository ligneCommandeRepository,
-                           TransactionalOperator transactionalOperator) {
+                           TransactionalOperator transactionalOperator,
+                           MailService mailService) {
         this.commandeRepository = commandeRepository;
         this.ligneCommandeRepository = ligneCommandeRepository;
         this.transactionalOperator = transactionalOperator;
+        this.mailService = mailService;
     }
 
-    public Mono<CommandeResponse> createCommande(CommandeRequest request, String userId) {
+    public Mono<CommandeResponse> createCommande(CommandeRequest request, String userId, String userEmail) {
 
         Commande commande = new Commande();
         commande.setUserId(userId);
@@ -42,6 +46,7 @@ public class CommandeService {
         commande.setStatut("CREEE");
         commande.setDateCommande(LocalDateTime.now());
         commande.setDateLivraison(request.dateLivraison());
+
         return transactionalOperator.execute(status ->
                         commandeRepository.save(commande)
                                 .flatMap(saved -> {
@@ -64,11 +69,26 @@ public class CommandeService {
 
                                     return ligneCommandeRepository.saveAll(lignes)
                                             .collectList()
-                                            .map(l -> saved);
+                                            .map(savedLignes -> saved);
                                 })
                 )
                 .single()
-                .flatMap(this::toResponseWithTotal);
+                .flatMap(saved ->
+                        ligneCommandeRepository.findByCommandeId(saved.getId())
+                                .collectList()
+                                .flatMap(lignes -> {
+                                    System.out.println(">>> Lignes récupérées pour mail: " + lignes.size()); // ✅ debug
+                                    return toResponseWithTotal(saved)
+                                            .flatMap(response ->
+                                                    mailService.sendConfirmationCommande(userEmail, response, lignes)
+                                                            .thenReturn(response)
+                                                            .onErrorResume(e -> {
+                                                                System.err.println("⚠️ Email non envoyé : " + e.getMessage());
+                                                                return Mono.just(response);
+                                                            })
+                                            );
+                                })
+                );
     }
 
     // ✅ READ ONE — ROLE_CLIENT : seulement sa commande

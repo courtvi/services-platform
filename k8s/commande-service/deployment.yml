@@ -34,6 +34,16 @@ spec:
               value: "r2dbc:h2:mem:///commandedb;DB_CLOSE_DELAY=-1"
             - name: SERVER_PORT
               value: "8082"
+            - name: MAIL_USERNAME
+              valueFrom:
+                secretKeyRef:
+                 name: mail-secret
+                 key: MAIL_USERNAME
+            - name: MAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mail-secret
+                  key: MAIL_PASSWORD
           readinessProbe:
             httpGet:
               path: /manage/health

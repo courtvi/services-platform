@@ -1,3 +1,4 @@
+org/gestion/commande/service/MailService.class
 org/gestion/commande/dto/CommandeRequest.class
 org/gestion/commande/handler/CommandeHandler.class
 org/gestion/commande/service/CommandeService.class

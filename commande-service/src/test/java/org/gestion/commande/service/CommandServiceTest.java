@@ -34,6 +34,9 @@ class CommandeServiceTest {
     @Mock
     LigneCommandeRepository ligneCommandeRepository;
 
+    @Mock
+    MailService mailService;
+
     private TransactionalOperator transactionalOperator;
     private CommandeService commandeService;
 
@@ -58,7 +61,11 @@ class CommandeServiceTest {
         };
 
         transactionalOperator = TransactionalOperator.create(txManager);
-        commandeService = new CommandeService(commandeRepository, ligneCommandeRepository, transactionalOperator);
+        commandeService = new CommandeService(
+                commandeRepository,
+                ligneCommandeRepository,
+                transactionalOperator,
+                mailService);
 
         request = new CommandeRequest(
                 "CMD-TEST-001",
@@ -107,8 +114,8 @@ class CommandeServiceTest {
         when(commandeRepository.save(any())).thenReturn(Mono.just(savedCommande));
         when(ligneCommandeRepository.saveAll(any(Iterable.class))).thenReturn(Flux.empty());
         mockLignes(1L, 1.10);
-
-        StepVerifier.create(commandeService.createCommande(request, "user-123"))
+        when(mailService.sendConfirmationCommande(any(), any(), any())).thenReturn(Mono.empty());
+        StepVerifier.create(commandeService.createCommande(request, "user-123", "user@test.com"))
                 .expectNextMatches(r ->
                         r.reference().equals("CMD-TEST-001") &&
                                 r.statut().equals("CREEE") &&
@@ -123,8 +130,8 @@ class CommandeServiceTest {
         Commande commande = buildCommande(1L, "user-123", "CMD-TEST-002", "CREEE");
         when(commandeRepository.save(any())).thenReturn(Mono.just(commande));
         mockLignesVides(1L);
-
-        StepVerifier.create(commandeService.createCommande(requestSansLignes, "user-123"))
+        when(mailService.sendConfirmationCommande(any(), any(), any())).thenReturn(Mono.empty());
+        StepVerifier.create(commandeService.createCommande(requestSansLignes, "user-123", "user@test.com"))
                 .expectNextMatches(r ->
                         r.reference().equals("CMD-TEST-002") &&
                                 r.total() == 0.0
@@ -140,7 +147,7 @@ class CommandeServiceTest {
                 Mono.error(new IllegalArgumentException("userId ne peut pas être null"))
         );
 
-        StepVerifier.create(commandeService.createCommande(request, null))
+        StepVerifier.create(commandeService.createCommande(request, null, "user@test.com"))
                 .expectError(IllegalArgumentException.class)
                 .verify();
     }
