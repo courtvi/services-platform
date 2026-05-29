@@ -1,17 +1,26 @@
 <div class="container">
-  <h2>{{ 'commande.nouvelle' | translate }}</h2>
-  <h3>{{ 'commande.selectionArticles' | translate }}</h3>
+  <h2>
+    <mat-icon>storefront</mat-icon>
+    {{ 'commande.nouvelle' | translate }}
+  </h2>
+  <h3>
+    <mat-icon>shopping_bag</mat-icon>
+    {{ 'commande.selectionArticles' | translate }}
+  </h3>
 
   <form [formGroup]="form" (ngSubmit)="submit()">
     <mat-form-field appearance="outline">
       <mat-label>{{ 'commande.dateLivraison' | translate }}</mat-label>
+      <mat-icon matPrefix>calendar_today</mat-icon>
       <input matInput type="date" formControlName="dateLivraison" [min]="getTomorrow()">
     </mat-form-field>
 
     <div formArrayName="articles">
       @for (groupe of GROUPES; track groupe.key) {
       <div class="groupe-section">
-        <h3 class="groupe-label">{{ groupe.label | translate }}</h3>
+        <h3 class="groupe-label">
+          {{ groupe.label | translate }}
+        </h3>
         <div class="groupe-articles">
           @for (item of getArticlesByGroupe(groupe.key); track item.index) {
           <div class="article-wrapper">
@@ -21,11 +30,11 @@
                    onerror="this.src='default.png'"
                    [alt]="'articles.' + item.control.get('article')?.value | translate">
               <span class="article-name">
-                    {{ 'articles.' + item.control.get('article')?.value | translate }}
-                  </span>
+                {{ 'articles.' + item.control.get('article')?.value | translate }}
+              </span>
               <span class="article-prix">
-                    {{ item.control.get('prixUnitaire')?.value | currency:'EUR' }}
-                  </span>
+                {{ item.control.get('prixUnitaire')?.value | currency:'EUR' }}
+              </span>
               <div class="qty-control">
                 <button type="button" (click)="decreaseQuantity(item.index)"
                         [disabled]="item.control.get('quantite')?.value <= 0">
@@ -53,10 +62,18 @@
     </div>
 
     <div class="actions">
-      <button type="submit" [disabled]="form.invalid || loading">
-        <mat-icon>shopping_cart</mat-icon>
-        {{ 'commande.commander' | translate }}
+      @if (!payPalConfig) {
+      <button mat-raised-button color="primary" type="button"
+              [disabled]="form.invalid || loading"
+              (click)="initPayPal()">
+        <mat-icon>payment</mat-icon>
+        {{ 'commande.payer' | translate }}
       </button>
+      }
+
+      @if (payPalConfig) {
+      <ngx-paypal [config]="payPalConfig"></ngx-paypal>
+      }
     </div>
   </form>
 </div>

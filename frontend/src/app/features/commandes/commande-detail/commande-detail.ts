@@ -1,10 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { CommandeService } from '../../../core/services/commande.service';
 import { CommandeAvecLignes } from '../../../core/models/commande.model';
 import { TranslateModule } from '@ngx-translate/core';
-import { CurrencyPipe } from '@angular/common';
+
 
 @Component({
   selector: 'app-commande-detail',
@@ -21,6 +21,8 @@ export class CommandeDetail implements OnInit {
   loading = true;
   error = false;
 
+  readonly TVA_RATE = 0.03; // 3%
+
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.commandeService.getCommandeById(id).subscribe({
@@ -35,7 +37,19 @@ export class CommandeDetail implements OnInit {
     });
   }
 
+  getTva(total: number): number {
+    return total * this.TVA_RATE;
+  }
+
   getTotalCommande(): number {
     return this.commande?.lignes.reduce((acc, ligne) => acc + ligne.total, 0) ?? 0;
+  }
+
+  getTotalHT(): number {
+    return this.getTotalCommande() / (1 + this.TVA_RATE);
+  }
+
+  getTotalTva(): number {
+    return this.getTotalCommande() * this.TVA_RATE / (1 + this.TVA_RATE);
   }
 }

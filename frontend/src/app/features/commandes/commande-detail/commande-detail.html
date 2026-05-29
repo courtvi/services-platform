@@ -16,6 +16,7 @@
   <tr>
     <th>{{ 'commande.article' | translate }}</th>
     <th>{{ 'commande.quantite' | translate }}</th>
+    <th>{{ 'commande.tva' | translate }}</th>
     <th>{{ 'commande.prixUnitaire' | translate }}</th>
     <th>{{ 'commande.total' | translate }}</th>
   </tr>
@@ -25,6 +26,7 @@
   <tr>
     <td>{{ 'articles.' + ligne.article | translate }}</td>
     <td>{{ ligne.quantite }}</td>
+    <td>{{ getTva(ligne.total) | currency:'EUR' }}</td>
     <td>{{ ligne.prixUnitaire | currency:'EUR' }}</td>
     <td>{{ ligne.total | currency:'EUR' }}</td>
   </tr>
@@ -32,7 +34,11 @@
   </tbody>
   <tfoot>
   <tr>
-    <td colspan="3"><strong>{{ 'commande.totalCommande' | translate }}</strong></td>
+    <td colspan="4"><strong>{{ 'commande.totalTva' | translate }}</strong></td>
+    <td><strong>{{ getTotalTva() | currency:'EUR' }}</strong></td>
+  </tr>
+  <tr>
+    <td colspan="4"><strong>{{ 'commande.totalCommande' | translate }}</strong></td>
     <td><strong>{{ getTotalCommande() | currency:'EUR' }}</strong></td>
   </tr>
   </tfoot>

@@ -26,11 +26,14 @@
     "utilisateur": "Utilisateur",
     "article": "Article",
     "quantite": "Quantité",
+    "tva": "tva",
     "prixUnitaire": "Prix unitaire",
     "total": "Total",
     "totalCommande": "Total",
+    "totalTva": "Total TVA",
     "erreur": "Erreur lors du chargement de la commande.",
-    "chargement": "Chargement..."
+    "chargement": "Chargement...",
+    "payer": "Payer avec PayPal"
   },
   "statuts": {
     "CREEE": "Créée",

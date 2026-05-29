@@ -10,7 +10,7 @@ mat-toolbar {
   align-items: center;
   gap: 0.5rem;
   text-decoration: none;
-  color: white;
+  color: black;
   font-size: 1.2rem;
   font-weight: 600;
 }

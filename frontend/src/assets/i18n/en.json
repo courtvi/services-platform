@@ -27,10 +27,13 @@
     "article": "Item",
     "quantite": "Quantity",
     "prixUnitaire": "Unit price",
+    "tva": "VAT" ,
+    "totalTva": "Total VAT",
     "total": "Total",
     "totalCommande": "Total",
     "erreur": "Error loading the order.",
-    "chargement": "Loading..."
+    "chargement": "Loading...",
+    "payer": "Pay with PayPal"
   },
   "statuts": {
     "CREEE": "Created",

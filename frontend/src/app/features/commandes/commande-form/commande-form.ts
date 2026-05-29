@@ -11,6 +11,9 @@ import { CommandeRequest } from '../../../core/models/commande.model';
 import { TranslateModule } from '@ngx-translate/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CurrencyPipe } from '@angular/common';
+import { NgxPayPalModule, IPayPalConfig, ICreateOrderRequest } from 'ngx-paypal';
+import { environment } from '../../../environments/environment';
+
 
 interface ArticleGroupe {
   key: string;
@@ -36,7 +39,8 @@ interface Groupe {
     MatFormFieldModule,
     MatInputModule,
     MatSnackBarModule,
-    TranslateModule
+    TranslateModule,
+    NgxPayPalModule
   ],
   templateUrl: './commande-form.html',
   styleUrl: './commande-form.css',
@@ -49,6 +53,39 @@ export class CommandeForm {
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
   private fb = inject(FormBuilder);
+
+  payPalConfig?: IPayPalConfig;
+
+  initPayPal() {
+    const total = this.form.value.articles
+      .reduce((acc: number, a: any) => acc + (a.quantite * a.prixUnitaire), 0)
+      .toFixed(2);
+
+    this.payPalConfig = {
+      currency: 'EUR',
+      clientId: environment.paypal.clientId,
+      createOrderOnClient: () => ({
+        intent: 'CAPTURE',
+        purchase_units: [{
+          amount: {
+            currency_code: 'EUR',
+            value: total
+          }
+        }]
+      } as ICreateOrderRequest),
+      advanced: { commit: 'true' },
+      style: { label: 'paypal', layout: 'vertical' },
+      onApprove: (data, actions) => {
+        actions.order.capture().then(() => {
+          this.submit();
+        });
+      },
+      onError: err => {
+        console.error('PayPal error', err);
+        this.snackBar.open('Erreur PayPal', 'Fermer', { duration: 3000 });
+      }
+    };
+  }
 
   getTomorrow(): string {
     const tomorrow = new Date();

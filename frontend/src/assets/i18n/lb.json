@@ -27,10 +27,13 @@
     "article": "Artikel",
     "quantite": "Quantitéit",
     "prixUnitaire": "Eenzelpreis",
+    "tva": "MwSt.",
+    "totalTva": "MwSt. gesamt",
     "total": "Total",
     "totalCommande": "Total",
     "erreur": "Fehler beim Luede vun der Bestellung.",
-    "chargement": "Lueden..."
+    "chargement": "Lueden...",
+    "payer": "Mat PayPal bezuelen"
   },
   "statuts": {
     "CREEE": "Erstallt",
