@@ -15,10 +15,14 @@ spec:
       labels:
         app: keycloak
     spec:
+      initContainers:
+        - name: wait-for-postgres
+          image: busybox
+          command: ['sh', '-c', 'until nc -z postgres 5432; do echo waiting for postgres; sleep 2; done']
       containers:
         - name: keycloak
           image: quay.io/keycloak/keycloak:26.2.4
-          args: ["start-dev", "--import-realm"]
+          args: ["start-dev"]
           ports:
             - containerPort: 8080
           env:
@@ -32,15 +36,25 @@ spec:
               value: "false"
             - name: KC_HOSTNAME_STRICT_BACKCHANNEL
               value: "false"
-            - name: KC_IMPORT_STRATEGY
-              value: OVERWRITE_EXISTING
             - name: KC_HOSTNAME
               value: "localhost"
             - name: KC_HOSTNAME_PORT
               value: "30090"
-          volumeMounts:
-            - name: realm-config
-              mountPath: /opt/keycloak/data/import
+            # PostgreSQL
+            - name: KC_DB
+              value: postgres
+            - name: KC_DB_URL
+              value: jdbc:postgresql://postgres:5432/keycloak
+            - name: KC_DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_USER
+            - name: KC_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
           readinessProbe:
             httpGet:
               path: /realms/master
@@ -61,7 +75,3 @@ spec:
             limits:
               memory: "1Gi"
               cpu: "500m"
-      volumes:
-        - name: realm-config
-          configMap:
-            name: keycloak-realm
