@@ -15,6 +15,10 @@ spec:
       labels:
         app: commande-service
     spec:
+      initContainers:
+        - name: wait-for-postgres
+          image: busybox
+          command: [ 'sh', '-c', 'until nc -z postgres-commande 5432; do echo waiting for postgres-commande; sleep 5; done' ]
       containers:
         - name: commande-service
           image: commande-service:latest
@@ -30,8 +34,6 @@ spec:
               value: "http://keycloak:8080/realms/camping-haller/protocol/openid-connect/certs"
             - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
               value: "http://eureka:8761/eureka"
-            - name: SPRING_R2DBC_URL
-              value: "r2dbc:h2:mem:///commandedb;DB_CLOSE_DELAY=-1"
             - name: SERVER_PORT
               value: "8082"
             - name: MAIL_USERNAME
@@ -44,6 +46,20 @@ spec:
                 secretKeyRef:
                   name: mail-secret
                   key: MAIL_PASSWORD
+            - name: SPRING_R2DBC_URL
+              value: "r2dbc:postgresql://postgres-commande:5432/commandedb"
+            - name: SPRING_R2DBC_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-commande-secret
+                  key: POSTGRES_USER
+            - name: SPRING_R2DBC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-commande-secret
+                  key: POSTGRES_PASSWORD
+            - name: SPRING_SQL_INIT_MODE
+              value: "always"
           readinessProbe:
             httpGet:
               path: /manage/health

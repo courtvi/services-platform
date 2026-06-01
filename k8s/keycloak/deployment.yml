@@ -18,7 +18,7 @@ spec:
       initContainers:
         - name: wait-for-postgres
           image: busybox
-          command: ['sh', '-c', 'until nc -z postgres 5432; do echo waiting for postgres; sleep 2; done']
+          command: ['sh', '-c', 'until nc -z postgres-keycloak 5432; do echo waiting for postgres; sleep 2; done']
       containers:
         - name: keycloak
           image: quay.io/keycloak/keycloak:26.2.4
@@ -44,16 +44,16 @@ spec:
             - name: KC_DB
               value: postgres
             - name: KC_DB_URL
-              value: jdbc:postgresql://postgres:5432/keycloak
+              value: jdbc:postgresql://postgres-keycloak:5432/keycloak
             - name: KC_DB_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: postgres-secret
+                  name: postgres-keycloak-secret
                   key: POSTGRES_USER
             - name: KC_DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgres-secret
+                  name: postgres-keycloak-secret
                   key: POSTGRES_PASSWORD
           readinessProbe:
             httpGet:

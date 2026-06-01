@@ -17,7 +17,7 @@ public class SecurityTestConfig {
         return http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchanges -> exchanges
-                        .anyExchange().permitAll()  // ← tout autoriser en test
+                        .anyExchange().permitAll()
                 )
                 .build();
     }

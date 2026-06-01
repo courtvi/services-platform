@@ -1,0 +1,87 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgres-commande-secret
+  namespace: camping-haller
+type: Opaque
+stringData:
+  POSTGRES_DB: commandedb
+  POSTGRES_USER: commande
+  POSTGRES_PASSWORD: commande
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-commande-pvc
+  namespace: camping-haller
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-commande
+  namespace: camping-haller
+  labels:
+    app: postgres-commande
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-commande
+  template:
+    metadata:
+      labels:
+        app: postgres-commande
+    spec:
+      containers:
+        - name: postgres-commande
+          image: postgres:16
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - secretRef:
+                name: postgres-commande-secret
+          volumeMounts:
+            - name: postgres-commande-data
+              mountPath: /var/lib/postgresql/data
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "commande"]
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          livenessProbe:
+            exec:
+              command: ["pg_isready", "-U", "commande"]
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "250m"
+      volumes:
+        - name: postgres-commande-data
+          persistentVolumeClaim:
+            claimName: postgres-commande-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-commande
+  namespace: camping-haller
+spec:
+  selector:
+    app: postgres-commande
+  ports:
+    - port: 5432
+      targetPort: 5432
