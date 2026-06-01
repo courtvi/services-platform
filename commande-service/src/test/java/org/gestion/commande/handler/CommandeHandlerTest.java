@@ -60,14 +60,15 @@ class CommandeHandlerTest {
         Jwt jwt = Jwt.withTokenValue("token")
                 .header("alg", "RS256")
                 .claim("sub", "user-123")
-                .claim("email", "user@test.com")  // ✅ ajout
+                .claim("email", "user@test.com")
+                .claim("numeroClient", "CLI-00001")
                 .build();
         authToken = new JwtAuthenticationToken(jwt);
     }
 
     @Test
     void createCommande_shouldReturn201() {
-        when(commandeService.createCommande(any(), eq("user-123"), eq("user@test.com")))
+        when(commandeService.createCommande(any(), eq("user-123"), eq("user@test.com"), eq("CLI-00001")))
                 .thenReturn(Mono.just(response));
 
         MockServerRequest serverRequest = MockServerRequest.builder()
@@ -81,7 +82,7 @@ class CommandeHandlerTest {
 
     @Test
     void createCommande_shouldReturn400OnError() {
-        when(commandeService.createCommande(any(), eq("user-123"), eq("user@test.com")))
+        when(commandeService.createCommande(any(), eq("user-123"), eq("user@test.com"), eq("CLI-00001")))
                 .thenReturn(Mono.error(new RuntimeException("Erreur service")));
 
         MockServerRequest serverRequest = MockServerRequest.builder()
@@ -220,7 +221,7 @@ class CommandeHandlerTest {
                 1.10
         );
 
-        when(commandeService.createCommande(any(), eq("user-123"), eq("user@test.com")))
+        when(commandeService.createCommande(any(), eq("user-123"), eq("user@test.com"), eq("CLI-00001")))
                 .thenReturn(Mono.just(avecTotal));
 
         MockServerRequest serverRequest = MockServerRequest.builder()

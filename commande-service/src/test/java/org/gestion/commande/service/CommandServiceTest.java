@@ -2,8 +2,10 @@ package org.gestion.commande.service;
 
 import org.gestion.commande.dto.CommandeRequest;
 import org.gestion.commande.dto.LigneCommandeRequest;
+import org.gestion.commande.model.ClientRef;
 import org.gestion.commande.model.Commande;
 import org.gestion.commande.model.LigneCommande;
+import org.gestion.commande.repository.ClientRefRepository;
 import org.gestion.commande.repository.CommandeRepository;
 import org.gestion.commande.repository.LigneCommandeRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,6 +35,9 @@ class CommandeServiceTest {
     CommandeRepository commandeRepository;
     @Mock
     LigneCommandeRepository ligneCommandeRepository;
+
+    @Mock
+    ClientRefRepository clientRefRepository;
 
     @Mock
     MailService mailService;
@@ -65,7 +70,8 @@ class CommandeServiceTest {
                 commandeRepository,
                 ligneCommandeRepository,
                 transactionalOperator,
-                mailService);
+                mailService,
+                clientRefRepository);
 
         request = new CommandeRequest(
                 "CMD-TEST-001",
@@ -111,11 +117,13 @@ class CommandeServiceTest {
 
     @Test
     void createCommande_shouldReturnResponseWithTotal() {
+        when(clientRefRepository.findById("user-123")).thenReturn(Mono.just(new ClientRef("user-123", "CLI-00001")));
+        when(clientRefRepository.save(any())).thenReturn(Mono.just(new ClientRef("user-123", "CLI-00001")));
         when(commandeRepository.save(any())).thenReturn(Mono.just(savedCommande));
         when(ligneCommandeRepository.saveAll(any(Iterable.class))).thenReturn(Flux.empty());
         mockLignes(1L, 1.10);
         when(mailService.sendConfirmationCommande(any(), any(), any())).thenReturn(Mono.empty());
-        StepVerifier.create(commandeService.createCommande(request, "user-123", "user@test.com"))
+        StepVerifier.create(commandeService.createCommande(request, "user-123", "user@test.com", "CLI-00001"))
                 .expectNextMatches(r ->
                         r.reference().equals("CMD-TEST-001") &&
                                 r.statut().equals("CREEE") &&
@@ -128,10 +136,12 @@ class CommandeServiceTest {
     @Test
     void createCommande_sansLignes_shouldReturnTotalZero() {
         Commande commande = buildCommande(1L, "user-123", "CMD-TEST-002", "CREEE");
+        when(clientRefRepository.findById("user-123")).thenReturn(Mono.just(new ClientRef("user-123", "CLI-00001")));
+        when(clientRefRepository.save(any())).thenReturn(Mono.just(new ClientRef("user-123", "CLI-00001")));
         when(commandeRepository.save(any())).thenReturn(Mono.just(commande));
         mockLignesVides(1L);
         when(mailService.sendConfirmationCommande(any(), any(), any())).thenReturn(Mono.empty());
-        StepVerifier.create(commandeService.createCommande(requestSansLignes, "user-123", "user@test.com"))
+        StepVerifier.create(commandeService.createCommande(requestSansLignes, "user-123", "user@test.com", "CLI-00001"))
                 .expectNextMatches(r ->
                         r.reference().equals("CMD-TEST-002") &&
                                 r.total() == 0.0
@@ -143,11 +153,12 @@ class CommandeServiceTest {
 
     @Test
     void createCommande_shouldFailWithNullUserId() {
-        when(commandeRepository.save(any())).thenReturn(
+        when(clientRefRepository.findById((String) null)).thenReturn(Mono.empty());
+        when(clientRefRepository.save(any())).thenReturn(
                 Mono.error(new IllegalArgumentException("userId ne peut pas être null"))
         );
 
-        StepVerifier.create(commandeService.createCommande(request, null, "user@test.com"))
+        StepVerifier.create(commandeService.createCommande(request, null, "user@test.com", "CLI-00001"))
                 .expectError(IllegalArgumentException.class)
                 .verify();
     }

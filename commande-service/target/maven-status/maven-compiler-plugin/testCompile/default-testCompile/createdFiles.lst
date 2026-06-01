@@ -1,8 +1,8 @@
-org/gestion/commande/CommandeIntegrationTest.class
-org/gestion/commande/repository/CommandeRepositoryTest.class
-org/gestion/commande/config/SecurityTestConfig.class
-org/gestion/commande/handler/CommandeHandlerTest.class
-org/gestion/commande/model/CommandeTest.class
-org/gestion/commande/service/CommandeServiceTest.class
-org/gestion/commande/service/CommandeServiceTest$1.class
-org/gestion/commande/CommandServiceApplicationTest.class
+org\gestion\commande\config\SecurityTestConfig.class
+org\gestion\commande\handler\CommandeHandlerTest.class
+org\gestion\commande\CommandServiceApplicationTest.class
+org\gestion\commande\service\CommandeServiceTest.class
+org\gestion\commande\model\CommandeTest.class
+org\gestion\commande\repository\CommandeRepositoryTest.class
+org\gestion\commande\CommandeIntegrationTest.class
+org\gestion\commande\service\CommandeServiceTest$1.class

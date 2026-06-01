@@ -60,10 +60,11 @@ public class CommandeHandler {
                 .flatMap(auth -> {
                     String userId = auth.getToken().getSubject();
                     String userEmail = auth.getToken().getClaimAsString("email"); // ✅ email extrait
+                    String numeroClient = auth.getToken().getClaimAsString("numeroClient");
 
                     return request.bodyToMono(CommandeRequest.class)
                             .flatMap(commandeRequest ->
-                                    commandeService.createCommande(commandeRequest, userId, userEmail)
+                                    commandeService.createCommande(commandeRequest, userId, userEmail, numeroClient)
                             );
                 })
                 .flatMap(response ->

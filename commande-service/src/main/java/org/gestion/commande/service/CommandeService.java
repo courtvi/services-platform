@@ -3,8 +3,10 @@ package org.gestion.commande.service;
 import org.gestion.commande.dto.CommandeAvecLignes;
 import org.gestion.commande.dto.CommandeRequest;
 import org.gestion.commande.dto.CommandeResponse;
+import org.gestion.commande.model.ClientRef;
 import org.gestion.commande.model.Commande;
 import org.gestion.commande.model.LigneCommande;
+import org.gestion.commande.repository.ClientRefRepository;
 import org.gestion.commande.repository.CommandeRepository;
 import org.gestion.commande.repository.LigneCommandeRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,17 +30,24 @@ public class CommandeService {
     @Value("${spring.mail.username}")
     private String adminEmail;
 
+    private final ClientRefRepository clientRefRepository;
+
     public CommandeService(CommandeRepository commandeRepository,
                            LigneCommandeRepository ligneCommandeRepository,
                            TransactionalOperator transactionalOperator,
-                           MailService mailService) {
+                           MailService mailService,
+                           ClientRefRepository clientRefRepository) {
         this.commandeRepository = commandeRepository;
         this.ligneCommandeRepository = ligneCommandeRepository;
         this.transactionalOperator = transactionalOperator;
         this.mailService = mailService;
+        this.clientRefRepository = clientRefRepository;
     }
 
-    public Mono<CommandeResponse> createCommande(CommandeRequest request, String userId, String userEmail) {
+    public Mono<CommandeResponse> createCommande(CommandeRequest request, String userId, String userEmail, String numeroClient) {
+        return clientRefRepository.findById(userId)
+                .switchIfEmpty(clientRefRepository.save(new ClientRef(userId, numeroClient)))
+                .flatMap(clientRef -> {
 
         Commande commande = new Commande();
         commande.setUserId(userId);
@@ -50,7 +59,7 @@ public class CommandeService {
         return transactionalOperator.execute(status ->
                         commandeRepository.save(commande)
                                 .flatMap(saved -> {
-                                    // ✅ Lignes optionnelles
+
                                     if (request.lignes() == null || request.lignes().isEmpty()) {
                                         return Mono.just(saved);
                                     }
@@ -77,7 +86,7 @@ public class CommandeService {
                         ligneCommandeRepository.findByCommandeId(saved.getId())
                                 .collectList()
                                 .flatMap(lignes -> {
-                                    System.out.println(">>> Lignes récupérées pour mail: " + lignes.size()); // ✅ debug
+                                    System.out.println(">>> Lignes récupérées pour mail: " + lignes.size());
                                     return toResponseWithTotal(saved)
                                             .flatMap(response ->
                                                     mailService.sendConfirmationCommande(userEmail, response, lignes)
@@ -89,8 +98,8 @@ public class CommandeService {
                                             );
                                 })
                 );
+    });
     }
-
     // ✅ READ ONE — ROLE_CLIENT : seulement sa commande
     public Mono<CommandeResponse> getCommandeByIdForUser(Long id, String userId) {
         return commandeRepository.findByIdAndUserId(id, userId)
