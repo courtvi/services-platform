@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 public class LigneCommande {
 
     @Id
+    @Column("ID")
     private Long id;
 
     @Column("COMMANDE_ID")

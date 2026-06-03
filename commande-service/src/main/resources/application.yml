@@ -13,21 +13,11 @@ spring:
           auth: true
           starttls:
             enable: true
-  r2dbc:
-    url: r2dbc:h2:mem:///commandedb;DB_CLOSE_DELAY=-1;NON_KEYWORDS=VALUE
-    username: sa
-    password:
-
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
 
   sql:
     init:
-      mode: always        # ✅ exécute schema.sql au démarrage
+      mode: always
       schema-locations: classpath:schema.sql
-      data-locations: classpath:data.sql
 
   security:
     oauth2:
@@ -63,13 +53,6 @@ management:
 
 logging:
   level:
-    org.springframework.web: DEBUG
-    com.fasterxml.jackson: DEBUG
-    org.springframework.http.converter: DEBUG
-    org.springframework.http.codec: DEBUG
-
-
     root: ERROR
-    org.gestion: DEBUG
-    org.springframework.web.server: DEBUG
-    org.springframework.core.codec: DEBUG
+    org.gestion: INFO
+    org.springframework.boot.sql.init: DEBUG
