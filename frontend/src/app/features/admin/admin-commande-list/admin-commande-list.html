@@ -38,7 +38,7 @@
             <tr>
                 <th>ID</th>
                 <th>Référence</th>
-                <th>User</th>
+                <th>Client ID</th>
                 <th>Statut</th>
                 <th>Date commande</th>
                 <th>Date livraison</th>
@@ -57,7 +57,7 @@
                     <span class="chevron">{{ isOuverte(commande.id) ? '▲' : '▼' }}</span>
                     }
                 </td>
-                <td class="user-id">{{ commande.userId }}</td>
+                <td class="user-id">{{ commande.numeroClient }}</td>
                 <td>
                     <span class="badge badge-{{ commande.statut }}">{{ commande.statut }}</span>
                 </td>

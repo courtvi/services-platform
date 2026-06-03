@@ -169,6 +169,8 @@ class CommandeServiceTest {
 
     @Test
     void getCommandeByIdForUser_shouldReturnCommandeWithTotal() {
+        when(clientRefRepository.findById("user-123"))
+                .thenReturn(Mono.just(new ClientRef("user-123", "CLI-00001")));
         when(commandeRepository.findByIdAndUserId(1L, "user-123"))
                 .thenReturn(Mono.just(savedCommande));
         mockLignes(1L, 2.20, 4.50);
@@ -199,6 +201,8 @@ class CommandeServiceTest {
     @Test
     void getCommandesByUser_shouldReturnAllWithTotals() {
         Commande c2 = buildCommande(2L, "user-123", "CMD-002", "CREEE");
+        when(clientRefRepository.findById("user-123"))
+                .thenReturn(Mono.just(new ClientRef("user-123", "CLI-00001")));
         when(commandeRepository.findByUserId("user-123"))
                 .thenReturn(Flux.just(savedCommande, c2));
         mockLignes(1L, 2.20, 4.50);
@@ -225,6 +229,10 @@ class CommandeServiceTest {
     @Test
     void getAllCommandes_shouldReturnAllWithTotals() {
         Commande c2 = buildCommande(2L, "user-456", "CMD-002", "CREEE");
+        when(clientRefRepository.findById("user-123"))
+                .thenReturn(Mono.just(new ClientRef("user-123", "CLI-00001")));
+        when(clientRefRepository.findById("user-456"))
+                .thenReturn(Mono.just(new ClientRef("user-456", "CLI-00002")));
         when(commandeRepository.findAll()).thenReturn(Flux.just(savedCommande, c2));
         mockLignes(1L, 1.10);
         mockLignes(2L, 3.50, 7.00);
@@ -246,7 +254,8 @@ class CommandeServiceTest {
                 LocalDateTime.of(2026, 5, 17, 0, 0), null
         );
         Commande updated = buildCommande(1L, "user-123", "CMD-UPDATED", "CREEE");
-
+        when(clientRefRepository.findById("user-123"))
+                .thenReturn(Mono.just(new ClientRef("user-123", "CLI-00001")));
         when(commandeRepository.findByIdAndUserId(1L, "user-123")).thenReturn(Mono.just(savedCommande));
         when(commandeRepository.save(any())).thenReturn(Mono.just(updated));
         mockLignes(1L, 2.20);
@@ -336,6 +345,8 @@ class CommandeServiceTest {
     @Test
     void passerEnCours_shouldSetStatutEnCours() {
         Commande enCours = buildCommande(1L, "user-123", "CMD-TEST-001", "EN_COURS");
+        when(clientRefRepository.findById("user-123"))
+                .thenReturn(Mono.just(new ClientRef("user-123", "CLI-00001")));
         when(commandeRepository.findById(1L)).thenReturn(Mono.just(savedCommande));
         when(commandeRepository.save(any())).thenReturn(Mono.just(enCours));
         mockLignes(1L, 2.20, 4.50);

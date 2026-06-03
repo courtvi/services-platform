@@ -9,6 +9,7 @@ export interface LigneCommande {
 export interface Commande {
   id: number;
   userId: string;
+  numeroClient: string;
   reference: string;
   statut: CommandeStatut;
   dateCommande: string;

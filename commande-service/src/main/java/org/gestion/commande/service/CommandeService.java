@@ -100,7 +100,7 @@ public class CommandeService {
                 );
     });
     }
-    // ✅ READ ONE — ROLE_CLIENT : seulement sa commande
+
     public Mono<CommandeResponse> getCommandeByIdForUser(Long id, String userId) {
         return commandeRepository.findByIdAndUserId(id, userId)
                 .flatMap(this::toResponseWithTotal)
@@ -109,19 +109,19 @@ public class CommandeService {
                 ));
     }
 
-    // ✅ READ ALL — ROLE_CLIENT : seulement ses commandes
+
     public Flux<CommandeResponse> getCommandesByUser(String userId) {
         return commandeRepository.findByUserId(userId)
                 .flatMap(this::toResponseWithTotal);
     }
 
-    // ✅ READ ALL — ROLE_ADMIN : toutes les commandes
+
     public Flux<CommandeResponse> getAllCommandes() {
         return commandeRepository.findAll()
                 .flatMap(this::toResponseWithTotal);
     }
 
-    // ✅ UPDATE — modification de la référence uniquement (statut géré séparément)
+
     public Mono<CommandeResponse> updateCommande(Long id, CommandeRequest request, String userId) {
         return commandeRepository.findByIdAndUserId(id, userId)
                 .switchIfEmpty(Mono.error(
@@ -140,7 +140,7 @@ public class CommandeService {
                 .flatMap(this::toResponseWithTotal);
     }
 
-    // ✅ DELETE (annulation) — seulement si statut CREEE
+
     public Mono<Void> annulerCommande(Long id, String userId) {
         return commandeRepository.findByIdAndUserId(id, userId)
                 .switchIfEmpty(Mono.error(
@@ -159,19 +159,23 @@ public class CommandeService {
 
 
     private Mono<CommandeResponse> toResponseWithTotal(Commande commande) {
-        System.out.println(">>> getId: " + commande.getId());
-        return ligneCommandeRepository.findByCommandeId(commande.getId())
-                .map(LigneCommande::getTotal)
-                .reduce(0.0, Double::sum)
-                .map(total -> new CommandeResponse(
-                        commande.getId(),
-                        commande.getUserId(),
-                        commande.getReference(),
-                        commande.getStatut(),
-                        commande.getDateCommande(),
-                        commande.getDateLivraison(),
-                        total
-                ));
+        return Mono.zip(
+                ligneCommandeRepository.findByCommandeId(commande.getId())
+                        .map(LigneCommande::getTotal)
+                        .reduce(0.0, Double::sum),
+                clientRefRepository.findById(commande.getUserId())
+                        .map(ClientRef::getNumeroClient)
+                        .defaultIfEmpty("N/A")
+        ).map(tuple -> new CommandeResponse(
+                commande.getId(),
+                commande.getUserId(),
+                tuple.getT2(),
+                commande.getReference(),
+                commande.getStatut(),
+                commande.getDateCommande(),
+                commande.getDateLivraison(),
+                tuple.getT1()
+        ));
     }
 
 

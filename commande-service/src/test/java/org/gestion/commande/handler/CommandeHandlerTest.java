@@ -50,6 +50,7 @@ class CommandeHandlerTest {
         response = new CommandeResponse(
                 1L,
                 "user-123",
+                "USER-001",
                 "CMD-TEST-001",
                 "CREEE",
                 LocalDateTime.of(2026, 5, 16, 0, 0),
@@ -176,6 +177,7 @@ class CommandeHandlerTest {
         CommandeResponse avecTotal = new CommandeResponse(
                 1L,
                 "user-alice",
+                "ALICE-001",
                 "CMD-ALICE-001",
                 "CREEE",
                 LocalDateTime.of(2026, 5, 21, 20, 52),
@@ -214,6 +216,7 @@ class CommandeHandlerTest {
         CommandeResponse avecTotal = new CommandeResponse(
                 1L,
                 "user-123",
+                "USER-001",
                 "CMD-TEST-001",
                 "CREEE",
                 LocalDateTime.of(2026, 5, 16, 0, 0),
