@@ -24,6 +24,7 @@
     "dateCommande": "Order date",
     "dateLivraison": "Delivery date",
     "utilisateur": "User",
+    "numeroClient": "Customer number",
     "article": "Item",
     "quantite": "Quantity",
     "prixUnitaire": "Unit price",

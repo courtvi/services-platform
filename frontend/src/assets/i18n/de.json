@@ -24,6 +24,7 @@
     "dateCommande": "Bestelldatum",
     "dateLivraison": "Lieferdatum",
     "utilisateur": "Benutzer",
+    "numeroClient": "Kundennummer",
     "article": "Artikel",
     "quantite": "Menge",
     "prixUnitaire": "Stückpreis",

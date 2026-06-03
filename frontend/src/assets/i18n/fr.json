@@ -24,6 +24,7 @@
     "dateCommande": "Date de commande",
     "dateLivraison": "Date de livraison",
     "utilisateur": "Utilisateur",
+    "numeroClient": "Numéro client",
     "article": "Article",
     "quantite": "Quantité",
     "tva": "tva",
