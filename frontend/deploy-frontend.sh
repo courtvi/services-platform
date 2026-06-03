@@ -8,7 +8,7 @@ echo "🔨 Build Angular"
 ng build --configuration=production
 
 echo "📦 Build Docker"
-docker build -t frontend:latest .
+docker build --no-cache -t frontend:latest .
 
 echo "📥 Load into Kind"
 kind load docker-image frontend:latest --name kind

@@ -180,14 +180,15 @@ public class CommandeService {
 
 
     public Mono<CommandeAvecLignes> getCommande(Long id) {
-
-        Mono<Commande> commandeMono = commandeRepository.findById(id);
-
         Mono<List<LigneCommande>> lignesMono =
                 ligneCommandeRepository.findByCommandeId(id)
                         .collectList();
 
-        return Mono.zip(commandeMono, lignesMono)
+        return commandeRepository.findById(id)
+                .flatMap(commande -> Mono.zip(
+                        toResponseWithTotal(commande),
+                        lignesMono
+                ))
                 .map(tuple -> new CommandeAvecLignes(
                         tuple.getT1(),
                         tuple.getT2()

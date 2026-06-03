@@ -25,10 +25,11 @@ echo "➡️ Maven build commande-service"
 cd ../commande-service && mvn clean package -DskipTests && cd ../script
 
 echo "➡️ Docker builds"
-docker build -t frontend:latest ../frontend
-docker build -t api-gateway:latest ../api-gateway
-docker build -t eureka-server:latest ../eureka-server
-docker build -t commande-service:latest ../commande-service
+cd ../frontend && rm -rf dist && cd ../script
+docker build --no-cache -t frontend:latest ../frontend
+docker build --no-cache -t api-gateway:latest ../api-gateway
+docker build --no-cache -t eureka-server:latest ../eureka-server
+docker build --no-cache -t commande-service:latest ../commande-service
 
 echo "📥 STEP 2 - Load images into Kind"
 kind load docker-image frontend:latest --name $CLUSTER
@@ -64,29 +65,23 @@ echo "✅ DONE - Cluster ready"
 # ✅ STEP 7 - Port-forwards avec auto-restart
 echo "🚀 STEP 7 - Port-forwards"
 pkill -f "kubectl port-forward" 2>/dev/null || true
-sleep 1
+sleep 2
 
-watch_and_forward() {
-  local SERVICE=$1
-  local LOCAL_PORT=$2
-  local REMOTE_PORT=$3
-  local NAMESPACE=$4
-  while true; do
-    kubectl port-forward --address 0.0.0.0 service/$SERVICE $LOCAL_PORT:$REMOTE_PORT -n $NAMESPACE 2>/dev/null
-    sleep 2
-  done
-}
+nohup kubectl port-forward --address 0.0.0.0 service/keycloak 30090:8080 -n $NAMESPACE > /tmp/pf-keycloak.log 2>&1 &
+nohup kubectl port-forward --address 0.0.0.0 service/eureka 8761:8761 -n $NAMESPACE > /tmp/pf-eureka.log 2>&1 &
+nohup kubectl port-forward --address 0.0.0.0 service/commande-service 8082:8082 -n $NAMESPACE > /tmp/pf-commande.log 2>&1 &
+nohup kubectl port-forward --address 0.0.0.0 service/api-gateway 31803:8090 -n $NAMESPACE > /tmp/pf-gateway.log 2>&1 &
+nohup kubectl port-forward --address 0.0.0.0 service/frontend 30080:80 -n $NAMESPACE > /tmp/pf-frontend.log 2>&1 &
 
-watch_and_forward keycloak 30090 8080 $NAMESPACE &
-watch_and_forward eureka 8761 8761 $NAMESPACE &
-watch_and_forward commande-service 8082 8082 $NAMESPACE &
-watch_and_forward api-gateway 31803 8090 $NAMESPACE &
-watch_and_forward frontend 30080 80 $NAMESPACE &
+sleep 3
+echo "✅ Port-forwards actifs !"
+echo "Frontend:    http://localhost:30080"
+echo "Gateway:     http://localhost:31803"
+echo "Keycloak:    http://localhost:30090"
 
 sleep 3
 echo "✅ Port-forwards avec auto-restart actifs !"
-sleep 3
-echo "✅ Port-forwards avec auto-restart actifs !"
+
 
 # ✅ STEP 8 - Recréez l'utilisateur Keycloak automatiquement
 echo "🔐 STEP 8 - Setup Keycloak user"
@@ -101,11 +96,6 @@ for i in $(seq 1 24); do
   echo "⏳ Waiting... ($i/24)"
   sleep 5
 done
-
-ADMIN_TOKEN=$(curl -s -X POST http://localhost:30090/realms/master/protocol/openid-connect/token \
-  -H "Content-Type: application/x-www-form-urlencoded" \
-  -d "grant_type=password&client_id=admin-cli&username=admin&password=admin" \
-  | grep -o '"access_token":"[^"]*"' | cut -d'"' -f4)
 
 ADMIN_TOKEN=$(curl -s -X POST http://localhost:30090/realms/master/protocol/openid-connect/token \
   -H "Content-Type: application/x-www-form-urlencoded" \

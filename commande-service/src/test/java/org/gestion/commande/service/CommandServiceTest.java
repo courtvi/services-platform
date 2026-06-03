@@ -391,12 +391,14 @@ class CommandeServiceTest {
         ligne.setPrixUnitaire(1.10);
         ligne.setTotal(1.10);
 
+        when(clientRefRepository.findById("user-123"))
+                .thenReturn(Mono.just(new ClientRef("user-123", "CLI-00001")));
         when(commandeRepository.findById(1L)).thenReturn(Mono.just(savedCommande));
         when(ligneCommandeRepository.findByCommandeId(1L)).thenReturn(Flux.just(ligne));
 
         StepVerifier.create(commandeService.getCommande(1L))
                 .expectNextMatches(result ->
-                        result.commande().getId().equals(1L) &&
+                        result.commande().id().equals(1L) &&
                                 result.lignes().size() == 1 &&
                                 result.lignes().get(0).getArticle().equals("Baguette")
                 )

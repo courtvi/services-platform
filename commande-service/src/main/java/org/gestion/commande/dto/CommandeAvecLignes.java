@@ -5,4 +5,4 @@ import org.gestion.commande.model.LigneCommande;
 
 import java.util.List;
 
-public record CommandeAvecLignes(Commande commande, List<LigneCommande> lignes) {}
+public record CommandeAvecLignes(CommandeResponse commande, List<LigneCommande> lignes) {}
