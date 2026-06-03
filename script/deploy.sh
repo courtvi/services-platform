@@ -50,6 +50,11 @@ kubectl rollout restart deployment/api-gateway -n $NAMESPACE
 kubectl rollout restart deployment/eureka -n $NAMESPACE
 kubectl rollout restart deployment/commande-service -n $NAMESPACE
 
+kubectl rollout status deployment/frontend -n $NAMESPACE --timeout=120s
+kubectl rollout status deployment/api-gateway -n $NAMESPACE --timeout=120s
+kubectl rollout status deployment/eureka -n $NAMESPACE --timeout=120s
+kubectl rollout status deployment/commande-service -n $NAMESPACE --timeout=120s
+
 echo "🔍 STEP 5 - Health checks"
 kubectl get pods -n $NAMESPACE -o wide
 kubectl get svc -n $NAMESPACE
