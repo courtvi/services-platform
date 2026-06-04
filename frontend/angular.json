@@ -55,6 +55,15 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "ovh": {
+              "fileReplacements": [
+                {
+                  "replace": "src/app/environments/environment.ts",
+                  "with": "src/app/environments/environment.ovh.ts"
+                }
+              ],
+              "outputHashing": "all"
             }
           },
           "defaultConfiguration": "production"
