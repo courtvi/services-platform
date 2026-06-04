@@ -1,8 +1,8 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://57.128.84.83.nip.io',
+  apiUrl: 'https://57.128.84.83.nip.io',
   keycloak: {
-    url: 'http://57.128.84.83.nip.io',
+    url: 'https://57.128.84.83.nip.io',
     realm: 'camping-haller',
     clientId: 'haller'
   },
