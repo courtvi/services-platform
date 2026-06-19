@@ -5,6 +5,7 @@ org\gestion\commande\handler\CommandeHandler.class
 org\gestion\commande\service\CommandeService.class
 org\gestion\commande\CommandServiceApplication.class
 org\gestion\commande\dto\CommandeResponse.class
+org\gestion\commande\config\ApplicationConfig$RouteProperties.class
 org\gestion\commande\model\ClientRef.class
 org\gestion\commande\repository\ClientRefRepository.class
 org\gestion\commande\config\SecurityConfig.class

@@ -1,3 +1,8 @@
+app:
+  routes:
+    base-path: /api/commandes
+    path-id: /{id}
+
 spring:
   application:
     name: commande-service
