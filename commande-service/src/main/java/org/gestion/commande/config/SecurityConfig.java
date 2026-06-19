@@ -37,6 +37,7 @@ public class SecurityConfig {
 
     private static final String ROLE_CLIENT = "CLIENT";
     private static final String ROLE_ADMIN  = "ADMIN";
+    private static final String API_COMMANDES  = "/api/commandes/**";
 
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
@@ -47,11 +48,11 @@ public class SecurityConfig {
                         .pathMatchers("/manage/**").permitAll()
                         .pathMatchers(HttpMethod.POST, "/api/commandes")
                         .hasRole(ROLE_CLIENT)
-                        .pathMatchers(HttpMethod.GET, "/api/commandes/**")
+                        .pathMatchers(HttpMethod.GET, API_COMMANDES)
                         .hasAnyRole(ROLE_CLIENT, ROLE_ADMIN)
-                        .pathMatchers(HttpMethod.PUT, "/api/commandes/**")
+                        .pathMatchers(HttpMethod.PUT, API_COMMANDES)
                         .hasRole(ROLE_CLIENT)
-                        .pathMatchers(HttpMethod.DELETE, "/api/commandes/**")
+                        .pathMatchers(HttpMethod.DELETE, API_COMMANDES)
                         .hasRole(ROLE_CLIENT)
                         .anyExchange().authenticated()
                 )
