@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 @Component
 public class CommandeHandler {
 
-    @Autowired
+
     private final CommandeService commandeService;
 
     public CommandeHandler(CommandeService commandeService) {
