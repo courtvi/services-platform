@@ -13,16 +13,18 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 @Configuration
 public class CommandeRouter {
 
+    private static final String PATH_ID = "/{id}";
+
     @Bean
     public RouterFunction<ServerResponse> commandeRoutes(CommandeHandler handler) {
         return RouterFunctions.route()
                 .nest(path("/api/commandes"), builder -> builder
                         .POST("",        handler::createCommande)
                         .GET("",         handler::getCommandes)
-                        .GET("/{id}",    handler::getCommandeById)
+                        .GET(PATH_ID,    handler::getCommandeById)
                         .GET("/{id}/detail",   handler::getCommandeAvecLignes)
-                        .PUT("/{id}",    handler::updateCommande)
-                        .DELETE("/{id}", handler::annulerCommande)
+                        .PUT(PATH_ID,    handler::updateCommande)
+                        .DELETE(PATH_ID, handler::annulerCommande)
                         .PATCH("/{id}/en-cours", handler::passerEnCours)
                         .GET("/debug", request ->
                                 ReactiveSecurityContextHolder.getContext()

@@ -12,12 +12,16 @@ import org.gestion.commande.repository.LigneCommandeRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import static org.gestion.commande.constants.CommandeStatut.*;
+
 import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+
 
 @Service
 public class CommandeService {
@@ -52,7 +56,7 @@ public class CommandeService {
         Commande commande = new Commande();
         commande.setUserId(userId);
         commande.setReference(request.reference());
-        commande.setStatut("CREEE");
+        commande.setStatut(CREEE);
         commande.setDateCommande(LocalDateTime.now());
         commande.setDateLivraison(request.dateLivraison());
 
@@ -128,8 +132,8 @@ public class CommandeService {
                         new RuntimeException("Commande introuvable ou accès refusé")
                 ))
                 .flatMap(commande -> {
-                    if ("ANNULEE".equals(commande.getStatut()) ||
-                            "LIVREE".equals(commande.getStatut())) {
+                    if (ANNULEE.equals(commande.getStatut()) ||
+                            LIVREE.equals(commande.getStatut())) {
                         return Mono.error(
                                 new RuntimeException("Impossible de modifier une commande " + commande.getStatut())
                         );
@@ -147,12 +151,12 @@ public class CommandeService {
                         new RuntimeException("Commande introuvable ou accès refusé")
                 ))
                 .flatMap(commande -> {
-                    if (!"CREEE".equals(commande.getStatut())) {
+                    if (!CREEE.equals(commande.getStatut())) {
                         return Mono.error(
                                 new RuntimeException("Impossible d'annuler une commande " + commande.getStatut())
                         );
                     }
-                    commande.setStatut("ANNULEE");
+                    commande.setStatut(ANNULEE);
                     return commandeRepository.save(commande).then();
                 });
     }
@@ -199,10 +203,10 @@ public class CommandeService {
         return commandeRepository.findById(id)
                 .switchIfEmpty(Mono.error(new RuntimeException("Commande introuvable")))
                 .flatMap(commande -> {
-                    if (!"CREEE".equals(commande.getStatut())) {
+                    if (!CREEE.equals(commande.getStatut())) {
                         return Mono.error(new RuntimeException("Impossible de passer en cours une commande " + commande.getStatut()));
                     }
-                    commande.setStatut("EN_COURS");
+                    commande.setStatut(EN_COURS);
                     return commandeRepository.save(commande);
                 })
                 .flatMap(this::toResponseWithTotal);

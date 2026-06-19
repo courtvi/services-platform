@@ -1,6 +1,7 @@
 C:\Users\bde_v\IdeaProjects\services-platform\commande-service\src\main\java\org\gestion\commande\CommandServiceApplication.java
 C:\Users\bde_v\IdeaProjects\services-platform\commande-service\src\main\java\org\gestion\commande\config\ApplicationConfig.java
 C:\Users\bde_v\IdeaProjects\services-platform\commande-service\src\main\java\org\gestion\commande\config\SecurityConfig.java
+C:\Users\bde_v\IdeaProjects\services-platform\commande-service\src\main\java\org\gestion\commande\constants\CommandeStatut.java
 C:\Users\bde_v\IdeaProjects\services-platform\commande-service\src\main\java\org\gestion\commande\dto\CommandeAvecLignes.java
 C:\Users\bde_v\IdeaProjects\services-platform\commande-service\src\main\java\org\gestion\commande\dto\CommandeRequest.java
 C:\Users\bde_v\IdeaProjects\services-platform\commande-service\src\main\java\org\gestion\commande\dto\CommandeResponse.java

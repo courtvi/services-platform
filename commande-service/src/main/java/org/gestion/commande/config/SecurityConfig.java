@@ -38,6 +38,7 @@ public class SecurityConfig {
     private static final String ROLE_CLIENT = "CLIENT";
     private static final String ROLE_ADMIN  = "ADMIN";
     private static final String API_COMMANDES  = "/api/commandes/**";
+    private static final String ROLES_KEY = "roles";
 
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
@@ -103,7 +104,7 @@ public class SecurityConfig {
         if (resourceAccess != null && resourceAccess.containsKey("haller")) {
             Map<String, Object> hallerAccess =
                     (Map<String, Object>) resourceAccess.get("haller");
-            List<String> roles = (List<String>) hallerAccess.get("roles");
+            List<String> roles = (List<String>) hallerAccess.get(ROLES_KEY);
             return roles.stream()
                     .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                     .collect(Collectors.toList());
@@ -111,8 +112,8 @@ public class SecurityConfig {
 
         // Fallback — Realm roles
         Map<String, Object> realmAccess = jwt.getClaim("realm_access");
-        if (realmAccess != null && realmAccess.containsKey("roles")) {
-            List<String> roles = (List<String>) realmAccess.get("roles");
+        if (realmAccess != null && realmAccess.containsKey(ROLES_KEY)) {
+            List<String> roles = (List<String>) realmAccess.get(ROLES_KEY);
             return roles.stream()
                     .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                     .collect(Collectors.toList());
