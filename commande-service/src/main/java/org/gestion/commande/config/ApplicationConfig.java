@@ -8,6 +8,7 @@ import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 @Configuration
 @EnableR2dbcRepositories
 @EnableConfigurationProperties(ApplicationConfig.RouteProperties.class)
+@SuppressWarnings("java:S1118") // Spring nécessite un constructeur public pour @Configuration
 public class ApplicationConfig {
 
     @ConfigurationProperties(prefix = "app.routes")
