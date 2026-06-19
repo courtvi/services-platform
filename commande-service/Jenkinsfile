@@ -1,0 +1,317 @@
+pipeline {
+    agent {
+        kubernetes {
+            label 'jenkins-agent'
+            defaultContainer 'maven'
+            yaml """
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: maven
+    image: maven:3.9-eclipse-temurin-21
+    command: ['sleep', 'infinity']
+    resources:
+      requests:
+        memory: "1Gi"
+        cpu: "500m"
+  - name: docker
+    image: docker:24-dind
+    securityContext:
+      privileged: true
+    env:
+    - name: DOCKER_TLS_CERTDIR
+      value: ""
+  - name: kubectl
+    image: bitnami/kubectl:latest
+    command: ['sleep', 'infinity']
+"""
+        }
+    }
+
+    // ─── Variables globales ────────────────────────────────────────────────────
+    environment {
+        APP_NAME         = 'mon-app'
+        DOCKER_REGISTRY  = 'registry.exemple.com'          // ex: docker.io/monorg
+        DOCKER_IMAGE     = "${DOCKER_REGISTRY}/${APP_NAME}"
+        DOCKER_CREDS     = credentials('docker-registry-creds')
+
+        SONAR_HOST_URL   = 'https://sonar.exemple.com'
+        SONAR_TOKEN      = credentials('sonarqube-token')
+
+        K8S_NAMESPACE_STAGING = 'staging'
+        K8S_NAMESPACE_PROD    = 'production'
+        KUBECONFIG_STAGING    = credentials('kubeconfig-staging')
+        KUBECONFIG_PROD       = credentials('kubeconfig-prod')
+
+        SLACK_CHANNEL    = '#ci-cd'
+        SLACK_CREDS      = credentials('slack-webhook-url')
+
+        // Tag de l'image = numéro de build + court SHA Git
+        IMAGE_TAG        = "${BUILD_NUMBER}-${GIT_COMMIT.take(7)}"
+    }
+
+    options {
+        timeout(time: 60, unit: 'MINUTES')
+        disableConcurrentBuilds()
+        buildDiscarder(logRotator(numToKeepStr: '20'))
+        timestamps()
+    }
+
+    // ─── Déclencheurs ─────────────────────────────────────────────────────────
+    triggers {
+        // Webhook Git — configurer le plugin "Generic Webhook Trigger"
+        // ou activer "GitHub hook trigger for GITScm polling" dans la config du job
+        pollSCM('')   // désactiver si webhook configuré
+    }
+
+    stages {
+
+        // ── 1. Checkout ────────────────────────────────────────────────────────
+        stage('Checkout') {
+            steps {
+                checkout scm
+                script {
+                    env.GIT_BRANCH_SHORT = env.GIT_BRANCH?.replaceAll('origin/', '') ?: 'unknown'
+                }
+                echo "Branche : ${env.GIT_BRANCH_SHORT} | Commit : ${env.GIT_COMMIT.take(7)}"
+            }
+        }
+
+        // ── 2. Build & compilation ─────────────────────────────────────────────
+        stage('Build') {
+            steps {
+                sh '''
+                    mvn clean package \
+                        -DskipTests \
+                        -Dmaven.repo.local=.m2/repository \
+                        --batch-mode \
+                        --no-transfer-progress
+                '''
+            }
+            post {
+                success {
+                    archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+                    stash name: 'build-artifacts', includes: 'target/*.jar'
+                }
+            }
+        }
+
+        // ── 3. Tests unitaires ─────────────────────────────────────────────────
+        stage('Tests unitaires') {
+            steps {
+                sh '''
+                    mvn test \
+                        -Dmaven.repo.local=.m2/repository \
+                        --batch-mode \
+                        --no-transfer-progress
+                '''
+            }
+            post {
+                always {
+                    // Publication des résultats JUnit dans l'interface Jenkins
+                    junit 'target/surefire-reports/**/*.xml'
+
+                    // Rapport de couverture JaCoCo (plugin requis)
+                    jacoco(
+                        execPattern: 'target/jacoco.exec',
+                        classPattern: 'target/classes',
+                        sourcePattern: 'src/main/java',
+                        minimumInstructionCoverage: '70',
+                        minimumBranchCoverage:      '60'
+                    )
+                }
+            }
+        }
+
+        // ── 4. Analyse SonarQube ───────────────────────────────────────────────
+        stage('SonarQube') {
+            steps {
+                withSonarQubeEnv('SonarQube') {   // nom configuré dans Manage Jenkins > SonarQube
+                    sh """
+                        mvn sonar:sonar \
+                            -Dsonar.projectKey=${APP_NAME} \
+                            -Dsonar.projectName="${APP_NAME}" \
+                            -Dsonar.host.url=${SONAR_HOST_URL} \
+                            -Dsonar.token=${SONAR_TOKEN} \
+                            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
+                            --batch-mode \
+                            --no-transfer-progress
+                    """
+                }
+            }
+        }
+
+        // ── 5. Quality Gate SonarQube ──────────────────────────────────────────
+        stage('Quality Gate') {
+            steps {
+                // Attend le résultat du Quality Gate (timeout 10 min)
+                timeout(time: 10, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+
+        // ── 6. Build image Docker ──────────────────────────────────────────────
+        stage('Build Docker') {
+            steps {
+                container('docker') {
+                    unstash 'build-artifacts'
+                    sh """
+                        docker login ${DOCKER_REGISTRY} \
+                            -u ${DOCKER_CREDS_USR} \
+                            -p ${DOCKER_CREDS_PSW}
+
+                        docker build \
+                            --build-arg JAR_FILE=target/*.jar \
+                            --label git-commit=${GIT_COMMIT.take(7)} \
+                            --label build-number=${BUILD_NUMBER} \
+                            -t ${DOCKER_IMAGE}:${IMAGE_TAG} \
+                            -t ${DOCKER_IMAGE}:latest \
+                            .
+
+                        docker push ${DOCKER_IMAGE}:${IMAGE_TAG}
+                        docker push ${DOCKER_IMAGE}:latest
+                    """
+                }
+            }
+        }
+
+        // ── 7. Déploiement Staging ─────────────────────────────────────────────
+        stage('Deploy Staging') {
+            steps {
+                container('kubectl') {
+                    withCredentials([file(credentialsId: 'kubeconfig-staging', variable: 'KUBECONFIG')]) {
+                        sh """
+                            kubectl set image deployment/${APP_NAME} \
+                                ${APP_NAME}=${DOCKER_IMAGE}:${IMAGE_TAG} \
+                                --namespace=${K8S_NAMESPACE_STAGING}
+
+                            kubectl rollout status deployment/${APP_NAME} \
+                                --namespace=${K8S_NAMESPACE_STAGING} \
+                                --timeout=5m
+                        """
+                    }
+                }
+            }
+        }
+
+        // ── 8. Smoke tests staging ─────────────────────────────────────────────
+        stage('Smoke Tests Staging') {
+            steps {
+                sh '''
+                    # Attendre que l'app soit prête
+                    sleep 15
+
+                    # Remplacer par l'URL interne de ton service staging
+                    STAGING_URL="http://mon-app.staging.svc.cluster.local"
+
+                    STATUS=$(curl -s -o /dev/null -w "%{http_code}" ${STAGING_URL}/actuator/health)
+                    if [ "$STATUS" != "200" ]; then
+                        echo "Smoke test échoué — HTTP ${STATUS}"
+                        exit 1
+                    fi
+                    echo "Smoke test OK — HTTP ${STATUS}"
+                '''
+            }
+        }
+
+        // ── 9. Validation manuelle avant prod ─────────────────────────────────
+        stage('Approbation Production') {
+            when {
+                branch 'main'   // uniquement depuis la branche main
+            }
+            steps {
+                timeout(time: 24, unit: 'HOURS') {
+                    input message: """
+Déployer en production ?
+
+Image  : ${DOCKER_IMAGE}:${IMAGE_TAG}
+Commit : ${GIT_COMMIT.take(7)}
+Branch : ${env.GIT_BRANCH_SHORT}
+""",
+                    ok: 'Déployer',
+                    submitterParameter: 'APPROVER'
+                }
+                echo "Approuvé par : ${env.APPROVER}"
+            }
+        }
+
+        // ── 10. Déploiement Production ─────────────────────────────────────────
+        stage('Deploy Production') {
+            when {
+                branch 'main'
+            }
+            steps {
+                container('kubectl') {
+                    withCredentials([file(credentialsId: 'kubeconfig-prod', variable: 'KUBECONFIG')]) {
+                        sh """
+                            # Mise à jour de l'image (rolling update)
+                            kubectl set image deployment/${APP_NAME} \
+                                ${APP_NAME}=${DOCKER_IMAGE}:${IMAGE_TAG} \
+                                --namespace=${K8S_NAMESPACE_PROD}
+
+                            kubectl rollout status deployment/${APP_NAME} \
+                                --namespace=${K8S_NAMESPACE_PROD} \
+                                --timeout=10m
+                        """
+                    }
+                }
+            }
+        }
+    }
+
+    // ─── Post-pipeline : notifications Slack ──────────────────────────────────
+    post {
+        success {
+            script {
+                def msg = [
+                    "✅ *[${APP_NAME}]* Pipeline réussi",
+                    "• Branche : `${env.GIT_BRANCH_SHORT}`",
+                    "• Commit  : `${env.GIT_COMMIT.take(7)}`",
+                    "• Image   : `${DOCKER_IMAGE}:${IMAGE_TAG}`",
+                    "• Build   : <${BUILD_URL}|#${BUILD_NUMBER}>"
+                ].join('\n')
+
+                slackSend(
+                    channel:     SLACK_CHANNEL,
+                    color:       'good',
+                    message:     msg,
+                    tokenCredentialId: 'slack-webhook-url'
+                )
+            }
+        }
+
+        failure {
+            script {
+                def msg = [
+                    "❌ *[${APP_NAME}]* Pipeline en échec",
+                    "• Branche : `${env.GIT_BRANCH_SHORT}`",
+                    "• Étape   : `${env.STAGE_NAME}`",
+                    "• Build   : <${BUILD_URL}|#${BUILD_NUMBER}>"
+                ].join('\n')
+
+                slackSend(
+                    channel:     SLACK_CHANNEL,
+                    color:       'danger',
+                    message:     msg,
+                    tokenCredentialId: 'slack-webhook-url'
+                )
+            }
+        }
+
+        unstable {
+            slackSend(
+                channel:     SLACK_CHANNEL,
+                color:       'warning',
+                message:     "⚠️ *[${APP_NAME}]* Pipeline instable (tests en échec) — Build <${BUILD_URL}|#${BUILD_NUMBER}>",
+                tokenCredentialId: 'slack-webhook-url'
+            )
+        }
+
+        always {
+            // Nettoyage du workspace
+            cleanWs()
+        }
+    }
+}

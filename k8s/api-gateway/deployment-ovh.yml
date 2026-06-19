@@ -25,7 +25,7 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: "kubernetes"
             - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
-              value: "http://localhost:30090/realms/camping-haller"
+              value: "https://localhost:30090/realms/camping-haller"
             - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI
               value: "http://keycloak:8080/realms/camping-haller/protocol/openid-connect/certs"
             - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
