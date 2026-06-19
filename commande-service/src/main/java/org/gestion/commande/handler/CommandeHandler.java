@@ -3,7 +3,6 @@ package org.gestion.commande.handler;
 import org.gestion.commande.dto.CommandeRequest;
 import org.gestion.commande.dto.CommandeResponse;
 import org.gestion.commande.service.CommandeService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
