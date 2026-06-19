@@ -35,6 +35,9 @@ public class SecurityConfig {
     @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
     private String issuerUri;
 
+    private static final String ROLE_CLIENT = "CLIENT";
+    private static final String ROLE_ADMIN  = "ADMIN";
+
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         return http
@@ -43,13 +46,13 @@ public class SecurityConfig {
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers("/manage/**").permitAll()
                         .pathMatchers(HttpMethod.POST, "/api/commandes")
-                        .hasRole("CLIENT")
+                        .hasRole(ROLE_CLIENT)
                         .pathMatchers(HttpMethod.GET, "/api/commandes/**")
-                        .hasAnyRole("CLIENT", "ADMIN")
+                        .hasAnyRole(ROLE_CLIENT, ROLE_ADMIN)
                         .pathMatchers(HttpMethod.PUT, "/api/commandes/**")
-                        .hasRole("CLIENT")
+                        .hasRole(ROLE_CLIENT)
                         .pathMatchers(HttpMethod.DELETE, "/api/commandes/**")
-                        .hasRole("CLIENT")
+                        .hasRole(ROLE_CLIENT)
                         .anyExchange().authenticated()
                 )
 
