@@ -6,9 +6,22 @@ spring:
           jwk-set-uri: http://localhost/dummy
           issuer-uri: http://localhost/dummy
 
-  cloud:
-    discovery:
-      enabled: false
+  mail:
+    host: localhost
+    port: 25
+    username: test
+    password: test
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
+
+    cloud:
+      discovery:
+        enabled: false
+
 
   config:
     import: "optional:configserver:"

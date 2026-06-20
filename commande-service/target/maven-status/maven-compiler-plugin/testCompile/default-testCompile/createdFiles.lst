@@ -5,5 +5,4 @@ org\gestion\commande\service\CommandeServiceTest.class
 org\gestion\commande\model\CommandeTest.class
 org\gestion\commande\repository\CommandeRepositoryTest.class
 org\gestion\commande\repository\ClientRefRepositoryTest.class
-org\gestion\commande\CommandeIntegrationTest.class
 org\gestion\commande\service\CommandeServiceTest$1.class
