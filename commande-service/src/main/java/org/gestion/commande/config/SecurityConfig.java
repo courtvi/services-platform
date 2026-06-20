@@ -90,14 +90,14 @@ public class SecurityConfig {
                 new ReactiveJwtAuthenticationConverter();
 
         converter.setJwtGrantedAuthoritiesConverter(jwt ->
-                Flux.fromIterable(extractRoles(jwt))
+                Flux.fromIterable(extractRolesForTest(jwt))
         );
 
         return converter;
     }
 
     // ✅ Extrait les rôles depuis resource_access.haller
-    private Collection<GrantedAuthority> extractRoles(Jwt jwt) {
+    Collection<GrantedAuthority> extractRolesForTest(Jwt jwt) {
 
         // ✅ Client roles (haller) — priorité
         Map<String, Object> resourceAccess = jwt.getClaim("resource_access");
