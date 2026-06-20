@@ -9,6 +9,8 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import org.gestion.commande.model.LigneCommande;
+
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import jakarta.mail.internet.MimeMessage;
 
@@ -19,7 +21,9 @@ public class MailService {
 
     @Value("${spring.mail.username}")
     private String fromEmail;
-
+    // Ajoute cette constante en haut de la classe (après les champs existants)
+    private static final DateTimeFormatter DATE_FORMATTER =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd à HH:mm");
 
     public MailService(JavaMailSender mailSender) {
         this.mailSender = mailSender;
@@ -49,8 +53,11 @@ public class MailService {
                 "padding: 2px 8px; border-radius: 4px; font-weight: 500;\">" +
                 commande.statut() + "</span>";
 
+
+
+// Remplace la ligne 53
         String dateCommande = commande.dateCommande() != null
-                ? commande.dateCommande().toString().replace("T", " à ").substring(0, 19)
+                ? commande.dateCommande().format(DATE_FORMATTER)
                 : "-";
 
         String dateLivraison = commande.dateLivraison() != null

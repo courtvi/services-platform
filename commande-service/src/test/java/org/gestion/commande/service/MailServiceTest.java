@@ -31,6 +31,9 @@ class MailServiceTest {
         ReflectionTestUtils.setField(mailService, "fromEmail", "test@camping-haller.fr");
     }
 
+    private static final LocalDateTime DATE_COMMANDE  = LocalDateTime.of(2026, 1, 15, 10, 0, 0);
+    private static final LocalDateTime DATE_LIVRAISON = LocalDateTime.of(2026, 1, 16, 10, 0, 0);
+
     @Test
     void sendConfirmationCommande_shouldSendEmail() throws Exception {
         // Arrange
@@ -43,8 +46,8 @@ class MailServiceTest {
                 "CLI-001",
                 "CMD-ALICE-001",
                 "CREEE",
-                LocalDateTime.now(),
-                LocalDateTime.now().plusDays(1),
+                DATE_COMMANDE,   // ← date fixe
+                DATE_LIVRAISON,  // ← date fixe
                 6.70
         );
 
