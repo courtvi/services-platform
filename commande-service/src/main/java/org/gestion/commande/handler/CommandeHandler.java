@@ -68,11 +68,7 @@ public class CommandeHandler {
                 })
                 .flatMap(response ->
                         ServerResponse.status(201).bodyValue(response)
-                )
-                .onErrorResume(e -> {
-                    e.printStackTrace();
-                    return ServerResponse.badRequest().bodyValue(e.getMessage());
-                });
+                );
     }
 
     public Mono<ServerResponse> getCommandes(ServerRequest request) {
