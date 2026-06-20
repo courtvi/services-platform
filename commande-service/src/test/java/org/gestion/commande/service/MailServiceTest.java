@@ -13,6 +13,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
@@ -26,13 +27,13 @@ class MailServiceTest {
     @InjectMocks
     private MailService mailService;
 
+    private static final LocalDateTime DATE_COMMANDE  = LocalDateTime.of(2026, Month.JANUARY, 15, 10, 0, 0);
+    private static final LocalDateTime DATE_LIVRAISON = LocalDateTime.of(2026, Month.JANUARY, 16, 10, 0, 0);
+
     @BeforeEach
     void setUp() {
         ReflectionTestUtils.setField(mailService, "fromEmail", "test@camping-haller.fr");
     }
-
-    private static final LocalDateTime DATE_COMMANDE  = LocalDateTime.of(2026, 1, 15, 10, 0, 0);
-    private static final LocalDateTime DATE_LIVRAISON = LocalDateTime.of(2026, 1, 16, 10, 0, 0);
 
     @Test
     void sendConfirmationCommande_shouldSendEmail() throws Exception {
@@ -87,8 +88,8 @@ class MailServiceTest {
                 "CLI-002",
                 "CMD-BOB-001",
                 "CREEE",
-                LocalDateTime.now(),
-                LocalDateTime.now().plusDays(1),
+                DATE_COMMANDE,
+                DATE_LIVRAISON,
                 0.0
         );
 
