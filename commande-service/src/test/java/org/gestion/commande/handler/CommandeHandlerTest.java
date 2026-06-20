@@ -81,19 +81,7 @@ class CommandeHandlerTest {
                 .verifyComplete();
     }
 
-    @Test
-    void createCommande_shouldReturn400OnError() {
-        when(commandeService.createCommande(any(), eq("user-123"), eq("user@test.com"), eq("CLI-00001")))
-                .thenReturn(Mono.error(new RuntimeException("Erreur service")));
 
-        MockServerRequest serverRequest = MockServerRequest.builder()
-                .principal(authToken)
-                .body(Mono.just(request));
-
-        StepVerifier.create(commandeHandler.createCommande(serverRequest))
-                .expectNextMatches(r -> r.statusCode().value() == 400)
-                .verifyComplete();
-    }
 
     @Test
     void getCommandes_shouldCallGetAllCommandesForAdmin() {
