@@ -27,7 +27,7 @@ spec:
             - containerPort: 8082
           env:
             - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
-              value: "https://91.134.36.197.nip.io/realms/camping-haller"
+              value: "https://__OVH_HOST__/realms/camping-haller"
             - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI
               value: "http://keycloak:8080/realms/camping-haller/protocol/openid-connect/certs"
             - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE

@@ -37,7 +37,7 @@ spec:
             - name: KC_HOSTNAME_STRICT_BACKCHANNEL
               value: "false"
             - name: KC_HOSTNAME
-              value: "91.134.36.197.nip.io"
+              value: "__OVH_HOST__"
             - name: KC_HOSTNAME_PORT
               value: "80"
             - name: KC_PROXY

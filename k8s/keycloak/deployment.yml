@@ -66,12 +66,21 @@ spec:
             httpGet:
               path: /realms/master
               port: 8080
-            initialDelaySeconds: 90
             periodSeconds: 20
+            failureThreshold: 3
+            timeoutSeconds: 3
           resources:
             requests:
-              memory: "512Mi"
-              cpu: "250m"
-            limits:
+              cpu: "1000m"
               memory: "1Gi"
-              cpu: "500m"
+            limits:
+              cpu: "2000m"
+              memory: "2Gi"
+
+          startupProbe:
+            httpGet:
+             path: /realms/master
+             port: 8080
+            periodSeconds: 10
+            failureThreshold: 30    # jusqu'à 300s pour démarrer avant d'être tué
+            timeoutSeconds: 3
