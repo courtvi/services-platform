@@ -1,7 +1,10 @@
 {
   "nav": {
     "commandes": "Meng Bestellungen",
-    "admin": "Admin"
+    "boutiques": "Buttéker",
+    "admin": "Admin",
+    "adminCommandes": "Brout-Bestellungen",
+    "adminBoutiques": "Buttéker"
   },
   "lang": {
     "fr": "Français",
@@ -10,62 +13,128 @@
     "lb": "Lëtzebuergesch"
   },
   "commande": {
-    "selectionArticles": "Artikelen auswielen",
+    "selectionArticles": "Artikelauswiel",
     "commander": "Bestellen",
     "nouvelle": "Nei Bestellung",
     "reference": "Referenz",
     "actions": "Aktiounen",
     "detail": "Detail",
-    "annuler": "Annuléieren",
-    "aucune": "Keng Bestellungen",
+    "annuler": "Annulléieren",
+    "aucune": "Keng Bestellung",
     "titre": "Bestellung",
     "statut": "Status",
     "date": "Datum",
-    "dateCommande": "Bestelldatum",
-    "dateLivraison": "Liwwerungsdatum",
+    "dateCommande": "Bestellungsdatum",
+    "dateLivraison": "Liwwerdatum",
     "utilisateur": "Benotzer",
-    "numeroClient": "Clientsnummer",
+    "numeroClient": "Kundennummer",
     "article": "Artikel",
     "quantite": "Quantitéit",
-    "prixUnitaire": "Eenzelpreis",
-    "tva": "MwSt.",
-    "totalTva": "MwSt. gesamt",
+    "tva": "TVA",
+    "prixUnitaire": "Eenheetspräis",
     "total": "Total",
+    "totalHT": "Total netto",
     "totalCommande": "Total",
-    "erreur": "Fehler beim Luede vun der Bestellung.",
+    "totalTva": "TVA Total",
+    "erreur": "Feeler beim Lueden vun der Bestellung.",
     "chargement": "Lueden...",
     "payer": "Mat PayPal bezuelen"
   },
   "statuts": {
     "CREEE": "Erstallt",
-    "EN_COURS": "A Beaarbechtung",
+    "EN_COURS": "Am Gaang",
     "LIVREE": "Geliwwert",
-    "ANNULEE": "Annuléiert"
+    "ANNULEE": "Annulléiert"
   },
   "auth": {
     "deconnexion": "Ofmellen"
   },
   "articles": {
-    "petit_pain_blanc": "Klenge wäisse Brëtchen",
-    "petit_pain_cereales": "Klenge Kären-Brëtchen",
+    "petit_pain_blanc": "Wäisst Bréitchen",
+    "petit_pain_cereales": "Kären-Bréitchen",
     "baguette_blanche": "Wäiss Baguette",
     "baguette_cereale": "Kären-Baguette",
     "pain_6_cereales": "6-Kären-Brout",
-    "pain_chef": "Chefbrout (Sauerteig)",
-    "pain_campagne": "Lanzbrout",
+    "pain_chef": "Chef-Brout (Sauerdeeg)",
+    "pain_campagne": "Bauerebrout",
     "pain_blanc": "Wäissbrout",
-    "pain_6_cereales_coupe": "6-Kären-Brout (opgeschnidden)",
-    "pain_chef_coupe": "Chefbrout (Sauerteig) opgeschnidden",
-    "pain_campagne_coupe": "Lanzbrout (opgeschnidden)",
-    "pain_blanc_coupe": "Wäissbrout (opgeschnidden)",
+    "pain_6_cereales_coupe": "6-Kären-Brout (geschnidden)",
+    "pain_chef_coupe": "Chef-Brout (Sauerdeeg) geschnidden",
+    "pain_campagne_coupe": "Bauerebrout (geschnidden)",
+    "pain_blanc_coupe": "Wäissbrout (geschnidden)",
     "croissant": "Croissant",
-    "viennoiserie": "Feingebäck",
-    "coupe": "Opgeschnidden"
+    "viennoiserie": "Gebäck",
+    "coupe": "Geschnidden",
+    "miel_lavande": "Lavendelhonneg",
+    "miel_toutes_fleurs": "Blummenhonneg",
+    "miel_chataignier": "Keschtenhonneg",
+    "miel_sapin": "Dannenhonneg",
+    "miel_tilleul": "Lannenhonneg",
+    "coffret_decouverte": "Entdeckungsset"
   },
   "groupe": {
-    "petits_pains": "Kleng Brëtchen",
+    "petits_pains": "Bréitercher",
     "baguettes": "Baguetten",
-    "pains": "Brout",
-    "viennoiseries": "Feingebäck"
+    "pains": "Breeder",
+    "viennoiseries": "Gebäck"
+  },
+  "boutiquesAccueil": {
+    "titre": "Eis Buttéker",
+    "sousTitre": "Wielt e Buttek fir seng Produkter z'entdecken an ze bestellen.",
+    "aucune": "Momentan ass kee Buttek disponibel."
+  },
+  "boutiques": {
+    "miel": {
+      "description": "Handwierklechen Honneg aus Loutréngen, ouni Zousazstoffer."
+    }
+  },
+  "boutiqueMiel": {
+    "eyebrow": "Franséisch handwierklech Beienzucht",
+    "heroTitre": "Reng Honneg, mat Passioun geernt.",
+    "heroTexte": "Vu Beienhaiser mëtt an de bléienden Wisen bis op Ären Dësch: e 100% natierleche Honneg.",
+    "panier": "Wuerekuerf",
+    "filtreTous": "All",
+    "filtreFleurs": "Blummenhonneger",
+    "filtreForet": "Bëschhonneger",
+    "filtreCoffret": "Geschenkboxen",
+    "ajouterPanier": "An de Wuerekuerf leeën",
+    "ajoute": "{{nom}} an de Wuerekuerf geluecht",
+    "voirPanier": "Wuerekuerf uweisen",
+    "quantite": "Quantitéit",
+    "retourCatalogue": "Zréck zum Katalog",
+    "continuerAchats": "Weider akafen",
+    "panierVide": "Ären Wuerekuerf ass eidel.",
+    "decouvrirMiels": "Eis Honneger entdecken",
+    "sousTotal": "Zwëschesumm",
+    "passerCommande": "Bestellung ofginn",
+    "retourPanier": "Zréck zum Wuerekuerf",
+    "finaliserCommande": "Meng Bestellung ofschléissen",
+    "dateLivraisonLabel": "Gewënschte Liwwerdatum",
+    "payerPaypal": "Mat PayPal bezuelen",
+    "commandeCreee": "Bestellung erstallt!",
+    "erreurCommande": "Feeler beim Erstellen vun der Bestellung",
+    "erreurPaypal": "PayPal-Feeler",
+    "produitIntrouvable": "Produkt net fonnt.",
+    "chargement": "Lueden...",
+    "terroirEyebrow": "Eise Terroir",
+    "terroirTitre": "Saulnes, am Häerz vum Dall",
+    "catalogueTitre": "Eisen Hunneg",
+    "terroirTexte": "Eis Beienheeschter sinn an de bewaldten Hiwwelen ronderëm Saulnes, tëscht bléienden Wisen a Bëscher — en ideale Terroir fir en räiche, authentesche Mel."
+  },
+  "tags": {
+    "bestSeller": "Bestseller",
+    "populaire": "Populär",
+    "rare": "Rar",
+    "ideeCadeau": "Geschenkidee"
+  },
+  "produitsMiel": {
+    "miel_printemps": "Crémeg, lecker polyfloral, ideal fir Kraidertéi.",
+    "miel_ete": "Flësseg mat enger ausgeprägter Charakter a holzegen Nuancen, ideal fir Botteren.",
+    "miel_lavande": "Mëll a wuel richend, geernt op den Héichten am Pays-Haut a Loutréngen.",
+    "miel_toutes_fleurs": "E lecker Blummenhonneg, perfekt fir déi ganz Famill.",
+    "miel_chataignier": "Ausgeprägte Charakter mat holzegen Nuancen, ideal fir Botteren.",
+    "miel_sapin": "Bëschhonnegtau, bernsteefaarweg an intensiv am Geschmaach.",
+    "miel_tilleul": "Frësch a liicht mentholéiert, gär als Owesinfusioun gedronk.",
+    "coffret_decouverte": "Dräi Pëtter vu 125 g fir eis bescht Ernten z'entdecken."
   }
 }

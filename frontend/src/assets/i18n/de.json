@@ -1,7 +1,10 @@
 {
   "nav": {
     "commandes": "Meine Bestellungen",
-    "admin": "Admin"
+    "boutiques": "Shops",
+    "admin": "Admin",
+    "adminCommandes": "Brotbestellungen",
+    "adminBoutiques": "Shops"
   },
   "lang": {
     "fr": "Français",
@@ -10,14 +13,14 @@
     "lb": "Lëtzebuergesch"
   },
   "commande": {
-    "selectionArticles": "Artikel auswählen",
+    "selectionArticles": "Artikelauswahl",
     "commander": "Bestellen",
     "nouvelle": "Neue Bestellung",
     "reference": "Referenz",
     "actions": "Aktionen",
     "detail": "Detail",
-    "annuler": "Stornieren",
-    "aucune": "Keine Bestellungen",
+    "annuler": "Abbrechen",
+    "aucune": "Keine Bestellung",
     "titre": "Bestellung",
     "statut": "Status",
     "date": "Datum",
@@ -27,11 +30,12 @@
     "numeroClient": "Kundennummer",
     "article": "Artikel",
     "quantite": "Menge",
-    "prixUnitaire": "Stückpreis",
-    "tva": "MwSt.",
-    "totalTva": "MwSt. gesamt",
+    "tva": "MwSt",
+    "prixUnitaire": "Einzelpreis",
     "total": "Gesamt",
-    "totalCommande": "Gesamtbetrag",
+    "totalHT": "Gesamt netto",
+    "totalCommande": "Gesamt",
+    "totalTva": "MwSt. gesamt",
     "erreur": "Fehler beim Laden der Bestellung.",
     "chargement": "Wird geladen...",
     "payer": "Mit PayPal bezahlen"
@@ -46,26 +50,91 @@
     "deconnexion": "Abmelden"
   },
   "articles": {
-    "petit_pain_blanc": "Kleines Weißbrötchen",
-    "petit_pain_cereales": "Kleines Körnerbrötchen",
-    "baguette_blanche": "Weiße Baguette",
-    "baguette_cereale": "Körner-Baguette",
+    "petit_pain_blanc": "Weißes Brötchen",
+    "petit_pain_cereales": "Getreidebrötchen",
+    "baguette_blanche": "Weißes Baguette",
+    "baguette_cereale": "Getreide-Baguette",
     "pain_6_cereales": "6-Korn-Brot",
-    "pain_chef": "Chefbrot (Sauerteig)",
+    "pain_chef": "Chef-Brot (Sauerteig)",
     "pain_campagne": "Landbrot",
     "pain_blanc": "Weißbrot",
-    "pain_6_cereales_coupe": "6-Korn-Brot (aufgeschnitten)",
-    "pain_chef_coupe": "Chefbrot (Sauerteig, aufgeschnitten)",
-    "pain_campagne_coupe": "Landbrot (aufgeschnitten)",
-    "pain_blanc_coupe": "Weißbrot (aufgeschnitten)",
+    "pain_6_cereales_coupe": "6-Korn-Brot (geschnitten)",
+    "pain_chef_coupe": "Chef-Brot (Sauerteig) geschnitten",
+    "pain_campagne_coupe": "Landbrot (geschnitten)",
+    "pain_blanc_coupe": "Weißbrot (geschnitten)",
     "croissant": "Croissant",
-    "viennoiserie": "Feingebäck",
-    "coupe": "Aufgeschnitten"
+    "viennoiserie": "Gebäck",
+    "coupe": "Geschnitten",
+    "miel_lavande": "Lavendelhonig",
+    "miel_toutes_fleurs": "Blütenhonig",
+    "miel_chataignier": "Kastanienhonig",
+    "miel_sapin": "Tannenhonig",
+    "miel_tilleul": "Lindenhonig",
+    "coffret_decouverte": "Entdeckerbox"
   },
   "groupe": {
     "petits_pains": "Brötchen",
     "baguettes": "Baguettes",
     "pains": "Brote",
-    "viennoiseries": "Feingebäck"
+    "viennoiseries": "Gebäck"
+  },
+  "boutiquesAccueil": {
+    "titre": "Unsere Shops",
+    "sousTitre": "Wählen Sie einen Shop, um seine Produkte zu entdecken und zu bestellen.",
+    "aucune": "Derzeit ist kein Shop verfügbar."
+  },
+  "boutiques": {
+    "miel": {
+      "description": "Handwerklich hergestellter Honig aus Lothringen, ohne Zusatzstoffe."
+    }
+  },
+  "boutiqueMiel": {
+    "eyebrow": "Französische Handwerksimkerei",
+    "heroTitre": "Reiner Honig, mit Leidenschaft geerntet.",
+    "heroTexte": "Von den Bienenstöcken mitten in den blühenden Wiesen bis zu Ihrem Tisch: ein 100% natürlicher Honig.",
+    "panier": "Warenkorb",
+    "filtreTous": "Alle",
+    "filtreFleurs": "Blütenhonige",
+    "filtreForet": "Waldhonige",
+    "filtreCoffret": "Geschenksets",
+    "ajouterPanier": "In den Warenkorb legen",
+    "ajoute": "{{nom}} wurde in den Warenkorb gelegt",
+    "voirPanier": "Warenkorb ansehen",
+    "quantite": "Menge",
+    "retourCatalogue": "Zurück zum Katalog",
+    "continuerAchats": "Weiter einkaufen",
+    "panierVide": "Ihr Warenkorb ist leer.",
+    "decouvrirMiels": "Unsere Honige entdecken",
+    "sousTotal": "Zwischensumme",
+    "passerCommande": "Bestellung aufgeben",
+    "retourPanier": "Zurück zum Warenkorb",
+    "finaliserCommande": "Bestellung abschließen",
+    "dateLivraisonLabel": "Gewünschtes Lieferdatum",
+    "payerPaypal": "Mit PayPal bezahlen",
+    "commandeCreee": "Bestellung erstellt!",
+    "erreurCommande": "Fehler beim Erstellen der Bestellung",
+    "erreurPaypal": "PayPal-Fehler",
+    "produitIntrouvable": "Produkt nicht gefunden.",
+    "chargement": "Wird geladen...",
+    "terroirEyebrow": "Unsere Heimat",
+    "terroirTitre": "Saulnes, im Herzen des Tals",
+    "catalogueTitre": "Unsere Honige",
+    "terroirTexte": "Unsere Bienenstöcke stehen in den bewaldeten Hügeln rund um Saulnes, zwischen blühenden Wiesen und Wäldern — ein ideales Terroir für einen reichen, authentischen Honig."
+  },
+  "tags": {
+    "bestSeller": "Bestseller",
+    "populaire": "Beliebt",
+    "rare": "Selten",
+    "ideeCadeau": "Geschenkidee"
+  },
+  "produitsMiel": {
+    "miel_printemps": "Cremig, köstlich polyfloral, ideal für Kräutertees.",
+    "miel_ete": "Flüssig mit kräftigem Charakter und holzigen Noten, ideal aufs Brot.",
+    "miel_lavande": "Mild und duftend, geerntet auf den Hochebenen des Pays-Haut in Lothringen.",
+    "miel_toutes_fleurs": "Ein köstlicher Blütenhonig, perfekt für die ganze Familie.",
+    "miel_chataignier": "Kräftiger Charakter mit holzigen Noten, ideal aufs Brot.",
+    "miel_sapin": "Waldhonigtau, bernsteinfarben und intensiv im Geschmack.",
+    "miel_tilleul": "Frisch und leicht mentholisiert, beliebt als Abendtee.",
+    "coffret_decouverte": "Drei Gläser à 125 g, um unsere besten Ernten zu entdecken."
   }
 }

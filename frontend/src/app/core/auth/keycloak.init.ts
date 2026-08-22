@@ -1,24 +1,23 @@
 import { provideKeycloak, withAutoRefreshToken } from 'keycloak-angular';
 import { environment } from '../../environments/environment';
 
-export const provideKeycloakAngular = () =>
-  provideKeycloak({
+function resolveSite() {
+  const isMiel = window.location.pathname.startsWith('/boutiques/miel');
+  return isMiel ? environment.sites['chabeille'] : environment.sites['camping-haller'];
+}
+
+export const provideKeycloakAngular = () => {
+  const cfg = resolveSite().keycloak;
+  return provideKeycloak({
     config: {
-      url: environment.keycloak.url,
-      realm: environment.keycloak.realm,
-      clientId: environment.keycloak.clientId
+      url: cfg.url,
+      realm: cfg.realm,
+      clientId: cfg.clientId
     },
     initOptions: {
-      onLoad: 'login-required',
+      onLoad: 'check-sso',
       pkceMethod: 'S256',
       checkLoginIframe: false
     }
-  /*,
-    features: [
-      withAutoRefreshToken({
-        onInactivityTimeout: 'logout',
-        sessionTimeout: 60000
-      })
-    ]
-  */
   });
+};

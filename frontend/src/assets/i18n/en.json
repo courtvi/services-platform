@@ -1,7 +1,10 @@
 {
   "nav": {
     "commandes": "My orders",
-    "admin": "Admin"
+    "boutiques": "Shops",
+    "admin": "Admin",
+    "adminCommandes": "Bread orders",
+    "adminBoutiques": "Shops"
   },
   "lang": {
     "fr": "Français",
@@ -10,8 +13,8 @@
     "lb": "Lëtzebuergesch"
   },
   "commande": {
-    "selectionArticles": "Select items",
-    "commander": "Place order",
+    "selectionArticles": "Item selection",
+    "commander": "Order",
     "nouvelle": "New order",
     "reference": "Reference",
     "actions": "Actions",
@@ -27,11 +30,12 @@
     "numeroClient": "Customer number",
     "article": "Item",
     "quantite": "Quantity",
+    "tva": "VAT",
+    "totalHT": "Subtotal (excl. VAT)",
     "prixUnitaire": "Unit price",
-    "tva": "VAT" ,
-    "totalTva": "Total VAT",
     "total": "Total",
     "totalCommande": "Total",
+    "totalTva": "Total VAT",
     "erreur": "Error loading the order.",
     "chargement": "Loading...",
     "payer": "Pay with PayPal"
@@ -43,29 +47,94 @@
     "ANNULEE": "Cancelled"
   },
   "auth": {
-    "deconnexion": "Sign out"
+    "deconnexion": "Log out"
   },
   "articles": {
-    "petit_pain_blanc": "Small white roll",
-    "petit_pain_cereales": "Small grain roll",
+    "petit_pain_blanc": "White roll",
+    "petit_pain_cereales": "Multigrain roll",
     "baguette_blanche": "White baguette",
-    "baguette_cereale": "Grain baguette",
+    "baguette_cereale": "Multigrain baguette",
     "pain_6_cereales": "6-grain bread",
     "pain_chef": "Chef's bread (sourdough)",
     "pain_campagne": "Country bread",
     "pain_blanc": "White bread",
     "pain_6_cereales_coupe": "6-grain bread (sliced)",
-    "pain_chef_coupe": "Chef's bread (sourdough, sliced)",
+    "pain_chef_coupe": "Chef's bread (sourdough) sliced",
     "pain_campagne_coupe": "Country bread (sliced)",
     "pain_blanc_coupe": "White bread (sliced)",
     "croissant": "Croissant",
     "viennoiserie": "Pastry",
-    "coupe": "Sliced"
+    "coupe": "Sliced",
+    "miel_lavande": "Lavender Honey",
+    "miel_toutes_fleurs": "Wildflower Honey",
+    "miel_chataignier": "Chestnut Honey",
+    "miel_sapin": "Fir Honey",
+    "miel_tilleul": "Linden Honey",
+    "coffret_decouverte": "Discovery Gift Set"
   },
   "groupe": {
-    "petits_pains": "Small rolls",
+    "petits_pains": "Rolls",
     "baguettes": "Baguettes",
     "pains": "Breads",
     "viennoiseries": "Pastries"
+  },
+  "boutiquesAccueil": {
+    "titre": "Our shops",
+    "sousTitre": "Choose a shop to discover its products and place an order.",
+    "aucune": "No shop available at the moment."
+  },
+  "boutiques": {
+    "miel": {
+      "description": "Artisanal honey harvested in Lorraine, additive-free."
+    }
+  },
+  "boutiqueMiel": {
+    "eyebrow": "French artisanal beekeeping",
+    "heroTitre": "Pure honey, harvested with passion.",
+    "heroTexte": "From hives set amid blooming meadows to your table: 100% natural honey.",
+    "panier": "Cart",
+    "filtreTous": "All",
+    "filtreFleurs": "Flower honeys",
+    "filtreForet": "Forest honeys",
+    "filtreCoffret": "Gift sets",
+    "ajouterPanier": "Add to cart",
+    "ajoute": "{{nom}} added to cart",
+    "voirPanier": "View cart",
+    "quantite": "Quantity",
+    "retourCatalogue": "Back to catalogue",
+    "continuerAchats": "Continue shopping",
+    "panierVide": "Your cart is empty.",
+    "decouvrirMiels": "Discover our honeys",
+    "sousTotal": "Subtotal",
+    "passerCommande": "Place order",
+    "retourPanier": "Back to cart",
+    "finaliserCommande": "Complete my order",
+    "dateLivraisonLabel": "Preferred delivery date",
+    "payerPaypal": "Pay with PayPal",
+    "commandeCreee": "Order created!",
+    "erreurCommande": "Error creating the order",
+    "erreurPaypal": "PayPal error",
+    "produitIntrouvable": "Product not found.",
+    "chargement": "Loading...",
+    "terroirEyebrow": "Our terroir",
+    "terroirTitre": "Saulnes, in the heart of the valley",
+    "catalogueTitre": "Our Honeys",
+    "terroirTexte": "Our hives are set in the wooded hills around Saulnes, between flowering meadows and forests — an ideal terroir for a rich, authentic honey."
+  },
+  "tags": {
+    "bestSeller": "Bestseller",
+    "populaire": "Popular",
+    "rare": "Rare",
+    "ideeCadeau": "Gift idea"
+  },
+  "produitsMiel": {
+    "miel_printemps": "Creamy, deliciously polyfloral, ideal for herbal teas.",
+    "miel_ete": "Liquid with a bold character and woody notes, ideal for spreading on bread.",
+    "miel_lavande": "Mild and fragrant, harvested in the highlands of Lorraine.",
+    "miel_toutes_fleurs": "A delicious wildflower honey, perfect for the whole family.",
+    "miel_chataignier": "Bold character with woody notes, ideal for spreading on bread.",
+    "miel_sapin": "Forest honeydew, amber-colored with an intense flavor.",
+    "miel_tilleul": "Fresh and slightly minty, enjoyed as an evening tea.",
+    "coffret_decouverte": "Three 125 g jars to explore our finest harvests."
   }
 }

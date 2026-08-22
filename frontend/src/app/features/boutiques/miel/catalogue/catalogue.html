@@ -1,0 +1,60 @@
+<div class="miel-topbar">
+  <div class="miel-topbar-inner">
+    <span class="miel-logo">
+      <mat-icon>emoji_nature</mat-icon>
+      Chabeille
+    </span>
+    <button mat-stroked-button class="panier-btn" [routerLink]="['/boutiques', boutiqueId, 'panier']">
+      <mat-icon>shopping_cart</mat-icon>
+      {{ 'boutiqueMiel.panier' | translate }}
+      @if (nombreArticlesPanier() > 0) {
+      <span class="panier-badge">{{ nombreArticlesPanier() }}</span>
+      }
+    </button>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <span class="eyebrow">{{ 'boutiqueMiel.eyebrow' | translate }}</span>
+    <h1>{{ 'boutiqueMiel.heroTitre' | translate }}</h1>
+  </div>
+</div>
+
+<div class="terroir">
+  <div class="terroir-inner">
+    <img src="/assets/images/saulnes.jpg" alt="Vue sur le village de Saulnes" class="terroir-img" />
+    <div class="terroir-text">
+      <span class="eyebrow">{{ 'boutiqueMiel.terroirEyebrow' | translate }}</span>
+      <h2>{{ 'boutiqueMiel.terroirTitre' | translate }}</h2>
+      <p>{{ 'boutiqueMiel.terroirTexte' | translate }}</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="container">
+    <div class="catalogue-header">
+      <h1>{{ 'boutiqueMiel.catalogueTitre' | translate }}</h1>
+    </div>
+
+    <div class="filtres">
+    @for (filtre of filtres; track filtre.key) {
+    <button class="filtre-chip" [class.active]="filtreActif() === filtre.key" (click)="choisirFiltre(filtre.key)">
+      {{ filtre.labelCle | translate }}
+    </button>
+    }
+  </div>
+
+  <div class="produits-grid">
+    @for (produit of produitsAffiches(); track produit.id) {
+    <app-produit-card
+      [produit]="produit"
+      icone="emoji_nature"
+      traductionPrefixe="produitsMiel"
+      [lienDetail]="lienDetail(produit)"
+      (ajouter)="ajouterAuPanier($event)" />
+    }
+  </div>
+</div>

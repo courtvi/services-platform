@@ -1,7 +1,10 @@
 {
   "nav": {
     "commandes": "Mes commandes",
-    "admin": "Admin"
+    "boutiques": "Boutiques",
+    "admin": "Admin",
+    "adminCommandes": "Commandes pain",
+    "adminBoutiques": "Boutiques"
   },
   "lang": {
     "fr": "Français",
@@ -30,6 +33,7 @@
     "tva": "tva",
     "prixUnitaire": "Prix unitaire",
     "total": "Total",
+    "totalHT": "Total HT",
     "totalCommande": "Total",
     "totalTva": "Total TVA",
     "erreur": "Erreur lors du chargement de la commande.",
@@ -60,12 +64,79 @@
     "pain_blanc_coupe": "Pain blanc (coupé)",
     "croissant": "Croissant",
     "viennoiserie": "Viennoiserie",
-    "coupe": "Coupé"
+    "coupe": "Coupé",
+    "miel_lavande": "Miel de Lavande",
+    "miel_toutes_fleurs": "Miel Toutes Fleurs",
+    "miel_chataignier": "Miel de Châtaignier",
+    "miel_sapin": "Miel de Sapin",
+    "miel_tilleul": "Miel de Tilleul",
+    "miel_printemps": "Miel de printemps",
+    "miel_ete": "Miel d'été",
+    "coffret_decouverte": "Coffret Découverte"
   },
   "groupe": {
     "petits_pains": "Petits pains",
     "baguettes": "Baguettes",
     "pains": "Pains",
     "viennoiseries": "Viennoiseries"
+  },
+  "boutiquesAccueil": {
+    "titre": "Nos boutiques",
+    "sousTitre": "Choisissez une boutique pour découvrir ses produits et passer commande.",
+    "aucune": "Aucune boutique disponible pour le moment."
+  },
+  "boutiques": {
+    "miel": {
+      "description": "Miel artisanal récolté en Lorraine, 100% bio, sans additif et sans conservateur."
+    }
+  },
+  "boutiqueMiel": {
+    "eyebrow": "Apiculture artisanale française",
+    "heroTitre": "Le miel pur, récolté avec passion.",
+    "heroTexte": "Des ruches installées dans une zone forestière prédominante.",
+    "panier": "Panier",
+    "filtreTous": "Tous",
+    "filtreFleurs": "Miels de fleurs",
+    "filtreForet": "Miels de forêt",
+    "filtreCoffret": "Coffrets",
+    "ajouterPanier": "Ajouter au panier",
+    "ajoute": "{{nom}} ajouté au panier",
+    "voirPanier": "Voir le panier",
+    "quantite": "Quantité",
+    "retourCatalogue": "Retour au catalogue",
+    "continuerAchats": "Continuer mes achats",
+    "panierVide": "Votre panier est vide.",
+    "decouvrirMiels": "Découvrir nos miels",
+    "sousTotal": "Sous-total",
+    "passerCommande": "Passer commande",
+    "retourPanier": "Retour au panier",
+    "finaliserCommande": "Finaliser ma commande",
+    "dateLivraisonLabel": "Date de livraison souhaitée",
+    "payerPaypal": "Payer avec PayPal",
+    "commandeCreee": "Commande créée !",
+    "erreurCommande": "Erreur lors de la création de la commande",
+    "erreurPaypal": "Erreur PayPal",
+    "produitIntrouvable": "Produit introuvable.",
+    "chargement": "Chargement...",
+    "terroirEyebrow": "Notre terroir",
+    "terroirTitre": "Saulnes, au cœur de la vallée",
+    "catalogueTitre": "Nos miels",
+    "terroirTexte": "Nos ruches sont installées dans les collines boisées autour de Saulnes, entre prairies fleuries et forêts — un terroir idéal pour un miel riche et authentique."
+  },
+  "tags": {
+    "bestSeller": "Best-seller",
+    "populaire": "Populaire",
+    "rare": "Rare",
+    "ideeCadeau": "Idée cadeau"
+  },
+  "produitsMiel": {
+    "miel_printemps": "Crémeux, polyfloral et gourmand, récolté au début de saison, idéal pour les infusions.",
+    "miel_ete": "Liquide et caractère prononcé avec des notes boisées, idéal pour les tartines.",
+    "miel_lavande": "Doux et parfumé, récolté sur les terres du pays-haut en Lorraine.",
+    "miel_toutes_fleurs": "Un miel polyfloral gourmand, parfait pour toute la famille.",
+    "miel_chataignier": "Caractère prononcé et notes boisées, idéal pour les tartines.",
+    "miel_sapin": "Miellat de forêt, ambré et intense en bouche.",
+    "miel_tilleul": "Frais et légèrement mentholé, apprécié en infusion du soir.",
+    "coffret_decouverte": "Trois pots de 125 g pour explorer nos meilleures récoltes."
   }
 }

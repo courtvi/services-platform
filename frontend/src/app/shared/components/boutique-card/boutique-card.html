@@ -1,0 +1,10 @@
+<a [routerLink]="['/boutiques', boutique.id]" class="boutique-card" [class]="boutique.theme">
+  <div class="boutique-icone">
+    <mat-icon>{{ boutique.icone }}</mat-icon>
+  </div>
+  <div class="boutique-info">
+    <h3>{{ boutique.nom }}</h3>
+    <p>{{ boutique.descriptionCle | translate }}</p>
+  </div>
+  <mat-icon class="boutique-fleche">arrow_forward</mat-icon>
+</a>

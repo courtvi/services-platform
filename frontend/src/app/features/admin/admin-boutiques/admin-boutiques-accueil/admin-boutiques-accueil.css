@@ -1,0 +1,50 @@
+.container {
+  max-width: 700px;
+  margin: 2.5rem auto;
+  padding: 0 1rem;
+}
+
+h1 { margin-bottom: 6px; }
+
+.sous-titre {
+  color: #666;
+  margin-bottom: 24px;
+}
+
+.liste {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.carte {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  text-decoration: none;
+  color: #0f172a;
+  transition: background .15s ease;
+}
+
+.carte:hover { background: #f8fafc; }
+.carte.inactive { opacity: .55; }
+
+.carte b { display: block; font-size: 15px; }
+
+.prefixe {
+  font-size: 12.5px;
+  color: #64748b;
+}
+
+.badge-inactif {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #b91c1c;
+  background: #fee2e2;
+  padding: 4px 8px;
+  border-radius: 4px;
+}

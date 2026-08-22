@@ -1,0 +1,191 @@
+.miel-topbar {
+  border-bottom: 1px solid var(--boutique-line);
+  background: var(--boutique-surface);
+}
+
+.miel-topbar-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.miel-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--boutique-font-title);
+  font-weight: 700;
+  font-size: 19px;
+  color: var(--boutique-ink);
+}
+
+.panier-btn {
+  position: relative;
+  color: var(--boutique-ink) !important;
+  border-color: var(--boutique-line) !important;
+}
+
+.panier-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--boutique-primary);
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero {
+  background: radial-gradient(circle at 30% 20%, var(--boutique-media-bg), var(--boutique-bg) 70%);
+  padding: 56px 24px;
+  text-align: center;
+}
+
+.hero-inner {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.eyebrow {
+  display: block;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  font-size: 12px;
+  color: var(--boutique-primary-dark);
+  margin-bottom: 12px;
+}
+
+.hero h1 {
+  line-height: 1.4;
+  font-family: var(--boutique-font-title);
+  font-size: clamp(28px, 4vw, 40px);
+  color: var(--boutique-ink);
+  margin: 0 0 14px;
+}
+
+.hero p {
+  color: var(--boutique-ink-soft);
+  margin: 0;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 36px 24px 60px;
+}
+
+.filtres {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+
+.filtre-chip {
+  padding: 9px 18px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 13.5px;
+  background: var(--boutique-surface);
+  border: 1.5px solid var(--boutique-line);
+  color: var(--boutique-ink-soft);
+  cursor: pointer;
+  transition: all .15s ease;
+}
+
+.filtre-chip:hover {
+  border-color: var(--boutique-primary);
+}
+
+.filtre-chip.active {
+  background: var(--boutique-ink);
+  border-color: var(--boutique-ink);
+  color: #fff;
+}
+
+.produits-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+@media (max-width: 860px) {
+  .produits-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 560px) {
+  .produits-grid { grid-template-columns: 1fr; }
+}
+.terroir {
+  padding: 0 24px;
+  margin: 40px 0;
+}
+
+.terroir-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  background: var(--boutique-surface);
+  border: 1px solid var(--boutique-line);
+  border-radius: 20px;
+  overflow: hidden;
+  padding: 20px;
+}
+
+.terroir-img {
+  width: 45%;
+  max-width: 420px;
+  height: 280px;
+  object-fit: cover;
+  border-radius: 14px;
+  flex: none;
+}
+
+.terroir-text h2 {
+  font-family: var(--boutique-font-title);
+  color: var(--boutique-ink);
+  margin: 8px 0 12px;
+}
+
+.terroir-text p {
+  color: var(--boutique-ink-soft);
+  line-height: 1.6;
+}
+
+@media (max-width: 640px) {
+  .terroir-inner {
+    flex-direction: column;
+  }
+  .terroir-img {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.catalogue-header {
+  text-align: center;
+  padding-top: 32px;
+  margin: 8px 0 28px;
+  border-top: 1px solid var(--boutique-line);
+}
+
+.catalogue-header h1 {
+  font-family: var(--boutique-font-title);
+  color: var(--boutique-ink);
+  font-size: 1.8rem;
+  margin: 0;
+}

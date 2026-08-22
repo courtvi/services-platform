@@ -1,0 +1,102 @@
+.produit-card {
+  background: var(--boutique-surface, #fff);
+  border: 1px solid var(--boutique-line, #e5e5e5);
+  border-radius: var(--boutique-radius, 16px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.produit-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, .12);
+}
+
+.produit-media {
+  position: relative;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--boutique-media-bg, #f3f3f3);
+  text-decoration: none;
+}
+
+.produit-icone {
+  width: 56px;
+  height: 56px;
+  font-size: 56px;
+  color: var(--boutique-primary, #666);
+  opacity: .85;
+}
+
+.produit-tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #fff;
+  color: var(--boutique-primary-dark, #333);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  padding: 5px 10px;
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
+}
+
+.produit-body {
+  padding: 18px 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.produit-origine {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--boutique-primary, #666);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.produit-nom {
+  font-family: var(--boutique-font-title, inherit);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--boutique-ink, #222);
+  text-decoration: none;
+}
+
+.produit-desc {
+  font-size: 13.5px;
+  color: var(--boutique-ink-soft, #666);
+  flex: 1;
+  margin: 0;
+}
+
+.produit-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+
+.produit-prix {
+  font-weight: 800;
+  font-size: 17px;
+  color: var(--boutique-ink, #222);
+}
+
+.produit-prix small {
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--boutique-ink-soft, #777);
+}
+
+.produit-add {
+  --mat-fab-small-container-color: var(--boutique-primary, #666);
+  --mat-fab-small-foreground-color: #fff;
+}

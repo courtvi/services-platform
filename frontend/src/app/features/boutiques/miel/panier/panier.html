@@ -1,0 +1,62 @@
+<div class="container">
+  <a [routerLink]="['/boutiques', boutiqueId]" class="retour">
+    <mat-icon>arrow_back</mat-icon>
+    {{ 'boutiqueMiel.continuerAchats' | translate }}
+  </a>
+
+  <h1>{{ 'boutiqueMiel.panier' | translate }}</h1>
+
+  @if (lignes().length === 0) {
+  <div class="vide">
+    <mat-icon>shopping_cart</mat-icon>
+    <p>{{ 'boutiqueMiel.panierVide' | translate }}</p>
+    <a mat-raised-button class="btn-continuer" [routerLink]="['/boutiques', boutiqueId]">
+      {{ 'boutiqueMiel.decouvrirMiels' | translate }}
+    </a>
+  </div>
+  } @else {
+  <div class="lignes">
+    @for (ligne of lignes(); track ligne.produit.id) {
+    <div class="ligne">
+      <mat-icon class="ligne-icone">emoji_nature</mat-icon>
+      <div class="ligne-info">
+        <b>{{ 'articles.' + ligne.produit.cle | translate }}</b>
+        <span>{{ ligne.produit.prix | currency:'EUR' }} · {{ ligne.produit.unite }}</span>
+      </div>
+      <div class="qty-control">
+        <button mat-icon-button (click)="diminuer(ligne.produit.id, ligne.quantite)">
+          <mat-icon>remove</mat-icon>
+        </button>
+        <span>{{ ligne.quantite }}</span>
+        <button mat-icon-button (click)="augmenter(ligne.produit.id, ligne.quantite)">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+      <span class="ligne-total">{{ ligne.produit.prix * ligne.quantite | currency:'EUR' }}</span>
+      <button mat-icon-button class="ligne-supprimer" (click)="supprimer(ligne.produit.id)" aria-label="Supprimer">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    }
+  </div>
+
+  <div class="recap">
+    <div class="recap-total">
+      <span>{{ 'commande.totalHT' | translate }}</span>
+      <b>{{ totalHT() | currency:'EUR' }}</b>
+    </div>
+    <div class="recap-total">
+      <span>{{ 'commande.totalTva' | translate }}</span>
+      <b>{{ montantTva() | currency:'EUR' }}</b>
+    </div>
+    <div class="recap-total recap-total-final">
+      <span>{{ 'commande.totalCommande' | translate }}</span>
+      <b>{{ total() | currency:'EUR' }}</b>
+    </div>
+  </div>
+
+  <a mat-raised-button class="btn-checkout" [routerLink]="['/boutiques', boutiqueId, 'checkout']">
+    {{ 'boutiqueMiel.passerCommande' | translate }}
+  </a>
+  }
+</div>

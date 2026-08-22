@@ -1,0 +1,18 @@
+<div class="container">
+  <h1>Boutiques</h1>
+  <p class="sous-titre">Sélectionnez une boutique pour consulter ses commandes.</p>
+
+  <div class="liste">
+    @for (boutique of boutiques; track boutique.id) {
+    <a class="carte" [routerLink]="['/admin/boutiques', boutique.id]" [class.inactive]="!boutique.actif">
+      <div>
+        <b>{{ boutique.nom }}</b>
+        <span class="prefixe">Préfixe des références : {{ boutique.prefixeReference }}</span>
+      </div>
+      @if (!boutique.actif) {
+      <span class="badge-inactif">Inactive</span>
+      }
+    </a>
+    }
+  </div>
+</div>

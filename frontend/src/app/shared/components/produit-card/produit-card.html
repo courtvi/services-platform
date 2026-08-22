@@ -1,0 +1,24 @@
+<div class="produit-card">
+  <a [routerLink]="lienDetail" class="produit-media">
+    @if (produit.tagCle) {
+    <span class="produit-tag">{{ 'tags.' + produit.tagCle | translate }}</span>
+    }
+    <mat-icon class="produit-icone">{{ icone }}</mat-icon>
+  </a>
+
+  <div class="produit-body">
+    <span class="produit-origine">{{ produit.origine }}</span>
+    <a [routerLink]="lienDetail" class="produit-nom">{{ 'articles.' + produit.cle | translate }}</a>
+    <p class="produit-desc">{{ traductionPrefixe + '.' + produit.cle | translate }}</p>
+
+    <div class="produit-footer">
+      <span class="produit-prix">
+        {{ produit.prix | currency:'EUR' }}
+        <small>/ {{ produit.unite }}</small>
+      </span>
+      <button mat-mini-fab class="produit-add" (click)="ajouter.emit(produit)" [attr.aria-label]="'boutiqueMiel.ajouterPanier' | translate">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

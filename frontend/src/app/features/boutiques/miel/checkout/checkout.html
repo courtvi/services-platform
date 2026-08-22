@@ -1,0 +1,50 @@
+<div class="container">
+  <a [routerLink]="['/boutiques', boutiqueId, 'panier']" class="retour">
+    <mat-icon>arrow_back</mat-icon>
+    {{ 'boutiqueMiel.retourPanier' | translate }}
+  </a>
+
+  <h1>{{ 'boutiqueMiel.finaliserCommande' | translate }}</h1>
+
+  <div class="recap">
+    @for (ligne of lignes(); track ligne.produit.id) {
+    <div class="recap-ligne">
+      <span>{{ ligne.quantite }} × {{ 'articles.' + ligne.produit.cle | translate }}</span>
+      <b>{{ ligne.produit.prix * ligne.quantite | currency:'EUR' }}</b>
+    </div>
+    }
+    <div class="recap-total">
+      <span>{{ 'commande.totalHT' | translate }}</span>
+      <b>{{ totalHT() | currency:'EUR' }}</b>
+    </div>
+    <div class="recap-total">
+      <span>{{ 'commande.totalTva' | translate }}</span>
+      <b>{{ montantTva() | currency:'EUR' }}</b>
+    </div>
+    <div class="recap-total recap-total-final">
+      <span>{{ 'commande.totalCommande' | translate }}</span>
+      <b>{{ total() | currency:'EUR' }}</b>
+    </div>
+  </div>
+
+  <form [formGroup]="form" class="livraison-form">
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'boutiqueMiel.dateLivraisonLabel' | translate }}</mat-label>
+      <mat-icon matPrefix>calendar_today</mat-icon>
+      <input matInput type="date" formControlName="dateLivraison" [min]="getTomorrow()">
+    </mat-form-field>
+  </form>
+
+  <div class="paiement">
+    @if (!payPalConfig) {
+    <button mat-raised-button class="btn-payer" type="button" [disabled]="form.invalid || loading" (click)="initPayPal()">
+      <mat-icon>payment</mat-icon>
+      {{ 'boutiqueMiel.payerPaypal' | translate }}
+    </button>
+    }
+
+    @if (payPalConfig) {
+    <ngx-paypal [config]="payPalConfig"></ngx-paypal>
+    }
+  </div>
+</div>

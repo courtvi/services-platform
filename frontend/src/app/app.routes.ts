@@ -46,7 +46,45 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/admin/admin-commande-list/admin-commande-list')
             .then(m => m.AdminCommandeList)
+      },
+      {
+        path: 'boutiques',
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./features/admin/admin-boutiques/admin-boutiques-accueil/admin-boutiques-accueil')
+                .then(m => m.AdminBoutiquesAccueil)
+          },
+          {
+            path: ':id',
+            loadComponent: () =>
+              import('./features/admin/admin-boutiques/admin-boutique-commandes/admin-boutique-commandes')
+                .then(m => m.AdminBoutiqueCommandes)
+          }
+        ]
       }
+    ]
+  },
+
+
+  {
+    path: 'boutiques',
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./features/boutiques/boutiques-accueil/boutiques-accueil')
+            .then(m => m.BoutiquesAccueil)
+      },
+      {
+        path: 'miel',
+        loadChildren: () =>
+          import('./features/boutiques/miel/miel.routes')
+            .then(m => m.MIEL_ROUTES)
+      }
+      // Prochaine boutique : ajouter un bloc similaire ici, ex.
+      // { path: 'fromage', loadChildren: () => import('./features/boutiques/fromage/fromage.routes').then(m => m.FROMAGE_ROUTES) }
     ]
   },
 

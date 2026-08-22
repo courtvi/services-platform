@@ -1,0 +1,49 @@
+.boutique-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 22px 24px;
+  border-radius: var(--boutique-radius, 16px);
+  background: var(--boutique-surface, #fff);
+  border: 1px solid var(--boutique-line, #e5e5e5);
+  text-decoration: none;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.boutique-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, .12);
+}
+
+.boutique-icone {
+  width: 56px;
+  height: 56px;
+  flex: none;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--boutique-primary, #666);
+  color: #fff;
+}
+
+.boutique-info {
+  flex: 1;
+}
+
+.boutique-info h3 {
+  margin: 0 0 4px;
+  font-family: var(--boutique-font-title, inherit);
+  color: var(--boutique-ink, #222);
+  font-size: 18px;
+}
+
+.boutique-info p {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--boutique-ink-soft, #666);
+}
+
+.boutique-fleche {
+  color: var(--boutique-primary, #666);
+}

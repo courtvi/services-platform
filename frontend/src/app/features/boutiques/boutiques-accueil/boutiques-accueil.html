@@ -1,0 +1,13 @@
+<div class="container">
+  <h1>{{ 'boutiquesAccueil.titre' | translate }}</h1>
+  <p class="sous-titre">{{ 'boutiquesAccueil.sousTitre' | translate }}</p>
+
+  <div class="boutiques-grid">
+    @for (boutique of boutiques; track boutique.id) {
+    <app-boutique-card [boutique]="boutique" />
+    }
+    @empty {
+    <p class="vide">{{ 'boutiquesAccueil.aucune' | translate }}</p>
+    }
+  </div>
+</div>

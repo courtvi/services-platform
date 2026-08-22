@@ -1,7 +1,7 @@
 <mat-toolbar color="primary" class="toolbar">
-    <a routerLink="/commandes" class="toolbar-title">
+    <a routerLink="/boutiques" class="toolbar-title">
         <mat-icon>storefront</mat-icon>
-        <span>Camping Haller</span>
+      <span>{{ 'nav.boutiques' | translate }}</span>
     </a>
 
     <span class="spacer"></span>
@@ -13,10 +13,17 @@
     </a>
 
     @if (isAdmin()) {
-    <a mat-button routerLink="/admin/commandes" routerLinkActive="active-link">
+    <button mat-button [matMenuTriggerFor]="adminMenu" routerLinkActive="active-link">
         <mat-icon>admin_panel_settings</mat-icon>
         <span>{{ 'nav.admin' | translate }}</span>
-    </a>
+    </button>
+
+    <mat-menu #adminMenu="matMenu">
+        <a mat-menu-item routerLink="/admin/boutiques">
+            <mat-icon>storefront</mat-icon>
+            <span>{{ 'nav.adminBoutiques' | translate }}</span>
+        </a>
+    </mat-menu>
     }
 
     <button mat-icon-button [matMenuTriggerFor]="langMenu" aria-label="Choisir la langue">

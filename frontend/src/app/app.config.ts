@@ -16,6 +16,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([authInterceptor])),
     provideKeycloakAngular(),
     provideTranslateService({ fallbackLang: 'fr' }),
-    ...provideTranslateHttpLoader()
+    ...provideTranslateHttpLoader({ prefix: '/assets/i18n/', suffix: '.json' })
   ]
 };
