@@ -5,6 +5,8 @@ metadata:
   namespace: camping-haller
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
 spec:
   rules:
     - host: __OVH_HOST__
@@ -48,4 +50,3 @@ spec:
   tls:
     - hosts:
         - __OVH_HOST__
-      secretName: camping-haller-tls
