@@ -17,6 +17,7 @@ sed "s/__OVH_HOST__/$OVH_NIP_HOST/g" ../k8s/keycloak/deployment-ovh.yml.template
 sed "s/__OVH_HOST__/$OVH_NIP_HOST/g" ../k8s/api-gateway/deployment-ovh.yml.template > ../k8s/api-gateway/deployment-ovh.yml
 sed "s/__OVH_HOST__/$OVH_NIP_HOST/g" ../k8s/commande-service/deployment-ovh.yml.template > ../k8s/commande-service/deployment-ovh.yml
 sed "s#__OVH_URL__#https://$OVH_NIP_HOST#g" ../frontend/src/app/environments/environment.ovh.ts.template > ../frontend/src/app/environments/environment.ovh.ts
+sed "s/__OVH_HOST__/$OVH_NIP_HOST/g" ../k8s/ingress.yml.template > ../k8s/ingress.yml
 echo "✅ Fichiers générés avec l'hôte $OVH_NIP_HOST"
 
 echo "🚀 STEP 0 - Checking cluster"
@@ -41,7 +42,7 @@ cd ../commande-service && mvn clean package -DskipTests && cd ../script
 
 echo "➡️ Docker builds"
 cd ../frontend && rm -rf dist && cd ../script
-docker build --no-cache -t frontend:latest ../frontend
+docker build --no-cache -f ../frontend/Dockerfile-ovh -t frontend:latest ../frontend
 docker build --no-cache -t api-gateway:latest ../api-gateway
 docker build --no-cache -t eureka-server:latest ../eureka-server
 docker build --no-cache -t commande-service:latest ../commande-service
@@ -63,6 +64,10 @@ kubectl apply -f ../k8s/commande-service/service.yml
 
 kubectl apply -f ../k8s/front-end/deployment.yml
 kubectl apply -f ../k8s/front-end/service.yml
+
+# Traefik (TLS/Let's Encrypt) + Ingress
+kubectl apply -f ../k8s/traefik-tls.yml
+kubectl apply -f ../k8s/ingress.yml
 
 echo "⏳ STEP 3 - Restart + wait"
 kubectl rollout restart deployment/keycloak -n $NAMESPACE
