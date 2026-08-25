@@ -38,6 +38,8 @@ spec:
               value: "smtp-relay.brevo.com"
             - name: MAIL_PORT
               value: "587"
+            - name: MAIL_FROM
+              value: "__MAIL_FROM__"
             - name: MAIL_USERNAME
               valueFrom:
                 secretKeyRef:

@@ -19,7 +19,7 @@ public class MailService {
 
     private final JavaMailSender mailSender;
 
-    @Value("${spring.mail.username}")
+    @Value("${mail.from}")
     private String fromEmail;
     // Ajoute cette constante en haut de la classe (après les champs existants)
     private static final DateTimeFormatter DATE_FORMATTER =
