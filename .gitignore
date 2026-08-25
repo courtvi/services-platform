@@ -4,3 +4,6 @@ target/
 *.jar
 
 */target/
+
+k8s/.ovh-env
+**/target/
