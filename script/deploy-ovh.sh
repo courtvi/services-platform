@@ -15,7 +15,7 @@ echo "✅ IP OVH : $OVH_PUBLIC_IP ($OVH_NIP_HOST)"
 echo "📝 STEP -0.5 - Génération des fichiers depuis les templates"
 sed "s/__OVH_HOST__/$OVH_NIP_HOST/g" ../k8s/keycloak/deployment-ovh.yml.template > ../k8s/keycloak/deployment-ovh.yml
 sed "s/__OVH_HOST__/$OVH_NIP_HOST/g" ../k8s/api-gateway/deployment-ovh.yml.template > ../k8s/api-gateway/deployment-ovh.yml
-sed "s/__OVH_HOST__/$OVH_NIP_HOST/g" ../k8s/commande-service/deployment-ovh.yml.template > ../k8s/commande-service/deployment-ovh.yml
+sed -e "s/__OVH_HOST__/$OVH_NIP_HOST/g" -e "s#__MAIL_FROM__#$MAIL_FROM#g" ../k8s/commande-service/deployment-ovh.yml.template > ../k8s/commande-service/deployment-ovh.yml
 sed "s#__OVH_URL__#https://$OVH_NIP_HOST#g" ../frontend/src/app/environments/environment.ovh.ts.template > ../frontend/src/app/environments/environment.ovh.ts
 sed "s/__OVH_HOST__/$OVH_NIP_HOST/g" ../k8s/ingress.yml.template > ../k8s/ingress.yml
 echo "✅ Fichiers générés avec l'hôte $OVH_NIP_HOST"
