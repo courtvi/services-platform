@@ -34,6 +34,10 @@ spec:
               value: "http://eureka:8761/eureka"
             - name: SERVER_PORT
               value: "8082"
+            - name: MAIL_HOST
+              value: "smtp-relay.brevo.com"
+            - name: MAIL_PORT
+              value: "587"
             - name: MAIL_USERNAME
               valueFrom:
                 secretKeyRef:

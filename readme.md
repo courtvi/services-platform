@@ -28,7 +28,7 @@ Elle permet de gérer un cycle complet de gestion commerciale :
    ──────────────REST + EVENTS + JWT───────────────   
      │                │                        │
 ┌─────▼──────┐  ┌─────▼──────┐         ┌───────▼──┐
-│  KAFKA     │  │  ACTUATOR  │         │ EUREKA   │
+│            │  │  ACTUATOR  │         │ EUREKA   │
 │ MESSAGING  │  │            │         │ DISCOVERY│
 └────┬───────┘  └─────┬──────┘         └─────┬────┘     
      └────────────────+──────────────────────┘
