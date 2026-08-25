@@ -38,8 +38,6 @@ spec:
               value: "false"
             - name: KC_HOSTNAME
               value: "__OVH_HOST__"
-            - name: KC_HOSTNAME_PORT
-              value: "80"
             - name: KC_PROXY
               value: "edge"
             - name: KC_DB
