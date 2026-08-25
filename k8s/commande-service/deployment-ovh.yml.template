@@ -30,6 +30,8 @@ spec:
               value: "https://__OVH_HOST__/realms/camping-haller"
             - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI
               value: "http://keycloak:8080/realms/camping-haller/protocol/openid-connect/certs"
+            - name: SPRING_SQL_INIT_DATA_LOCATIONS
+              value: ""
             - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
               value: "http://eureka:8761/eureka"
             - name: SERVER_PORT
