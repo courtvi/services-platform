@@ -47,6 +47,13 @@ docker build --no-cache -t api-gateway:latest ../api-gateway
 docker build --no-cache -t eureka-server:latest ../eureka-server
 docker build --no-cache -t commande-service:latest ../commande-service
 
+echo "📥 Import des images dans le containerd de k3s (docker build != k3s ctr, sinon k3s réutilise l'ancienne image en cache)"
+docker save frontend:latest         | sudo k3s ctr images import -
+docker save api-gateway:latest      | sudo k3s ctr images import -
+docker save eureka-server:latest    | sudo k3s ctr images import -
+docker save commande-service:latest | sudo k3s ctr images import -
+
+
 echo "☸️ STEP 2 - Apply Kubernetes manifests (variantes OVH)"
 kubectl apply -f ../k8s/keycloak/postgres.yml
 kubectl apply -f ../k8s/keycloak/deployment-ovh.yml
