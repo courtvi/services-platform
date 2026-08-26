@@ -1,6 +1,6 @@
 {
   "id": "34a85983-20f0-4254-876c-b18069cc761d",
-  "realm": "camping-haller",
+  "realm": "lorrconnect",
   "notBefore": 0,
   "defaultSignatureAlgorithm": "RS256",
   "revokeRefreshToken": false,
@@ -67,7 +67,7 @@
       },
       {
         "id": "8986585c-79f2-4625-a19f-6dc6ea020ff5",
-        "name": "default-roles-camping-haller",
+        "name": "default-roles-lorrconnect",
         "description": "${role_default-roles}",
         "composite": true,
         "composites": {
@@ -408,7 +408,7 @@
   "groups": [],
   "defaultRole": {
     "id": "8986585c-79f2-4625-a19f-6dc6ea020ff5",
-    "name": "default-roles-camping-haller",
+    "name": "default-roles-lorrconnect",
     "description": "${role_default-roles}",
     "composite": true,
     "clientRole": false,
@@ -483,13 +483,13 @@
       "clientId": "account",
       "name": "${client_account}",
       "rootUrl": "${authBaseUrl}",
-      "baseUrl": "/realms/camping-haller/account/",
+      "baseUrl": "/realms/lorrconnect/account/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "redirectUris": [
-        "/realms/camping-haller/account/*"
+        "/realms/lorrconnect/account/*"
       ],
       "webOrigins": [],
       "notBefore": 0,
@@ -530,13 +530,13 @@
       "clientId": "account-console",
       "name": "${client_account-console}",
       "rootUrl": "${authBaseUrl}",
-      "baseUrl": "/realms/camping-haller/account/",
+      "baseUrl": "/realms/lorrconnect/account/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "redirectUris": [
-        "/realms/camping-haller/account/*"
+        "/realms/lorrconnect/account/*"
       ],
       "webOrigins": [],
       "notBefore": 0,
@@ -773,13 +773,13 @@
       "clientId": "security-admin-console",
       "name": "${client_security-admin-console}",
       "rootUrl": "${authAdminUrl}",
-      "baseUrl": "/admin/camping-haller/console/",
+      "baseUrl": "/admin/lorrconnect/console/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "redirectUris": [
-        "/admin/camping-haller/console/*"
+        "/admin/lorrconnect/console/*"
       ],
       "webOrigins": [
         "+"

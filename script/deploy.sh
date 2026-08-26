@@ -2,7 +2,7 @@
 
 set -e
 
-NAMESPACE="camping-haller"
+NAMESPACE="lorrconnect"
 CLUSTER="kind"
 
 echo "🚀 STEP 0 - Checking cluster"
@@ -93,9 +93,9 @@ echo "🔐 STEP 8 - Setup camping haller Keycloak user"
 # Attendez jusqu'à 120s que le realm soit disponible
 for i in $(seq 1 24); do
   STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-    http://localhost:30090/realms/camping-haller)
+    http://localhost:30090/realms/lorrconnect)
   if [ "$STATUS" = "200" ]; then
-    echo "✅ Realm camping-haller ready!"
+    echo "✅ Realm lorrconnect ready!"
     break
   fi
   echo "⏳ Waiting... ($i/24)"
@@ -107,40 +107,40 @@ ADMIN_TOKEN=$(curl -s -X POST http://localhost:30090/realms/master/protocol/open
   -d "grant_type=password&client_id=admin-cli&username=admin&password=admin" \
   | grep -o '"access_token":"[^"]*"' | cut -d'"' -f4)
 
-CLIENT_ID=$(curl -s "http://localhost:30090/admin/realms/camping-haller/clients?clientId=haller" \
+CLIENT_ID=$(curl -s "http://localhost:30090/admin/realms/lorrconnect/clients?clientId=haller" \
   -H "Authorization: Bearer $ADMIN_TOKEN" \
   | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4)
 
 # Créez les rôles si absents
-curl -s -X POST "http://localhost:30090/admin/realms/camping-haller/clients/$CLIENT_ID/roles" \
+curl -s -X POST "http://localhost:30090/admin/realms/lorrconnect/clients/$CLIENT_ID/roles" \
   -H "Authorization: Bearer $ADMIN_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"name":"CLIENT"}' 2>/dev/null || true
 
-curl -s -X POST "http://localhost:30090/admin/realms/camping-haller/clients/$CLIENT_ID/roles" \
+curl -s -X POST "http://localhost:30090/admin/realms/lorrconnect/clients/$CLIENT_ID/roles" \
   -H "Authorization: Bearer $ADMIN_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"name":"ADMIN"}' 2>/dev/null || true
 
 # Créez l'utilisateur
-curl -s -X POST "http://localhost:30090/admin/realms/camping-haller/users" \
+curl -s -X POST "http://localhost:30090/admin/realms/lorrconnect/users" \
   -H "Authorization: Bearer $ADMIN_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"username":"vincent.courtois0@gmail.com","email":"vincent.courtois0@gmail.com","firstName":"vincent","lastName":"courtois","enabled":true,"emailVerified":true,"credentials":[{"type":"password","value":"password","temporary":false}]}' 2>/dev/null || true
 
-USER_ID=$(curl -s "http://localhost:30090/admin/realms/camping-haller/users?username=vincent.courtois0%40gmail.com" \
+USER_ID=$(curl -s "http://localhost:30090/admin/realms/lorrconnect/users?username=vincent.courtois0%40gmail.com" \
   -H "Authorization: Bearer $ADMIN_TOKEN" \
   | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4)
 
-CLIENT_ROLE_ID=$(curl -s "http://localhost:30090/admin/realms/camping-haller/clients/$CLIENT_ID/roles/CLIENT" \
+CLIENT_ROLE_ID=$(curl -s "http://localhost:30090/admin/realms/lorrconnect/clients/$CLIENT_ID/roles/CLIENT" \
   -H "Authorization: Bearer $ADMIN_TOKEN" \
   | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4)
 
-ADMIN_ROLE_ID=$(curl -s "http://localhost:30090/admin/realms/camping-haller/clients/$CLIENT_ID/roles/ADMIN" \
+ADMIN_ROLE_ID=$(curl -s "http://localhost:30090/admin/realms/lorrconnect/clients/$CLIENT_ID/roles/ADMIN" \
   -H "Authorization: Bearer $ADMIN_TOKEN" \
   | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4)
 
-curl -s -X POST "http://localhost:30090/admin/realms/camping-haller/users/$USER_ID/role-mappings/clients/$CLIENT_ID" \
+curl -s -X POST "http://localhost:30090/admin/realms/lorrconnect/users/$USER_ID/role-mappings/clients/$CLIENT_ID" \
   -H "Authorization: Bearer $ADMIN_TOKEN" \
   -H "Content-Type: application/json" \
   -d "[{\"id\":\"$CLIENT_ROLE_ID\",\"name\":\"CLIENT\"},{\"id\":\"$ADMIN_ROLE_ID\",\"name\":\"ADMIN\"}]" 2>/dev/null || true

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: api-gateway
-  namespace: camping-haller
+  namespace: lorrconnect
   labels:
     app: api-gateway
 spec:
@@ -25,9 +25,9 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: "kubernetes"
             - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
-              value: "https://__OVH_HOST__/realms/camping-haller"
+              value: "https://__OVH_HOST__/realms/lorrconnect"
             - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI
-              value: "http://keycloak:8080/realms/camping-haller/protocol/openid-connect/certs"
+              value: "http://keycloak:8080/realms/lorrconnect/protocol/openid-connect/certs"
             - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
               value: "http://eureka:8761/eureka"
             - name: SERVER_PORT

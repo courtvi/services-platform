@@ -63,7 +63,7 @@ export class CommandeForm {
 
     this.payPalConfig = {
       currency: 'EUR',
-      clientId: environment.sites['camping-haller'].paypal.clientId,
+      clientId: environment.sites['lorrconnect'].paypal.clientId,
       createOrderOnClient: () => ({
         intent: 'CAPTURE',
         purchase_units: [{

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: commande-service
-  namespace: camping-haller
+  namespace: lorrconnect
   labels:
     app: commande-service
 spec:
@@ -27,9 +27,9 @@ spec:
             - containerPort: 8082
           env:
             - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
-              value: "https://__OVH_HOST__/realms/camping-haller"
+              value: "https://__OVH_HOST__/realms/lorrconnect"
             - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI
-              value: "http://keycloak:8080/realms/camping-haller/protocol/openid-connect/certs"
+              value: "http://keycloak:8080/realms/lorrconnect/protocol/openid-connect/certs"
             - name: SPRING_SQL_INIT_DATA_LOCATIONS
               value: ""
             - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE

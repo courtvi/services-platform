@@ -13,5 +13,5 @@ echo "📥 Kind load..."
 kind load docker-image commande-service:latest --name kind
 
 echo "🔁 Restart..."
-kubectl rollout restart deployment/commande-service -n camping-haller
-kubectl rollout status deployment/commande-service -n camping-haller
+kubectl rollout restart deployment/commande-service -n lorrconnect
+kubectl rollout status deployment/commande-service -n lorrconnect

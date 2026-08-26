@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: postgres-keycloak-secret
-  namespace: camping-haller
+  namespace: lorrconnect
 type: Opaque
 stringData:
   POSTGRES_DB: keycloak
@@ -14,7 +14,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: postgres-keycloak-pvc
-  namespace: camping-haller
+  namespace: lorrconnect
 spec:
   accessModes:
     - ReadWriteOnce
@@ -27,7 +27,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgres-keycloak
-  namespace: camping-haller
+  namespace: lorrconnect
   labels:
     app: postgres-keycloak
 spec:
@@ -78,7 +78,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: postgres-keycloak
-  namespace: camping-haller
+  namespace: lorrconnect
 spec:
   selector:
     app: postgres-keycloak

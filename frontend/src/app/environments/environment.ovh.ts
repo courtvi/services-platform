@@ -2,10 +2,10 @@ export const environment = {
   production: true,
   apiUrl: 'https://91.134.36.197.nip.io',
   sites: {
-    'camping-haller': {
+    'lorrconnect': {
       keycloak: {
         url: 'https://91.134.36.197.nip.io',
-        realm: 'camping-haller',
+        realm: 'lorrconnect',
         clientId: 'haller'
       },
       paypal: {
@@ -19,7 +19,7 @@ export const environment = {
         clientId: 'chabeille'
       },
       paypal: {
-        // Sandbox: on réutilise le client id de test de camping-haller en attendant un client id dédié à chabeille
+        // Sandbox: on réutilise le client id de test de lorrconnect en attendant un client id dédié à chabeille
         clientId: 'AbVtQq3_8LphF3SZ8TRV4wX7s-lTLfySfkHDhmvxknXULaSAVBgfzUptTH2AAPRo4BxIkHuCZUjCUwZh'
       }
     }

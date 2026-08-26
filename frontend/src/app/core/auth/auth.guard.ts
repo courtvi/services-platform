@@ -26,7 +26,7 @@ export const adminGuard: CanActivateFn = async () => {
     return false;
   }
 
-  const hasAdminRole = keycloak.hasResourceRole('ADMIN', 'haller');
+  const hasAdminRole = keycloak.hasResourceRole('ADMIN');
 
   if (!hasAdminRole) {
     return router.createUrlTree(['/commandes']);

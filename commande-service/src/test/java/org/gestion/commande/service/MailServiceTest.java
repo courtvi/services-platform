@@ -32,7 +32,7 @@ class MailServiceTest {
 
     @BeforeEach
     void setUp() {
-        ReflectionTestUtils.setField(mailService, "fromEmail", "test@camping-haller.fr");
+        ReflectionTestUtils.setField(mailService, "fromEmail", "test@lorrconnect.fr");
     }
 
     @Test

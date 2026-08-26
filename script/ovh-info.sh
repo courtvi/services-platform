@@ -6,7 +6,7 @@
 #   ovhcloud login
 #
 # Ce script :
-#   - retrouve le projet cloud et l'instance camping-haller
+#   - retrouve le projet cloud et l'instance lorrconnect
 #   - démarre/arrête l'instance si demandé
 #   - récupère IP publique/privée + statut
 #   - écrit ces infos dans k8s/.ovh-env (source-able par deploy-ovh.sh)
@@ -37,7 +37,7 @@ fi
 echo "✅ Project ID: $PROJECT_ID"
 
 echo "🔍 STEP 1 - Recherche de l'instance"
-# ID connu de l'instance camping-haller (nommée "b2-7-gra11" côté OVH, d'où le besoin de le fixer en dur)
+# ID connu de l'instance lorrconnect (nommée "b2-7-gra11" côté OVH, d'où le besoin de le fixer en dur)
 INSTANCE_ID="97855841-0854-436a-8050-478023ea2c90"
 
 # Vérifie qu'elle existe toujours sous cet ID dans ce projet

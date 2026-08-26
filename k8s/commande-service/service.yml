@@ -2,7 +2,7 @@
 kind: Service
 metadata:
   name: commande-service
-  namespace: camping-haller
+  namespace: lorrconnect
 spec:
   type: NodePort
   selector:

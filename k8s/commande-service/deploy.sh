@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-NAMESPACE="camping-haller"
+NAMESPACE="lorrconnect"
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 echo ">>> Vérifications préalables..."

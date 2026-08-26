@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: postgres-commande-secret
-  namespace: camping-haller
+  namespace: lorrconnect
 type: Opaque
 stringData:
   POSTGRES_DB: commandedb
@@ -14,7 +14,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: postgres-commande-pvc
-  namespace: camping-haller
+  namespace: lorrconnect
 spec:
   accessModes:
     - ReadWriteOnce
@@ -27,7 +27,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgres-commande
-  namespace: camping-haller
+  namespace: lorrconnect
   labels:
     app: postgres-commande
 spec:
@@ -78,7 +78,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: postgres-commande
-  namespace: camping-haller
+  namespace: lorrconnect
 spec:
   selector:
     app: postgres-commande

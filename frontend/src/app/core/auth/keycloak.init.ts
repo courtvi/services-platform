@@ -3,7 +3,7 @@ import { environment } from '../../environments/environment';
 
 function resolveSite() {
   const isMiel = window.location.pathname.startsWith('/boutiques/miel');
-  return isMiel ? environment.sites['chabeille'] : environment.sites['camping-haller'];
+  return isMiel ? environment.sites['chabeille'] : environment.sites['lorrconnect'];
 }
 
 export const provideKeycloakAngular = () => {

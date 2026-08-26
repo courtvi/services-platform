@@ -2,7 +2,7 @@
 kind: Service
 metadata:
   name: keycloak
-  namespace: camping-haller
+  namespace: lorrconnect
 spec:
   type: NodePort
 

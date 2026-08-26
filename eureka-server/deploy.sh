@@ -3,7 +3,7 @@
 set -e
 
 SERVICE_NAME=$1
-NAMESPACE="camping-haller"
+NAMESPACE="lorrconnect"
 IMAGE_NAME="$SERVICE_NAME:latest"
 
 if [ -z "$SERVICE_NAME" ]; then

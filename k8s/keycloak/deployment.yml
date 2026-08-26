@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: keycloak
-  namespace: camping-haller
+  namespace: lorrconnect
   labels:
     app: keycloak
 spec:

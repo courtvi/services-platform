@@ -2,7 +2,7 @@
 
 set -e
 
-NAMESPACE="camping-haller"
+NAMESPACE="lorrconnect"
 CLUSTER="kind"
 
 echo "🔨 Compile api-gateway"

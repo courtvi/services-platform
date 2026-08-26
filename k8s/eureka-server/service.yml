@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: eureka
-  namespace: camping-haller
+  namespace: lorrconnect
 spec:
   type: ClusterIP
   selector:
