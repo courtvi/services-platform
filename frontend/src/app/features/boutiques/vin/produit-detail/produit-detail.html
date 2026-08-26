@@ -1,0 +1,45 @@
+<div class="container">
+  <a [routerLink]="['/boutiques', boutiqueId]" class="retour">
+    <mat-icon>arrow_back</mat-icon>
+    {{ 'boutiqueMiel.retourCatalogue' | translate }}
+  </a>
+
+  @if (chargement()) {
+  <p class="etat">{{ 'boutiqueMiel.chargement' | translate }}</p>
+  } @else if (!produit()) {
+  <p class="etat">{{ 'boutiqueMiel.produitIntrouvable' | translate }}</p>
+  } @else {
+  <div class="detail-grid">
+    <div class="detail-media">
+      <mat-icon>emoji_nature</mat-icon>
+    </div>
+    <div class="detail-info">
+      <span class="origine">{{ produit()!.origine }}</span>
+      <h1>{{ 'articles.' + produit()!.cle | translate }}</h1>
+      <p class="description">{{ traductionPrefixe + '.' + produit()!.cle | translate }}</p>
+      <div class="prix">
+        {{ produit()!.prix | currency:'EUR' }}
+        <small>/ {{ produit()!.unite }}</small>
+      </div>
+
+      <div class="quantite-row">
+        <span>{{ 'boutiqueMiel.quantite' | translate }}</span>
+        <div class="qty-control">
+          <button mat-icon-button (click)="diminuer()" [disabled]="quantite() <= 1">
+            <mat-icon>remove</mat-icon>
+          </button>
+          <span>{{ quantite() }}</span>
+          <button mat-icon-button (click)="augmenter()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <button mat-raised-button class="btn-ajouter" (click)="ajouterAuPanier()">
+        <mat-icon>shopping_cart</mat-icon>
+        {{ 'boutiqueMiel.ajouterPanier' | translate }}
+      </button>
+    </div>
+  </div>
+  }
+</div>
