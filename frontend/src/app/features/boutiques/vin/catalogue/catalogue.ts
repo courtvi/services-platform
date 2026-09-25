@@ -9,10 +9,10 @@ import { ProduitService } from '../../../../core/services/produit.service';
 import { PanierService } from '../../../../core/services/panier.service';
 import { Produit } from '../../../../core/models/produit.model';
 
-const BOUTIQUE_ID = 'miel';
+const BOUTIQUE_ID = 'vin';
 
 @Component({
-  selector: 'app-miel-catalogue',
+  selector: 'app-vin-catalogue',
   standalone: true,
   imports: [RouterLink, MatIconModule, MatButtonModule, MatSnackBarModule, TranslateModule, ProduitCard],
   templateUrl: './catalogue.html',
@@ -28,10 +28,10 @@ export class Catalogue {
   readonly boutiqueId = BOUTIQUE_ID;
 
   readonly filtres = [
-    { key: 'tous', labelCle: 'boutiqueMiel.filtreTous' },
-    { key: 'fleurs', labelCle: 'boutiqueMiel.filtreFleurs' },
-    { key: 'foret', labelCle: 'boutiqueMiel.filtreForet' },
-    { key: 'coffret', labelCle: 'boutiqueMiel.filtreCoffret' }
+    { key: 'tous', labelCle: 'boutiquevin.filtreTous' },
+    { key: 'fleurs', labelCle: 'boutiquevin.filtreFleurs' },
+    { key: 'foret', labelCle: 'boutiquevin.filtreForet' },
+    { key: 'coffret', labelCle: 'boutiquevin.filtreCoffret' }
   ];
 
   produits = signal<Produit[]>([]);
@@ -56,8 +56,8 @@ export class Catalogue {
   ajouterAuPanier(produit: Produit): void {
     this.panierService.ajouter(BOUTIQUE_ID, produit, 1);
     const nom = this.translate.instant('articles.' + produit.cle);
-    const message = this.translate.instant('boutiqueMiel.ajoute', { nom });
-    const voirPanier = this.translate.instant('boutiqueMiel.voirPanier');
+    const message = this.translate.instant('boutiquevin.ajoute', { nom });
+    const voirPanier = this.translate.instant('boutiquevin.voirPanier');
     this.snackBar.open(message, voirPanier, { duration: 3000 })
       .onAction()
       .subscribe(() => this.router.navigate(['/boutiques', BOUTIQUE_ID, 'panier']));

@@ -35,24 +35,7 @@ public class CommandeHandler {
                 .map(principal -> (Authentication) principal);
     }
 
-    /*
-    public Mono<ServerResponse> createCommande(ServerRequest request) {
-        return extractUserId(request)
-                .flatMap(userId ->
-                        request.bodyToMono(CommandeRequest.class)
-                                .flatMap(commandeRequest ->
-                                        commandeService.createCommande(commandeRequest, userId)
-                                )
-                )
-                .flatMap(response ->
-                        ServerResponse.status(201).bodyValue(response)
-                )
-                .onErrorResume(e -> {
-                    e.printStackTrace(); // ← ajoute ça
-                    return ServerResponse.badRequest().bodyValue(e.getMessage());
-                });
-    }
-    */
+
     public Mono<ServerResponse> createCommande(ServerRequest request) {
         return request.principal()
                 .cast(JwtAuthenticationToken.class)

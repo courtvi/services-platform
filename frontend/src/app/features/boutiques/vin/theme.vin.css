@@ -1,8 +1,4 @@
-/* Thème visuel de la boutique "Le Rucher Doré" (miel).
-   Chaque boutique déclare ses propres variables sous sa propre classe
-   .theme-<id> — les composants partagés (produit-card, boutique-card, ...)
-   ne connaissent que les noms de variables, jamais les couleurs en dur. */
-.theme-miel {
+.theme-vin {
   --boutique-bg: #FFFBF2;
   --boutique-surface: #FFFFFF;
   --boutique-media-bg: #FCE9BE;

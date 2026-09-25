@@ -24,14 +24,13 @@ export const BOUTIQUES: Boutique[] = [
     actif: true
   }
 
-  // Exemple pour la prochaine boutique :
-  // {
-  //   id: 'fromage',
-  //   nom: 'La Fromagerie du Val',
-  //   descriptionCle: 'boutiques.fromage.description',
-  //   theme: 'theme-fromage',
-  //   icone: 'restaurant',
-  //   prefixeReference: 'FROMAGE-',
-  //   actif: true
-  // }
+   {
+     id: 'vin',
+     nom: 'La cuvée de Saulnes',
+     descriptionCle: 'boutiques.vin.description',
+     theme: 'theme-vin'
+     icone: 'restaurant',
+     prefixeReference: 'VIN-',
+     actif: true
+   }
 ];

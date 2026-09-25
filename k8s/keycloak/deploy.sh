@@ -10,6 +10,7 @@ if ! kubectl get namespace $NAMESPACE > /dev/null 2>&1; then
   echo "❌ Namespace '$NAMESPACE' introuvable"
   exit 1
 fi
+echo Name Space: $NAMESPACE
 
 if ! kubectl get secret postgres-secret -n $NAMESPACE > /dev/null 2>&1; then
   echo "❌ Secret 'postgres-secret' introuvable"

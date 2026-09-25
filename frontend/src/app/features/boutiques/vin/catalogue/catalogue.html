@@ -1,12 +1,12 @@
-<div class="miel-topbar">
-  <div class="miel-topbar-inner">
-    <span class="miel-logo">
+<div class="vin-topbar">
+  <div class="vin-topbar-inner">
+    <span class="vin-logo">
       <mat-icon>emoji_nature</mat-icon>
       Chabeille
     </span>
     <button mat-stroked-button class="panier-btn" [routerLink]="['/boutiques', boutiqueId, 'panier']">
       <mat-icon>shopping_cart</mat-icon>
-      {{ 'boutiqueMiel.panier' | translate }}
+      {{ 'boutiquevin.panier' | translate }}
       @if (nombreArticlesPanier() > 0) {
       <span class="panier-badge">{{ nombreArticlesPanier() }}</span>
       }
@@ -16,8 +16,8 @@
 
 <div class="hero">
   <div class="hero-inner">
-    <span class="eyebrow">{{ 'boutiqueMiel.eyebrow' | translate }}</span>
-    <h1>{{ 'boutiqueMiel.heroTitre' | translate }}</h1>
+    <span class="eyebrow">{{ 'boutiquevin.eyebrow' | translate }}</span>
+    <h1>{{ 'boutiquevin.heroTitre' | translate }}</h1>
   </div>
 </div>
 
@@ -25,9 +25,9 @@
   <div class="terroir-inner">
     <img src="/assets/images/saulnes.jpg" alt="Vue sur le village de Saulnes" class="terroir-img" />
     <div class="terroir-text">
-      <span class="eyebrow">{{ 'boutiqueMiel.terroirEyebrow' | translate }}</span>
-      <h2>{{ 'boutiqueMiel.terroirTitre' | translate }}</h2>
-      <p>{{ 'boutiqueMiel.terroirTexte' | translate }}</p>
+      <span class="eyebrow">{{ 'boutiquevin.terroirEyebrow' | translate }}</span>
+      <h2>{{ 'boutiquevin.terroirTitre' | translate }}</h2>
+      <p>{{ 'boutiquevin.terroirTexte' | translate }}</p>
     </div>
   </div>
 </div>
@@ -36,7 +36,7 @@
 
   <div class="container">
     <div class="catalogue-header">
-      <h1>{{ 'boutiqueMiel.catalogueTitre' | translate }}</h1>
+      <h1>{{ 'boutiquevin.catalogueTitre' | translate }}</h1>
     </div>
 
     <div class="filtres">
@@ -52,7 +52,7 @@
     <app-produit-card
       [produit]="produit"
       icone="emoji_nature"
-      traductionPrefixe="produitsMiel"
+      traductionPrefixe="produitsvin"
       [lienDetail]="lienDetail(produit)"
       (ajouter)="ajouterAuPanier($event)" />
     }

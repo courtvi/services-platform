@@ -10,10 +10,6 @@ kubectl cluster-info
 
 kubectl get namespace $NAMESPACE &>/dev/null || kubectl create namespace $NAMESPACE
 
-echo "📦 STEP 1 - Build Maven + Docker images"
-
-export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
-export PATH="$JAVA_HOME/bin:$PATH"
 
 echo "➡️ Maven build api-gateway"
 cd ../api-gateway && mvn clean package -DskipTests && cd ../script
@@ -88,7 +84,7 @@ sleep 3
 echo "✅ Port-forwards avec auto-restart actifs !"
 
 
-# ✅ STEP 8  Setup camping haller Keycloak automatiquement
+# ✅ STEP 8  Setup lorrconnect Keycloak automatiquement
 echo "🔐 STEP 8 - Setup camping haller Keycloak user"
 # Attendez jusqu'à 120s que le realm soit disponible
 for i in $(seq 1 24); do

@@ -1,11 +1,11 @@
 import { Routes } from '@angular/router';
-import { mielAuthGuard } from './../../../core/auth/miel-auth.guard';
+import { vinAuthGuard } from './../../../core/auth/vin-auth.guard';
 
-export const MIEL_ROUTES: Routes = [
+export const vin_ROUTES: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./miel-shell/miel-shell').then(m => m.MielShell),
+      import('./vin-shell/vin-shell').then(m => m.vinShell),
     children: [
       {
         path: '',
@@ -24,7 +24,7 @@ export const MIEL_ROUTES: Routes = [
       },
       {
         path: 'checkout',
-        canActivate: [mielAuthGuard],
+        canActivate: [vinAuthGuard],
         loadComponent: () =>
           import('./checkout/checkout').then(m => m.Checkout)
       }

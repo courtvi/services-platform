@@ -6,11 +6,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';
 import { PanierService } from '../../../../core/services/panier.service';
 
-const BOUTIQUE_ID = 'miel';
+const BOUTIQUE_ID = 'vin';
 const TAUX_TVA = 0.055;
 
 @Component({
-  selector: 'app-miel-panier',
+  selector: 'app-vin-panier',
   standalone: true,
   imports: [RouterLink, CurrencyPipe, MatIconModule, MatButtonModule, TranslateModule],
   templateUrl: './panier.html',

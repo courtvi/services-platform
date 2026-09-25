@@ -29,14 +29,7 @@ spring:
     init:
       mode: always
       schema-locations: classpath:schema.sql
-      data-locations: classpath:data.sql
-
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://localhost:30090/realms/lorrconnect
-          jwk-set-uri: http://keycloak:8080/realms/lorrconnect/protocol/openid-connect/certs
+      data-locations: optional:classpath:none.sql
 
 server:
   port: 8082

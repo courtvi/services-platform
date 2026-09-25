@@ -1,13 +1,13 @@
 <div class="container">
   <a [routerLink]="['/boutiques', boutiqueId]" class="retour">
     <mat-icon>arrow_back</mat-icon>
-    {{ 'boutiqueMiel.retourCatalogue' | translate }}
+    {{ 'boutiquevin.retourCatalogue' | translate }}
   </a>
 
   @if (chargement()) {
-  <p class="etat">{{ 'boutiqueMiel.chargement' | translate }}</p>
+  <p class="etat">{{ 'boutiquevin.chargement' | translate }}</p>
   } @else if (!produit()) {
-  <p class="etat">{{ 'boutiqueMiel.produitIntrouvable' | translate }}</p>
+  <p class="etat">{{ 'boutiquevin.produitIntrouvable' | translate }}</p>
   } @else {
   <div class="detail-grid">
     <div class="detail-media">
@@ -23,7 +23,7 @@
       </div>
 
       <div class="quantite-row">
-        <span>{{ 'boutiqueMiel.quantite' | translate }}</span>
+        <span>{{ 'boutiquevin.quantite' | translate }}</span>
         <div class="qty-control">
           <button mat-icon-button (click)="diminuer()" [disabled]="quantite() <= 1">
             <mat-icon>remove</mat-icon>
@@ -37,7 +37,7 @@
 
       <button mat-raised-button class="btn-ajouter" (click)="ajouterAuPanier()">
         <mat-icon>shopping_cart</mat-icon>
-        {{ 'boutiqueMiel.ajouterPanier' | translate }}
+        {{ 'boutiquevin.ajouterPanier' | translate }}
       </button>
     </div>
   </div>

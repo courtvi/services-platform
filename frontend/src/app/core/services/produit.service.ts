@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Produit } from '../models/produit.model';
 import { PRODUITS_MIEL } from '../data/produits.miel.data';
+import { PRODUITS_VIN } from '../data/produits.vin.data';
 
 /**
  * Catalogue produits par boutique.
@@ -15,6 +16,7 @@ import { PRODUITS_MIEL } from '../data/produits.miel.data';
 export class ProduitService {
   private readonly catalogues: Record<string, Produit[]> = {
     miel: PRODUITS_MIEL
+    vin: PRODUITS_VIN
   };
 
   getProduits(boutiqueId: string): Observable<Produit[]> {

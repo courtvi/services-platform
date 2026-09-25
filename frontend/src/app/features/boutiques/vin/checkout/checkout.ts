@@ -14,11 +14,11 @@ import { CommandeService } from '../../../../core/services/commande.service';
 import { CommandeRequest } from '../../../../core/models/commande.model';
 import { environment } from '../../../../environments/environment';
 
-const BOUTIQUE_ID = 'miel';
+const BOUTIQUE_ID = 'vin';
 const TAUX_TVA = 0.055; // TVA réduite alimentaire (5,5%) — les prix affichés sont TTC
 
 @Component({
-  selector: 'app-miel-checkout',
+  selector: 'app-vin-checkout',
   standalone: true,
   imports: [
     RouterLink, CurrencyPipe, ReactiveFormsModule, TranslateModule,
@@ -68,7 +68,7 @@ export class Checkout implements OnInit {
     const month = String(now.getMonth() + 1).padStart(2, '0');
     const day = String(now.getDate()).padStart(2, '0');
     const random = Math.floor(1000 + Math.random() * 9000);
-    return `MIEL-${year}${month}${day}-${random}`;
+    return `vin-${year}${month}${day}-${random}`;
   }
 
   initPayPal(): void {
@@ -94,7 +94,7 @@ export class Checkout implements OnInit {
       },
       onError: err => {
         console.error('PayPal error', err);
-        this.snackBar.open(this.translate.instant('boutiqueMiel.erreurPaypal'), 'OK', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('boutiquevin.erreurPaypal'), 'OK', { duration: 3000 });
       }
     };
   }
@@ -120,12 +120,12 @@ export class Checkout implements OnInit {
     this.commandeService.createCommande(payload).subscribe({
       next: () => {
         this.panierService.vider(BOUTIQUE_ID);
-        this.snackBar.open(this.translate.instant('boutiqueMiel.commandeCreee'), 'OK', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('boutiquevin.commandeCreee'), 'OK', { duration: 3000 });
         this.router.navigate(['/commandes']);
       },
       error: err => {
         console.error(err);
-        this.snackBar.open(this.translate.instant('boutiqueMiel.erreurCommande'), 'OK', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('boutiquevin.erreurCommande'), 'OK', { duration: 3000 });
         this.loading = false;
       }
     });

@@ -2,16 +2,16 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 /**
- * Coquille de la boutique "miel" : applique le thème visuel (theme-miel,
- * défini dans theme.miel.css) à toutes ses pages enfants via l'héritage
+ * Coquille de la boutique "vin" : applique le thème visuel (theme-vin,
+ * défini dans theme.vin.css) à toutes ses pages enfants via l'héritage
  * naturel des variables CSS. Sert de modèle pour toute future boutique.
  */
 @Component({
-  selector: 'app-miel-shell',
+  selector: 'app-vin-shell',
   standalone: true,
   imports: [RouterOutlet],
   template: `
-    <div class="theme-miel boutique-shell">
+    <div class="theme-vin boutique-shell">
       <router-outlet></router-outlet>
     </div>
   `,
@@ -22,4 +22,4 @@ import { RouterOutlet } from '@angular/router';
     }
   `]
 })
-export class MielShell {}
+export class vinShell {}

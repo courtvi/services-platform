@@ -1,10 +1,10 @@
 <div class="container">
   <a [routerLink]="['/boutiques', boutiqueId, 'panier']" class="retour">
     <mat-icon>arrow_back</mat-icon>
-    {{ 'boutiqueMiel.retourPanier' | translate }}
+    {{ 'boutiquevin.retourPanier' | translate }}
   </a>
 
-  <h1>{{ 'boutiqueMiel.finaliserCommande' | translate }}</h1>
+  <h1>{{ 'boutiquevin.finaliserCommande' | translate }}</h1>
 
   <div class="recap">
     @for (ligne of lignes(); track ligne.produit.id) {
@@ -29,7 +29,7 @@
 
   <form [formGroup]="form" class="livraison-form">
     <mat-form-field appearance="outline">
-      <mat-label>{{ 'boutiqueMiel.dateLivraisonLabel' | translate }}</mat-label>
+      <mat-label>{{ 'boutiquevin.dateLivraisonLabel' | translate }}</mat-label>
       <mat-icon matPrefix>calendar_today</mat-icon>
       <input matInput type="date" formControlName="dateLivraison" [min]="getTomorrow()">
     </mat-form-field>
@@ -39,7 +39,7 @@
     @if (!payPalConfig) {
     <button mat-raised-button class="btn-payer" type="button" [disabled]="form.invalid || loading" (click)="initPayPal()">
       <mat-icon>payment</mat-icon>
-      {{ 'boutiqueMiel.payerPaypal' | translate }}
+      {{ 'boutiquevin.payerPaypal' | translate }}
     </button>
     }
 

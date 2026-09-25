@@ -1,63 +1,33 @@
 import { Produit } from '../models/produit.model';
 
-export const PRODUITS_MIEL: Produit[] = [
+export const PRODUITS_VIN: Produit[] = [
   {
     id: 1,
-    boutiqueId: 'miel',
-    cle: 'miel_printemps',
+    boutiqueId: 'vin',
+    cle: 'vin_rouge',
     origine: 'Saulnes',
-    prix: 17.00,
-    unite: '1kg',
-    categorie: 'fleurs',
+    prix: 7.00,
+    unite: '75cl',
+    categorie: 'bouteille',
     tagCle: 'bestSeller'
   },
   {
     id: 2,
-    boutiqueId: 'miel',
-    cle: 'miel_ete',
+    boutiqueId: 'vin',
+    cle: 'vin_blanc',
     origine: 'Saulnes',
-    prix: 9.50,
-    unite: '500 g',
-    categorie: 'fleurs',
+    prix: 7.00,
+    unite: '75cl',
+    categorie: 'bouteille',
     tagCle: 'populaire'
   },
- /* {
+  {
     id: 3,
-    boutiqueId: 'miel',
-    cle: 'miel_chataignier',
-    origine: 'Cévennes',
-    prix: 9.90,
+    boutiqueId: 'vin',
+    cle: 'cremant',
+    origine: 'Saulnes',
+    prix: 8.00,
     unite: '250 g',
-    categorie: 'foret'
-  },
-  {
-    id: 4,
-    boutiqueId: 'miel',
-    cle: 'miel_sapin',
-    origine: 'Vosges',
-    prix: 10.90,
-    unite: '250 g',
-    categorie: 'foret',
-    tagCle: 'rare'
-  },
-  {
-    id: 5,
-    boutiqueId: 'miel',
-    cle: 'miel_tilleul',
-    origine: 'Bourgogne',
-    prix: 8.50,
-    unite: '250 g',
-    categorie: 'fleurs'
-  },
-  {
-    id: 6,
-    boutiqueId: 'miel',
-    cle: 'coffret_decouverte',
-    origine: 'Sélection',
-    prix: 24.90,
-    unite: '3 x 125 g',
-    categorie: 'coffret',
-    tagCle: 'ideeCadeau'
+    categorie: 'bouteille'
   }
-*/
 ];
