@@ -1,18 +1,5 @@
 import { Boutique } from '../models/boutique.model';
 
-/**
- * Registre des boutiques disponibles sur la plateforme.
- *
- * Pour ajouter une nouvelle boutique :
- *  1. Créer le dossier src/app/features/boutiques/<id>/ sur le modèle de "miel"
- *     (un *-shell, un catalogue, un produit-detail, un panier, un checkout).
- *  2. Créer son fichier de thème theme.<id>.css et l'importer dans src/styles.css.
- *  3. Ajouter les routes correspondantes (client ET admin) dans app.routes.ts.
- *  4. Ajouter ses clés de traduction (boutiques.<id>.description, produits<Id>.*) dans les
- *     4 fichiers src/assets/i18n/*.json.
- *  5. Déclarer la boutique ci-dessous — elle apparaîtra automatiquement sur la page d'accueil
- *     des boutiques (/boutiques) et dans l'admin (/admin/boutiques).
- */
 export const BOUTIQUES: Boutique[] = [
   {
     id: 'miel',
@@ -22,13 +9,13 @@ export const BOUTIQUES: Boutique[] = [
     icone: 'emoji_nature',
     prefixeReference: 'MIEL-',
     actif: true
-  }
+  },
 
    {
      id: 'vin',
      nom: 'La cuvée de Saulnes',
      descriptionCle: 'boutiques.vin.description',
-     theme: 'theme-vin'
+     theme: 'theme-vin',
      icone: 'restaurant',
      prefixeReference: 'VIN-',
      actif: true

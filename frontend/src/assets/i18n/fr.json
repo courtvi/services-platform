@@ -72,7 +72,10 @@
     "miel_tilleul": "Miel de Tilleul",
     "miel_printemps": "Miel de printemps",
     "miel_ete": "Miel d'été",
-    "coffret_decouverte": "Coffret Découverte"
+    "coffret_decouverte": "Coffret Découverte",
+    "vin_rouge": "Vin rouge",
+    "vin_blanc": "Vin blanc",
+    "cremant": "Crémant"
   },
   "groupe": {
     "petits_pains": "Petits pains",
@@ -86,9 +89,8 @@
     "aucune": "Aucune boutique disponible pour le moment."
   },
   "boutiques": {
-    "miel": {
-      "description": "Miel artisanal récolté en Lorraine, 100% bio, sans additif et sans conservateur."
-    }
+    "miel": { "description": "Miel artisanal récolté en Lorraine, 100% bio, sans additif et sans conservateur." },
+    "vin":  { "description": "Vins de Lorraine élevés avec soin, du vignoble à la bouteille." }
   },
   "boutiqueMiel": {
     "eyebrow": "Apiculture artisanale française",
@@ -123,6 +125,39 @@
     "catalogueTitre": "Nos miels",
     "terroirTexte": "Nos ruches sont installées dans les collines boisées autour de Saulnes, entre prairies fleuries et forêts — un terroir idéal pour un miel riche et authentique."
   },
+  "boutiquevin": {
+    "eyebrow": "Vins de Lorraine",
+    "heroTitre": "La Cuvée des Saulnes, le vin de notre vallée.",
+    "heroTexte": "Des vins élevés avec patience sur les coteaux lorrains.",
+    "panier": "Panier",
+    "filtreTous": "Tous",
+    "filtreFleurs": "Vins blancs",
+    "filtreForet": "Vins rouges",
+    "filtreCoffret": "Crémants",
+    "ajouterPanier": "Ajouter au panier",
+    "ajoute": "{{nom}} ajouté au panier",
+    "voirPanier": "Voir le panier",
+    "quantite": "Quantité",
+    "retourCatalogue": "Retour au catalogue",
+    "continuerAchats": "Continuer mes achats",
+    "panierVide": "Votre panier est vide.",
+    "decouvrirMiels": "Découvrir nos vins",
+    "sousTotal": "Sous-total",
+    "passerCommande": "Passer commande",
+    "retourPanier": "Retour au panier",
+    "finaliserCommande": "Finaliser ma commande",
+    "dateLivraisonLabel": "Date de livraison souhaitée",
+    "payerPaypal": "Payer avec PayPal",
+    "commandeCreee": "Commande créée !",
+    "erreurCommande": "Erreur lors de la création de la commande",
+    "erreurPaypal": "Erreur PayPal",
+    "produitIntrouvable": "Produit introuvable.",
+    "chargement": "Chargement...",
+    "terroirEyebrow": "Notre terroir",
+    "terroirTitre": "Saulnes, au cœur de la vallée",
+    "catalogueTitre": "Nos vins",
+    "terroirTexte": "Nos vignes profitent des coteaux ensoleillés autour de Saulnes, sur un sol calcaire propice à des vins frais et élégants."
+  },
   "tags": {
     "bestSeller": "Best-seller",
     "populaire": "Populaire",
@@ -138,5 +173,10 @@
     "miel_sapin": "Miellat de forêt, ambré et intense en bouche.",
     "miel_tilleul": "Frais et légèrement mentholé, apprécié en infusion du soir.",
     "coffret_decouverte": "Trois pots de 125 g pour explorer nos meilleures récoltes."
+  },
+  "produitsvin": {
+    "vin_rouge": "Un rouge souple et fruité, aux tanins fondus.",
+    "vin_blanc": "Un blanc frais et minéral, idéal à l'apéritif.",
+    "cremant": "Bulles fines et notes briochées, pour les grandes occasions."
   }
 }

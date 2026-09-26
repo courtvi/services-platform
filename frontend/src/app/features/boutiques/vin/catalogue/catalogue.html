@@ -1,8 +1,8 @@
 <div class="vin-topbar">
   <div class="vin-topbar-inner">
     <span class="vin-logo">
-      <mat-icon>emoji_nature</mat-icon>
-      Chabeille
+      <mat-icon>wine_bar</mat-icon>
+      La Cuvée des Saulnes
     </span>
     <button mat-stroked-button class="panier-btn" [routerLink]="['/boutiques', boutiqueId, 'panier']">
       <mat-icon>shopping_cart</mat-icon>
@@ -18,6 +18,7 @@
   <div class="hero-inner">
     <span class="eyebrow">{{ 'boutiquevin.eyebrow' | translate }}</span>
     <h1>{{ 'boutiquevin.heroTitre' | translate }}</h1>
+    <p>{{ 'boutiquevin.heroTexte' | translate }}</p>
   </div>
 </div>
 
@@ -33,13 +34,11 @@
 </div>
 
 <div class="container">
+  <div class="catalogue-header">
+    <h1>{{ 'boutiquevin.catalogueTitre' | translate }}</h1>
+  </div>
 
-  <div class="container">
-    <div class="catalogue-header">
-      <h1>{{ 'boutiquevin.catalogueTitre' | translate }}</h1>
-    </div>
-
-    <div class="filtres">
+  <div class="filtres">
     @for (filtre of filtres; track filtre.key) {
     <button class="filtre-chip" [class.active]="filtreActif() === filtre.key" (click)="choisirFiltre(filtre.key)">
       {{ filtre.labelCle | translate }}
@@ -51,7 +50,7 @@
     @for (produit of produitsAffiches(); track produit.id) {
     <app-produit-card
       [produit]="produit"
-      icone="emoji_nature"
+      icone="wine_bar"
       traductionPrefixe="produitsvin"
       [lienDetail]="lienDetail(produit)"
       (ajouter)="ajouterAuPanier($event)" />

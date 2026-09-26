@@ -85,8 +85,41 @@
   },
   "boutiques": {
     "miel": {
-      "description": "Handwerklich hergestellter Honig aus Lothringen, ohne Zusatzstoffe."
-    }
+      "description": "Handwerklich hergestellter Honig aus Lothringen, ohne Zusatzstoffe."},
+    "vin": { "description": "Lothringer Weine, mit Sorgfalt ausgebaut – vom Weinberg bis zur Flasche." }
+      },
+  "boutiqueVin": {
+    "eyebrow": "Weine aus Lothringen",
+    "heroTitre": "La Cuvée des Saulnes, der Wein aus unserem Tal.",
+    "heroTexte": "Geduldig ausgebaute Weine von den Hängen Lothringens.",
+    "panier": "Warenkorb",
+    "filtreTous": "Alle",
+    "filtreFleurs": "Weißweine",
+    "filtreForet": "Rotweine",
+    "filtreCoffret": "Geschenkboxen",
+    "ajouterPanier": "In den Warenkorb",
+    "ajoute": "{{nom}} wurde in den Warenkorb gelegt",
+    "voirPanier": "Warenkorb ansehen",
+    "quantite": "Menge",
+    "retourCatalogue": "Zurück zum Katalog",
+    "continuerAchats": "Weiter einkaufen",
+    "panierVide": "Ihr Warenkorb ist leer.",
+    "decouvrirMiels": "Unsere Weine entdecken",
+    "sousTotal": "Zwischensumme",
+    "passerCommande": "Bestellen",
+    "retourPanier": "Zurück zum Warenkorb",
+    "finaliserCommande": "Bestellung abschließen",
+    "dateLivraisonLabel": "Gewünschtes Lieferdatum",
+    "payerPaypal": "Mit PayPal bezahlen",
+    "commandeCreee": "Bestellung erstellt!",
+    "erreurCommande": "Fehler beim Erstellen der Bestellung",
+    "erreurPaypal": "PayPal-Fehler",
+    "produitIntrouvable": "Produkt nicht gefunden.",
+    "chargement": "Wird geladen...",
+    "terroirEyebrow": "Unser Terroir",
+    "terroirTitre": "Saulnes, im Herzen des Tals",
+    "catalogueTitre": "Unsere Weine",
+    "terroirTexte": "Unsere Reben wachsen an den sonnigen Hängen rund um Saulnes, auf Kalkboden, der frische und elegante Weine hervorbringt."
   },
   "boutiqueMiel": {
     "eyebrow": "Französische Handwerksimkerei",

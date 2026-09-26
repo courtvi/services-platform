@@ -82,9 +82,12 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/boutiques/miel/miel.routes')
             .then(m => m.MIEL_ROUTES)
-      }
-      // Prochaine boutique : ajouter un bloc similaire ici, ex.
-      // { path: 'fromage', loadChildren: () => import('./features/boutiques/fromage/fromage.routes').then(m => m.FROMAGE_ROUTES) }
+      },
+    {
+      path: 'vin',
+      loadChildren: () =>
+        import('./features/boutiques/vin/vin.routes').then(m => m.vin_ROUTES)
+    }
     ]
   },
 

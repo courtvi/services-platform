@@ -15,7 +15,7 @@ import { CommandeRequest } from '../../../../core/models/commande.model';
 import { environment } from '../../../../environments/environment';
 
 const BOUTIQUE_ID = 'vin';
-const TAUX_TVA = 0.055; // TVA réduite alimentaire (5,5%) — les prix affichés sont TTC
+const TAUX_TVA = 0.20;
 
 @Component({
   selector: 'app-vin-checkout',
@@ -77,7 +77,7 @@ export class Checkout implements OnInit {
 
     this.payPalConfig = {
       currency: 'EUR',
-      clientId: environment.sites['chabeille'].paypal.clientId,
+      clientId: environment.sites.vin.paypal.clientId,
       createOrderOnClient: () => ({
         intent: 'CAPTURE',
         purchase_units: [{
@@ -106,9 +106,7 @@ export class Checkout implements OnInit {
       reference: this.generateReference(),
       dateCommande: new Date().toISOString().slice(0, 19),
       dateLivraison: this.form.value.dateLivraison + 'T00:00:00',
-      // "article" reprend la clé i18n (comme pour le pain, ex. "petit_pain_blanc") — cela permet
-      // à l'écran générique /commandes/:id d'afficher le nom traduit via 'articles.' + article,
-      // quelle que soit la langue choisie par le client au moment de la commande.
+
       lignes: this.lignes().map(l => ({
         article: l.produit.cle,
         quantite: l.quantite,

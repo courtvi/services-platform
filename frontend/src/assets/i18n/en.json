@@ -85,8 +85,42 @@
   },
   "boutiques": {
     "miel": {
-      "description": "Artisanal honey harvested in Lorraine, additive-free."
-    }
+      "description": "Artisanal honey harvested in Lorraine, additive-free."    },
+    "vin": { "description": "Lorraine wines crafted with care, from vine to bottle." }
+
+  },
+  "boutiqueVin": {
+    "eyebrow": "Lorraine wines",
+    "heroTitre": "La Cuvée des Saulnes, the wine of our valley.",
+    "heroTexte": "Wines patiently aged on the slopes of Lorraine.",
+    "panier": "Cart",
+    "filtreTous": "All",
+    "filtreFleurs": "White wines",
+    "filtreForet": "Red wines",
+    "filtreCoffret": "Gift boxes",
+    "ajouterPanier": "Add to cart",
+    "ajoute": "{{nom}} added to cart",
+    "voirPanier": "View cart",
+    "quantite": "Quantity",
+    "retourCatalogue": "Back to catalogue",
+    "continuerAchats": "Continue shopping",
+    "panierVide": "Your cart is empty.",
+    "decouvrirMiels": "Discover our wines",
+    "sousTotal": "Subtotal",
+    "passerCommande": "Place order",
+    "retourPanier": "Back to cart",
+    "finaliserCommande": "Complete my order",
+    "dateLivraisonLabel": "Preferred delivery date",
+    "payerPaypal": "Pay with PayPal",
+    "commandeCreee": "Order created!",
+    "erreurCommande": "Error while creating the order",
+    "erreurPaypal": "PayPal error",
+    "produitIntrouvable": "Product not found.",
+    "chargement": "Loading...",
+    "terroirEyebrow": "Our terroir",
+    "terroirTitre": "Saulnes, in the heart of the valley",
+    "catalogueTitre": "Our wines",
+    "terroirTexte": "Our vines thrive on the sunny slopes around Saulnes, on limestone soil ideal for fresh and elegant wines."
   },
   "boutiqueMiel": {
     "eyebrow": "French artisanal beekeeping",

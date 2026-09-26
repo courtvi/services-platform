@@ -7,7 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { PanierService } from '../../../../core/services/panier.service';
 
 const BOUTIQUE_ID = 'vin';
-const TAUX_TVA = 0.055;
+const TAUX_TVA = 0.20;
 
 @Component({
   selector: 'app-vin-panier',

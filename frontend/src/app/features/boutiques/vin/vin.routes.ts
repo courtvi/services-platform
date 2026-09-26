@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { vinAuthGuard } from './../../../core/auth/vin-auth.guard';
+import { vinAuthGuard } from '../../../core/auth/vin-auth.guard';
 
 export const vin_ROUTES: Routes = [
   {

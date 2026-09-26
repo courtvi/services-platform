@@ -15,7 +15,7 @@ import { PRODUITS_VIN } from '../data/produits.vin.data';
 @Injectable({ providedIn: 'root' })
 export class ProduitService {
   private readonly catalogues: Record<string, Produit[]> = {
-    miel: PRODUITS_MIEL
+    miel: PRODUITS_MIEL,
     vin: PRODUITS_VIN
   };
 

@@ -1,12 +1,26 @@
 .theme-vin {
-  --boutique-bg: #FFFBF2;
-  --boutique-surface: #FFFFFF;
-  --boutique-media-bg: #FCE9BE;
-  --boutique-primary: #E0972B;
-  --boutique-primary-dark: #C9791A;
-  --boutique-ink: #3A2814;
-  --boutique-ink-soft: #6B5540;
-  --boutique-line: #E9D9B8;
-  --boutique-radius: 18px;
-  --boutique-font-title: 'Georgia', serif;
+  --boutique-primary: #7b1e3a;
+  --boutique-bg: #fbf8f6;
+  --boutique-surface: #ffffff;
+  --boutique-line: #eadfdc;
+  --boutique-ink: #2a1a1f;
+  --boutique-ink-soft: #7a6166;
+  --boutique-font-title: inherit;
+}
+
+.theme-vin .passer-commande-btn,
+.theme-vin button[mat-flat-button],
+.theme-vin button[mat-raised-button] {
+  background-color: var(--boutique-primary) !important;
+  color: var(--boutique-on-primary) !important;
+}
+
+.theme-vin .passer-commande-btn:hover:not(:disabled),
+.theme-vin button[mat-flat-button]:hover:not(:disabled) {
+  background-color: var(--boutique-primary-hover) !important;
+}
+
+.theme-vin .passer-commande-btn:disabled,
+.theme-vin button[mat-flat-button]:disabled {
+  opacity: 0.5;
 }

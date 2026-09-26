@@ -102,13 +102,19 @@ h1 {
 
 .btn-checkout {
   width: 100%;
-  background: var(--boutique-primary) !important;
+  background: var(--boutique-primary, #7b1e3a) !important;
   color: #fff !important;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   padding: 6px 0;
+}
+
+.btn-continuer {
+  margin-top: 16px;
+  background: var(--boutique-primary, #7b1e3a) !important;
+  color: #fff !important;
 }
 
 .recap {

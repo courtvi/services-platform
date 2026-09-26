@@ -1,11 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
-/**
- * Coquille de la boutique "vin" : applique le thème visuel (theme-vin,
- * défini dans theme.vin.css) à toutes ses pages enfants via l'héritage
- * naturel des variables CSS. Sert de modèle pour toute future boutique.
- */
 @Component({
   selector: 'app-vin-shell',
   standalone: true,
@@ -17,7 +12,15 @@ import { RouterOutlet } from '@angular/router';
   `,
   styles: [`
     .boutique-shell {
-      background: var(--boutique-bg, #fff);
+      --boutique-primary: #7b1e3a;
+      --boutique-bg: #fbf8f6;
+      --boutique-surface: #ffffff;
+      --boutique-line: #eadfdc;
+      --boutique-ink: #2a1a1f;
+      --boutique-ink-soft: #7a6166;
+      --boutique-font-title: inherit;
+
+      background: var(--boutique-bg);
       min-height: calc(100vh - 64px);
     }
   `]

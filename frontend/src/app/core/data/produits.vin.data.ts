@@ -27,7 +27,7 @@ export const PRODUITS_VIN: Produit[] = [
     cle: 'cremant',
     origine: 'Saulnes',
     prix: 8.00,
-    unite: '250 g',
+    unite: '75cl',
     categorie: 'bouteille'
   }
 ];

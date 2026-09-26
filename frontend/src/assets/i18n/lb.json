@@ -85,7 +85,41 @@
   },
   "boutiques": {
     "miel": {
-      "description": "Handwierklechen Honneg aus Loutréngen, ouni Zousazstoffer."
+      "description": "Handwierklechen Honneg aus Loutréngen, ouni Zousazstoffer.",
+      "vin": { "description": "Wäiner aus Loutrengen, mat Suergfalt ausgebaut – vum Wéngert bis an d'Fläsch." }
+    },
+    "boutiqueVin": {
+      "eyebrow": "Wäiner aus Loutrengen",
+      "heroTitre": "La Cuvée des Saulnes, de Wäin aus eisem Dall.",
+      "heroTexte": "Wäiner, déi mat Gedold op de lothrengesche Hiwwele reifen.",
+      "panier": "Kuerf",
+      "filtreTous": "All",
+      "filtreFleurs": "Wäisswäiner",
+      "filtreForet": "Routwäiner",
+      "filtreCoffret": "Kaddoskëschten",
+      "ajouterPanier": "An de Kuerf",
+      "ajoute": "{{nom}} ass am Kuerf",
+      "voirPanier": "Kuerf ukucken",
+      "quantite": "Quantitéit",
+      "retourCatalogue": "Zréck bei de Katalog",
+      "continuerAchats": "Weider akafen",
+      "panierVide": "Äre Kuerf ass eidel.",
+      "decouvrirMiels": "Eis Wäiner entdecken",
+      "sousTotal": "Zwëschesumm",
+      "passerCommande": "Bestellen",
+      "retourPanier": "Zréck bei de Kuerf",
+      "finaliserCommande": "Bestellung ofschléissen",
+      "dateLivraisonLabel": "Gewënschten Liwwerdatum",
+      "payerPaypal": "Mat PayPal bezuelen",
+      "commandeCreee": "Bestellung erstallt!",
+      "erreurCommande": "Feeler beim Erstelle vun der Bestellung",
+      "erreurPaypal": "PayPal-Feeler",
+      "produitIntrouvable": "Produit net fonnt.",
+      "chargement": "Gëtt gelueden...",
+      "terroirEyebrow": "Eisen Terroir",
+      "terroirTitre": "Saulnes, am Häerz vum Dall",
+      "catalogueTitre": "Eis Wäiner",
+      "terroirTexte": "Eis Riewen wuessen op de sonnegen Hiwwelen ronderëm Saulnes, op engem Kallekbuedem, deen ideal fir frësch an elegant Wäiner ass."
     }
   },
   "boutiqueMiel": {

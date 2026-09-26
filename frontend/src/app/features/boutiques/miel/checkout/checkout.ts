@@ -77,7 +77,7 @@ export class Checkout implements OnInit {
 
     this.payPalConfig = {
       currency: 'EUR',
-      clientId: environment.sites['chabeille'].paypal.clientId,
+      clientId: environment.sites.miel.paypal.clientId,
       createOrderOnClient: () => ({
         intent: 'CAPTURE',
         purchase_units: [{

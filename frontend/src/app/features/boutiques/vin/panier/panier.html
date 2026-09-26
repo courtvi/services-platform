@@ -11,14 +11,14 @@
     <mat-icon>shopping_cart</mat-icon>
     <p>{{ 'boutiquevin.panierVide' | translate }}</p>
     <a mat-raised-button class="btn-continuer" [routerLink]="['/boutiques', boutiqueId]">
-      {{ 'boutiquevin.decouvrirvins' | translate }}
+      {{ 'boutiquevin.decouvrirMiels' | translate }}
     </a>
   </div>
   } @else {
   <div class="lignes">
     @for (ligne of lignes(); track ligne.produit.id) {
     <div class="ligne">
-      <mat-icon class="ligne-icone">emoji_nature</mat-icon>
+      <mat-icon class="ligne-icone">wine_bar</mat-icon>
       <div class="ligne-info">
         <b>{{ 'articles.' + ligne.produit.cle | translate }}</b>
         <span>{{ ligne.produit.prix | currency:'EUR' }} · {{ ligne.produit.unite }}</span>
