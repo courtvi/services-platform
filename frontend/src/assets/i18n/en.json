@@ -1,7 +1,7 @@
 {
   "nav": {
     "commandes": "My orders",
-    "boutiques": "Shops",
+    "boutiques": "Marketplace",
     "admin": "Admin",
     "adminCommandes": "Bread orders",
     "adminBoutiques": "Shops"
@@ -82,13 +82,18 @@
   "boutiquesAccueil": {
     "titre": "Our shops",
     "sousTitre": "Choose a shop to discover its products and place an order.",
-    "aucune": "No shop available at the moment."
+    "aucune": "No shop available at the moment.",
+    "terroirEyebrow": "Our terroir",
+    "terroirTitre": "Saulnes, in the heart of the valley",
+    "terroirTexte": "Between sunny limestone slopes where our vines thrive and wooded hills where our hives are set, the terroir of Saulnes gives rise to fresh, elegant wines and a rich, authentic honey."
   },
   "boutiques": {
     "miel": {
-      "description": "Artisanal honey harvested in Lorraine, additive-free."    },
-    "vin": { "description": "Lorraine wines crafted with care, from vine to bottle." }
-
+      "description": "Artisanal honey harvested in Lorraine, additive-free."
+    },
+    "vin": {
+      "description": "Lorraine wines crafted with care, from vine to bottle."
+    }
   },
   "boutiqueVin": {
     "eyebrow": "Lorraine wines",
@@ -151,10 +156,7 @@
     "erreurPaypal": "PayPal error",
     "produitIntrouvable": "Product not found.",
     "chargement": "Loading...",
-    "terroirEyebrow": "Our terroir",
-    "terroirTitre": "Saulnes, in the heart of the valley",
-    "catalogueTitre": "Our Honeys",
-    "terroirTexte": "Our hives are set in the wooded hills around Saulnes, between flowering meadows and forests — an ideal terroir for a rich, authentic honey."
+    "catalogueTitre": "Our Honeys"
   },
   "tags": {
     "bestSeller": "Bestseller",

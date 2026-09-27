@@ -24,3 +24,52 @@ h1 {
   text-align: center;
   padding: 2rem;
 }
+
+.terroir-heading {
+  font-size: 1.8rem;
+  margin: 0 0 16px;
+  color: #222;
+}
+
+.terroir {
+  margin: 0 0 36px;
+}
+
+.terroir-inner {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 20px;
+  overflow: hidden;
+  padding: 20px;
+}
+
+.terroir-img {
+  width: 45%;
+  max-width: 420px;
+  height: 280px;
+  object-fit: cover;
+  border-radius: 14px;
+  flex: none;
+}
+
+.terroir-text h3 {
+  margin: 0 0 12px;
+}
+
+.terroir-text p {
+  color: #666;
+  line-height: 1.6;
+}
+
+@media (max-width: 640px) {
+  .terroir-inner {
+    flex-direction: column;
+  }
+  .terroir-img {
+    width: 100%;
+    max-width: none;
+  }
+}

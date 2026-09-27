@@ -1,7 +1,7 @@
 {
   "nav": {
     "commandes": "Meng Bestellungen",
-    "boutiques": "Buttéker",
+    "boutiques": "Marketplace",
     "admin": "Admin",
     "adminCommandes": "Brout-Bestellungen",
     "adminBoutiques": "Buttéker"
@@ -82,12 +82,17 @@
   "boutiquesAccueil": {
     "titre": "Eis Buttéker",
     "sousTitre": "Wielt e Buttek fir seng Produkter z'entdecken an ze bestellen.",
-    "aucune": "Momentan ass kee Buttek disponibel."
+    "aucune": "Momentan ass kee Buttek disponibel.",
+    "terroirEyebrow": "Eise Terroir",
+    "terroirTitre": "Saulnes, am Häerz vum Dall",
+    "terroirTexte": "Tëscht sonnegen Kallekhiwwelen, wou eis Riewen wuessen, a bewaldte Hiwwelen, wou eis Beienheeschter stinn, gëtt den Terroir vu Saulnes frësch, eleganten Wäin an e räiche, authentesche Mel."
   },
   "boutiques": {
     "miel": {
       "description": "Handwierklechen Honneg aus Loutréngen, ouni Zousazstoffer.",
-      "vin": { "description": "Wäiner aus Loutrengen, mat Suergfalt ausgebaut – vum Wéngert bis an d'Fläsch." }
+      "vin": {
+        "description": "Wäiner aus Loutrengen, mat Suergfalt ausgebaut – vum Wéngert bis an d'Fläsch."
+      }
     },
     "boutiqueVin": {
       "eyebrow": "Wäiner aus Loutrengen",
@@ -151,10 +156,7 @@
     "erreurPaypal": "PayPal-Feeler",
     "produitIntrouvable": "Produkt net fonnt.",
     "chargement": "Lueden...",
-    "terroirEyebrow": "Eise Terroir",
-    "terroirTitre": "Saulnes, am Häerz vum Dall",
-    "catalogueTitre": "Eisen Hunneg",
-    "terroirTexte": "Eis Beienheeschter sinn an de bewaldten Hiwwelen ronderëm Saulnes, tëscht bléienden Wisen a Bëscher — en ideale Terroir fir en räiche, authentesche Mel."
+    "catalogueTitre": "Eisen Hunneg"
   },
   "tags": {
     "bestSeller": "Bestseller",

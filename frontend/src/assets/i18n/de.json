@@ -1,7 +1,7 @@
 {
   "nav": {
     "commandes": "Meine Bestellungen",
-    "boutiques": "Shops",
+    "boutiques": "Marketplace",
     "admin": "Admin",
     "adminCommandes": "Brotbestellungen",
     "adminBoutiques": "Shops"
@@ -82,13 +82,19 @@
   "boutiquesAccueil": {
     "titre": "Unsere Shops",
     "sousTitre": "Wählen Sie einen Shop, um seine Produkte zu entdecken und zu bestellen.",
-    "aucune": "Derzeit ist kein Shop verfügbar."
+    "aucune": "Derzeit ist kein Shop verfügbar.",
+    "terroirEyebrow": "Unser Terroir",
+    "terroirTitre": "Saulnes, im Herzen des Tals",
+    "terroirTexte": "Zwischen sonnigen Kalkhängen, an denen unsere Reben wachsen, und bewaldeten Hügeln, in denen unsere Bienenstöcke stehen, bringt das Terroir von Saulnes frische, elegante Weine und einen reichen, authentischen Honig hervor."
   },
   "boutiques": {
     "miel": {
-      "description": "Handwerklich hergestellter Honig aus Lothringen, ohne Zusatzstoffe."},
-    "vin": { "description": "Lothringer Weine, mit Sorgfalt ausgebaut – vom Weinberg bis zur Flasche." }
-      },
+      "description": "Handwerklich hergestellter Honig aus Lothringen, ohne Zusatzstoffe."
+    },
+    "vin": {
+      "description": "Lothringer Weine, mit Sorgfalt ausgebaut – vom Weinberg bis zur Flasche."
+    }
+  },
   "boutiqueVin": {
     "eyebrow": "Weine aus Lothringen",
     "heroTitre": "La Cuvée des Saulnes, der Wein aus unserem Tal.",
@@ -150,10 +156,7 @@
     "erreurPaypal": "PayPal-Fehler",
     "produitIntrouvable": "Produkt nicht gefunden.",
     "chargement": "Wird geladen...",
-    "terroirEyebrow": "Unsere Heimat",
-    "terroirTitre": "Saulnes, im Herzen des Tals",
-    "catalogueTitre": "Unsere Honige",
-    "terroirTexte": "Unsere Bienenstöcke stehen in den bewaldeten Hügeln rund um Saulnes, zwischen blühenden Wiesen und Wäldern — ein ideales Terroir für einen reichen, authentischen Honig."
+    "catalogueTitre": "Unsere Honige"
   },
   "tags": {
     "bestSeller": "Bestseller",

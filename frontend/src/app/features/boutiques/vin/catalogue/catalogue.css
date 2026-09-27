@@ -128,54 +128,6 @@
 @media (max-width: 560px) {
   .produits-grid { grid-template-columns: 1fr; }
 }
-.terroir {
-  padding: 0 24px;
-  margin: 40px 0;
-}
-
-.terroir-inner {
-  max-width: 1100px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  gap: 40px;
-  background: var(--boutique-surface);
-  border: 1px solid var(--boutique-line);
-  border-radius: 20px;
-  overflow: hidden;
-  padding: 20px;
-}
-
-.terroir-img {
-  width: 45%;
-  max-width: 420px;
-  height: 280px;
-  object-fit: cover;
-  border-radius: 14px;
-  flex: none;
-}
-
-.terroir-text h2 {
-  font-family: var(--boutique-font-title);
-  color: var(--boutique-ink);
-  margin: 8px 0 12px;
-}
-
-.terroir-text p {
-  color: var(--boutique-ink-soft);
-  line-height: 1.6;
-}
-
-@media (max-width: 640px) {
-  .terroir-inner {
-    flex-direction: column;
-  }
-  .terroir-img {
-    width: 100%;
-    max-width: none;
-  }
-}
-
 .catalogue-header {
   text-align: center;
   padding-top: 32px;

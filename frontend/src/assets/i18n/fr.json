@@ -1,7 +1,7 @@
 {
   "nav": {
     "commandes": "Mes commandes",
-    "boutiques": "Boutiques",
+    "boutiques": "Marketplace",
     "admin": "Admin",
     "adminCommandes": "Commandes pain",
     "adminBoutiques": "Boutiques"
@@ -87,11 +87,18 @@
   "boutiquesAccueil": {
     "titre": "Nos boutiques",
     "sousTitre": "Choisissez une boutique pour découvrir ses produits et passer commande.",
-    "aucune": "Aucune boutique disponible pour le moment."
+    "aucune": "Aucune boutique disponible pour le moment.",
+    "terroirEyebrow": "Notre terroir",
+    "terroirTitre": "Saulnes, au cœur de la vallée",
+    "terroirTexte": "Entre coteaux calcaires où s'épanouissent nos vignes et collines boisées où nichent nos ruches, le terroir de Saulnes donne naissance à des vins frais et élégants et un miel riche et authentique."
   },
   "boutiques": {
-    "miel": { "description": "Miel artisanal récolté en Lorraine, 100% bio, sans additif et sans conservateur." },
-    "vin":  { "description": "Vins de Lorraine élevés avec soin, du vignoble à la bouteille." }
+    "miel": {
+      "description": "Miel artisanal récolté en Lorraine, 100% bio, sans additif et sans conservateur."
+    },
+    "vin": {
+      "description": "Vins de Lorraine élevés avec soin, du vignoble à la bouteille."
+    }
   },
   "boutiqueMiel": {
     "eyebrow": "Apiculture artisanale française",
@@ -121,10 +128,7 @@
     "erreurPaypal": "Erreur PayPal",
     "produitIntrouvable": "Produit introuvable.",
     "chargement": "Chargement...",
-    "terroirEyebrow": "Notre terroir",
-    "terroirTitre": "Saulnes, au cœur de la vallée",
-    "catalogueTitre": "Nos miels",
-    "terroirTexte": "Nos ruches sont installées dans les collines boisées autour de Saulnes, entre prairies fleuries et forêts — un terroir idéal pour un miel riche et authentique."
+    "catalogueTitre": "Nos miels"
   },
   "boutiquevin": {
     "eyebrow": "Vins de Lorraine",
@@ -154,10 +158,7 @@
     "erreurPaypal": "Erreur PayPal",
     "produitIntrouvable": "Produit introuvable.",
     "chargement": "Chargement...",
-    "terroirEyebrow": "Notre terroir",
-    "terroirTitre": "Saulnes, au cœur de la vallée",
-    "catalogueTitre": "Nos vins",
-    "terroirTexte": "Nos vignes profitent des coteaux ensoleillés autour de Saulnes, sur un sol calcaire propice à des vins frais et élégants."
+    "catalogueTitre": "Nos vins"
   },
   "tags": {
     "bestSeller": "Best-seller",
