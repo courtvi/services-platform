@@ -5,11 +5,13 @@
       Chabeille
     </span>
     <button mat-stroked-button class="panier-btn" [routerLink]="['/boutiques', boutiqueId, 'panier']">
+      <span class="panier-icon-wrap">
       <mat-icon>shopping_cart</mat-icon>
-      {{ 'boutiqueMiel.panier' | translate }}
       @if (nombreArticlesPanier() > 0) {
       <span class="panier-badge">{{ nombreArticlesPanier() }}</span>
       }
+      </span>
+      {{ 'boutiqueMiel.panier' | translate }}
     </button>
   </div>
 </div>

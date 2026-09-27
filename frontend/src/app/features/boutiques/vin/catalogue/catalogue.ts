@@ -29,9 +29,9 @@ export class Catalogue {
 
   readonly filtres = [
     { key: 'tous', labelCle: 'boutiquevin.filtreTous' },
-    { key: 'fleurs', labelCle: 'boutiquevin.filtreFleurs' },
-    { key: 'foret', labelCle: 'boutiquevin.filtreForet' },
-    { key: 'coffret', labelCle: 'boutiquevin.filtreCoffret' }
+    { key: 'blanc', labelCle: 'boutiquevin.filtreVinBlanc' },
+    { key: 'rouge', labelCle: 'boutiquevin.filtreVinRouge' },
+    { key: 'cremant', labelCle: 'boutiquevin.filtreVinCremant' }
   ];
 
   produits = signal<Produit[]>([]);

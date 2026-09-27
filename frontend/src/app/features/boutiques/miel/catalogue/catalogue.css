@@ -23,22 +23,26 @@
 }
 
 .panier-btn {
-  position: relative;
   color: var(--boutique-ink) !important;
   border-color: var(--boutique-line) !important;
 }
 
+.panier-icon-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
 .panier-badge {
   position: absolute;
-  top: -6px;
-  right: -6px;
-  min-width: 18px;
-  height: 18px;
+  top: -8px;
+  right: -8px;
+  min-width: 16px;
+  height: 16px;
   padding: 0 4px;
   border-radius: 999px;
   background: var(--boutique-primary);
   color: #fff;
-  font-size: 10.5px;
+  font-size: 10px;
   font-weight: 800;
   display: flex;
   align-items: center;

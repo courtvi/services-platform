@@ -71,7 +71,10 @@
     "miel_chataignier": "Keschtenhonneg",
     "miel_sapin": "Dannenhonneg",
     "miel_tilleul": "Lannenhonneg",
-    "coffret_decouverte": "Entdeckungsset"
+    "coffret_decouverte": "Entdeckungsset",
+    "vin_rouge": "Routwäin",
+    "vin_blanc": "Wäisswäin",
+    "cremant": "Cremant"
   },
   "groupe": {
     "petits_pains": "Bréitercher",
@@ -173,5 +176,10 @@
     "miel_sapin": "Bëschhonnegtau, bernsteefaarweg an intensiv am Geschmaach.",
     "miel_tilleul": "Frësch a liicht mentholéiert, gär als Owesinfusioun gedronk.",
     "coffret_decouverte": "Dräi Pëtter vu 125 g fir eis bescht Ernten z'entdecken."
+  },
+  "produitsvin": {
+    "vin_rouge": "E mëllen, fruuchtege Rout mat wäiche Tanninen.",
+    "vin_blanc": "E frëschen, mineraleschen Wäiss, ideal als Aperitif.",
+    "cremant": "Feng Bullen, fir besonnesch Occasiounen."
   }
 }

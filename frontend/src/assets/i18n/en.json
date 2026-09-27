@@ -71,7 +71,10 @@
     "miel_chataignier": "Chestnut Honey",
     "miel_sapin": "Fir Honey",
     "miel_tilleul": "Linden Honey",
-    "coffret_decouverte": "Discovery Gift Set"
+    "coffret_decouverte": "Discovery Gift Set",
+    "vin_rouge": "Red wine",
+    "vin_blanc": "White wine",
+    "cremant": "Cremant"
   },
   "groupe": {
     "petits_pains": "Rolls",
@@ -94,39 +97,6 @@
     "vin": {
       "description": "Lorraine wines crafted with care, from vine to bottle."
     }
-  },
-  "boutiqueVin": {
-    "eyebrow": "Lorraine wines",
-    "heroTitre": "La Cuvée des Saulnes, the wine of our valley.",
-    "heroTexte": "Wines patiently aged on the slopes of Lorraine.",
-    "panier": "Cart",
-    "filtreTous": "All",
-    "filtreFleurs": "White wines",
-    "filtreForet": "Red wines",
-    "filtreCoffret": "Gift boxes",
-    "ajouterPanier": "Add to cart",
-    "ajoute": "{{nom}} added to cart",
-    "voirPanier": "View cart",
-    "quantite": "Quantity",
-    "retourCatalogue": "Back to catalogue",
-    "continuerAchats": "Continue shopping",
-    "panierVide": "Your cart is empty.",
-    "decouvrirMiels": "Discover our wines",
-    "sousTotal": "Subtotal",
-    "passerCommande": "Place order",
-    "retourPanier": "Back to cart",
-    "finaliserCommande": "Complete my order",
-    "dateLivraisonLabel": "Preferred delivery date",
-    "payerPaypal": "Pay with PayPal",
-    "commandeCreee": "Order created!",
-    "erreurCommande": "Error while creating the order",
-    "erreurPaypal": "PayPal error",
-    "produitIntrouvable": "Product not found.",
-    "chargement": "Loading...",
-    "terroirEyebrow": "Our terroir",
-    "terroirTitre": "Saulnes, in the heart of the valley",
-    "catalogueTitre": "Our wines",
-    "terroirTexte": "Our vines thrive on the sunny slopes around Saulnes, on limestone soil ideal for fresh and elegant wines."
   },
   "boutiqueMiel": {
     "eyebrow": "French artisanal beekeeping",
@@ -173,5 +143,43 @@
     "miel_sapin": "Forest honeydew, amber-colored with an intense flavor.",
     "miel_tilleul": "Fresh and slightly minty, enjoyed as an evening tea.",
     "coffret_decouverte": "Three 125 g jars to explore our finest harvests."
+  },
+  "produitsvin": {
+    "vin_rouge": "A smooth, fruity red with soft tannins.",
+    "vin_blanc": "A fresh, mineral white, perfect as an aperitif.",
+    "cremant": "Fine bubbles, for special occasions."
+  },
+  "boutiquevin": {
+    "eyebrow": "Lorraine wines",
+    "heroTitre": "La Cuvée des Saulnes, the wine of our valley.",
+    "heroTexte": "Wines patiently aged on the slopes of Lorraine.",
+    "panier": "Cart",
+    "filtreTous": "All",
+    "ajouterPanier": "Add to cart",
+    "ajoute": "{{nom}} added to cart",
+    "voirPanier": "View cart",
+    "quantite": "Quantity",
+    "retourCatalogue": "Back to catalogue",
+    "continuerAchats": "Continue shopping",
+    "panierVide": "Your cart is empty.",
+    "decouvrirMiels": "Discover our wines",
+    "sousTotal": "Subtotal",
+    "passerCommande": "Place order",
+    "retourPanier": "Back to cart",
+    "finaliserCommande": "Complete my order",
+    "dateLivraisonLabel": "Preferred delivery date",
+    "payerPaypal": "Pay with PayPal",
+    "commandeCreee": "Order created!",
+    "erreurCommande": "Error while creating the order",
+    "erreurPaypal": "PayPal error",
+    "produitIntrouvable": "Product not found.",
+    "chargement": "Loading...",
+    "terroirEyebrow": "Our terroir",
+    "terroirTitre": "Saulnes, in the heart of the valley",
+    "catalogueTitre": "Our wines",
+    "terroirTexte": "Our vines thrive on the sunny slopes around Saulnes, on limestone soil ideal for fresh and elegant wines.",
+    "filtreVinBlanc": "White wines",
+    "filtreVinRouge": "Red wines",
+    "filtreVinCremant": "Cremants"
   }
 }

@@ -1,3 +1,21 @@
+<div class="vin-topbar">
+  <div class="vin-topbar-inner">
+    <span class="vin-logo">
+      <mat-icon>wine_bar</mat-icon>
+      La Cuvée des Saulnes
+    </span>
+    <button mat-stroked-button class="panier-btn" [routerLink]="['/boutiques', boutiqueId, 'panier']">
+      <span class="panier-icon-wrap">
+      <mat-icon>shopping_cart</mat-icon>
+      @if (nombreArticlesPanier() > 0) {
+      <span class="panier-badge">{{ nombreArticlesPanier() }}</span>
+      }
+      </span>
+      {{ 'boutiquevin.panier' | translate }}
+    </button>
+  </div>
+</div>
+
 <div class="container">
   <a [routerLink]="['/boutiques', boutiqueId]" class="retour">
     <mat-icon>arrow_back</mat-icon>
@@ -11,7 +29,11 @@
   } @else {
   <div class="detail-grid">
     <div class="detail-media">
-      <mat-icon>emoji_nature</mat-icon>
+      @if (produit()!.image) {
+      <img [src]="produit()!.image" [alt]="'articles.' + produit()!.cle | translate" class="detail-image" />
+      } @else {
+      <mat-icon>wine_bar</mat-icon>
+      }
     </div>
     <div class="detail-info">
       <span class="origine">{{ produit()!.origine }}</span>

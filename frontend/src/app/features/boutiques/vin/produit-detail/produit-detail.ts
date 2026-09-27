@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -28,6 +28,8 @@ export class ProduitDetail implements OnInit {
 
   readonly boutiqueId = BOUTIQUE_ID;
   readonly traductionPrefixe = 'produitsvin';
+
+  nombreArticlesPanier = computed(() => this.panierService.nombreArticles(BOUTIQUE_ID));
 
   produit = signal<Produit | undefined>(undefined);
   quantite = signal(1);

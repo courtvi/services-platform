@@ -7,4 +7,7 @@ export interface Produit {
   unite: string;
   categorie: string;
   tagCle?: string;
+  image?: string;
+  rupture?: boolean;
+  annee?: string;
 }

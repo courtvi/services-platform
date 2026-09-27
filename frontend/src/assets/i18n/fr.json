@@ -136,9 +136,6 @@
     "heroTexte": "Des vins élevés avec patience sur les coteaux lorrains.",
     "panier": "Panier",
     "filtreTous": "Tous",
-    "filtreFleurs": "Vins blancs",
-    "filtreForet": "Vins rouges",
-    "filtreCoffret": "Crémants",
     "ajouterPanier": "Ajouter au panier",
     "ajoute": "{{nom}} ajouté au panier",
     "voirPanier": "Voir le panier",
@@ -158,7 +155,10 @@
     "erreurPaypal": "Erreur PayPal",
     "produitIntrouvable": "Produit introuvable.",
     "chargement": "Chargement...",
-    "catalogueTitre": "Nos vins"
+    "catalogueTitre": "Nos vins",
+    "filtreVinBlanc": "Vins blancs",
+    "filtreVinRouge": "Vins rouges",
+    "filtreVinCremant": "Crémants"
   },
   "tags": {
     "bestSeller": "Best-seller",
@@ -179,6 +179,6 @@
   "produitsvin": {
     "vin_rouge": "Un rouge souple et fruité, aux tanins fondus.",
     "vin_blanc": "Un blanc frais et minéral, idéal à l'apéritif.",
-    "cremant": "Bulles fines et notes briochées, pour les grandes occasions."
+    "cremant": "Bulles fines, pour les grandes occasions."
   }
 }

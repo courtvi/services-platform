@@ -8,8 +8,9 @@ export const PRODUITS_VIN: Produit[] = [
     origine: 'Saulnes',
     prix: 7.00,
     unite: '75cl',
-    categorie: 'bouteille',
-    tagCle: 'bestSeller'
+    categorie: 'rouge',
+    tagCle: 'bestSeller',
+    rupture: true
   },
   {
     id: 2,
@@ -18,8 +19,10 @@ export const PRODUITS_VIN: Produit[] = [
     origine: 'Saulnes',
     prix: 7.00,
     unite: '75cl',
-    categorie: 'bouteille',
-    tagCle: 'populaire'
+    categorie: 'blanc',
+    tagCle: 'populaire',
+    image: '/assets/images/ettiquette-2026.png',
+    annee: '2026'
   },
   {
     id: 3,
@@ -28,6 +31,7 @@ export const PRODUITS_VIN: Produit[] = [
     origine: 'Saulnes',
     prix: 8.00,
     unite: '75cl',
-    categorie: 'bouteille'
+    categorie: 'cremant',
+    rupture: true
   }
 ];

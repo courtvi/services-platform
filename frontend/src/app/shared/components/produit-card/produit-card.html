@@ -3,7 +3,16 @@
     @if (produit.tagCle) {
     <span class="produit-tag">{{ 'tags.' + produit.tagCle | translate }}</span>
     }
+    @if (produit.annee) {
+    <span class="produit-annee">{{ produit.annee }}</span>
+    }
+    @if (produit.rupture) {
+    <img src="/assets/images/vin-no-stock.png" alt="Rupture de stock" class="produit-image" />
+    } @else if (produit.image) {
+    <img [src]="produit.image" [alt]="'articles.' + produit.cle | translate" class="produit-image" />
+    } @else {
     <mat-icon class="produit-icone">{{ icone }}</mat-icon>
+    }
   </a>
 
   <div class="produit-body">
@@ -16,7 +25,7 @@
         {{ produit.prix | currency:'EUR' }}
         <small>/ {{ produit.unite }}</small>
       </span>
-      <button mat-mini-fab class="produit-add" (click)="ajouter.emit(produit)" [attr.aria-label]="'boutiqueMiel.ajouterPanier' | translate">
+      <button mat-mini-fab class="produit-add" [disabled]="produit.rupture" (click)="ajouter.emit(produit)" [attr.aria-label]="'boutiqueMiel.ajouterPanier' | translate">
         <mat-icon>add</mat-icon>
       </button>
     </div>

@@ -102,3 +102,54 @@
 @media (max-width: 720px) {
   .detail-grid { grid-template-columns: 1fr; }
 }
+
+.miel-topbar {
+  border-bottom: 1px solid var(--boutique-line);
+  background: var(--boutique-surface);
+}
+
+.miel-topbar-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.miel-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--boutique-font-title);
+  font-weight: 700;
+  font-size: 19px;
+  color: var(--boutique-ink);
+}
+
+.panier-btn {
+  color: var(--boutique-ink) !important;
+  border-color: var(--boutique-line) !important;
+}
+
+.panier-icon-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.panier-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--boutique-primary);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
