@@ -1,68 +1,73 @@
 <mat-toolbar color="primary" class="toolbar">
-    <a routerLink="/boutiques" class="toolbar-title">
-        <mat-icon>storefront</mat-icon>
-      <span>{{ 'nav.boutiques' | translate }}</span>
+  <a routerLink="/boutiques" class="toolbar-title">
+    <mat-icon>storefront</mat-icon>
+    <span>{{ 'nav.boutiques' | translate }}</span>
+  </a>
+
+  <span class="spacer"></span>
+
+  @if (isLoggedIn()) {
+  <a mat-button routerLink="/commandes" routerLinkActive="active-link">
+    <mat-icon>list_alt</mat-icon>
+    <span>{{ 'nav.commandes' | translate }}</span>
+  </a>
+
+  @if (isAdmin()) {
+  <button mat-button [matMenuTriggerFor]="adminMenu" routerLinkActive="active-link">
+    <mat-icon>admin_panel_settings</mat-icon>
+    <span>{{ 'nav.admin' | translate }}</span>
+  </button>
+
+  <mat-menu #adminMenu="matMenu">
+    <a mat-menu-item routerLink="/admin/boutiques">
+      <mat-icon>storefront</mat-icon>
+      <span>{{ 'nav.adminBoutiques' | translate }}</span>
     </a>
+  </mat-menu>
+  }
 
-    <span class="spacer"></span>
+  <button mat-icon-button [matMenuTriggerFor]="langMenu" aria-label="Choisir la langue">
+    <mat-icon>language</mat-icon>
+  </button>
 
-    @if (isLoggedIn()) {
-    <a mat-button routerLink="/commandes" routerLinkActive="active-link">
-        <mat-icon>list_alt</mat-icon>
-        <span>{{ 'nav.commandes' | translate }}</span>
-    </a>
-
-    @if (isAdmin()) {
-    <button mat-button [matMenuTriggerFor]="adminMenu" routerLinkActive="active-link">
-        <mat-icon>admin_panel_settings</mat-icon>
-        <span>{{ 'nav.admin' | translate }}</span>
+  <mat-menu #langMenu="matMenu">
+    <button mat-menu-item (click)="setLang('fr')">
+      <img src="flags/fr.svg" width="20" height="15"> {{ 'lang.fr' | translate }}
     </button>
-
-    <mat-menu #adminMenu="matMenu">
-        <a mat-menu-item routerLink="/admin/boutiques">
-            <mat-icon>storefront</mat-icon>
-            <span>{{ 'nav.adminBoutiques' | translate }}</span>
-        </a>
-    </mat-menu>
-    }
-
-    <button mat-icon-button [matMenuTriggerFor]="langMenu" aria-label="Choisir la langue">
-        <mat-icon>language</mat-icon>
+    <button mat-menu-item (click)="setLang('de')">
+      <img src="flags/de.svg" width="20" height="15"> {{ 'lang.de' | translate }}
     </button>
-
-    <mat-menu #langMenu="matMenu">
-        <button mat-menu-item (click)="setLang('fr')">
-            <img src="flags/fr.svg" width="20" height="15"> {{ 'lang.fr' | translate }}
-        </button>
-        <button mat-menu-item (click)="setLang('de')">
-            <img src="flags/de.svg" width="20" height="15"> {{ 'lang.de' | translate }}
-        </button>
-        <button mat-menu-item (click)="setLang('en')">
-            <img src="flags/en.svg" width="20" height="15"> {{ 'lang.en' | translate }}
-        </button>
-        <button mat-menu-item (click)="setLang('lb')">
-            <img src="flags/lu.svg" width="20" height="15"> {{ 'lang.lb' | translate }}
-        </button>
-    </mat-menu>
-
-    <button mat-icon-button [matMenuTriggerFor]="userMenu" aria-label="Menu utilisateur">
-        <mat-icon>account_circle</mat-icon>
+    <button mat-menu-item (click)="setLang('en')">
+      <img src="flags/en.svg" width="20" height="15"> {{ 'lang.en' | translate }}
     </button>
+    <button mat-menu-item (click)="setLang('lb')">
+      <img src="flags/lu.svg" width="20" height="15"> {{ 'lang.lb' | translate }}
+    </button>
+  </mat-menu>
 
-    <mat-menu #userMenu="matMenu">
-        <div class="user-info">
-            <mat-icon>person</mat-icon>
-            <span>{{ username() }}</span>
-        </div>
-        <mat-divider></mat-divider>
-        <button mat-menu-item (click)="logout()">
-            <mat-icon>logout</mat-icon>
-            <span>{{ 'auth.deconnexion' | translate }}</span>
-        </button>
-    </mat-menu>
-    }
+  <button mat-icon-button [matMenuTriggerFor]="userMenu" aria-label="Menu utilisateur">
+    <mat-icon>account_circle</mat-icon>
+  </button>
+
+  <mat-menu #userMenu="matMenu">
+    <div class="user-info">
+      <mat-icon>person</mat-icon>
+      <span>{{ username() }}</span>
+    </div>
+    <mat-divider></mat-divider>
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      <span>{{ 'auth.deconnexion' | translate }}</span>
+    </button>
+  </mat-menu>
+  } @else {
+  <button mat-button (click)="login()">
+    <mat-icon>login</mat-icon>
+    <span>{{ 'auth.connexion' | translate }}</span>
+  </button>
+  }
 </mat-toolbar>
 
 <main class="page-content">
-    <router-outlet></router-outlet>
+  <router-outlet></router-outlet>
 </main>

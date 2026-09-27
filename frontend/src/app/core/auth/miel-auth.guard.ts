@@ -9,10 +9,7 @@ export const mielAuthGuard: CanActivateFn = async () => {
     return true;
   }
 
-  await keycloak.login({
-    redirectUri: window.location.origin + '/boutiques/miel'
-  });
-
+  await keycloak.login({ redirectUri: window.location.origin + '/boutiques' });
   return false;
 };
 
@@ -21,13 +18,11 @@ export const mielAdminGuard: CanActivateFn = async () => {
   const router = inject(Router);
 
   if (!keycloak.authenticated) {
-    await keycloak.login();
+    await keycloak.login({ redirectUri: window.location.origin + '/commandes' });
     return false;
   }
 
-  const hasAdminRole = keycloak.hasResourceRole('ADMIN', 'chabeille');
-
-  if (!hasAdminRole) {
+  if (!keycloak.hasResourceRole('ADMIN', 'chabeille')) {
     return router.createUrlTree(['/boutiques/miel']);
   }
 

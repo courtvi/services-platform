@@ -47,6 +47,7 @@
     "ANNULEE": "Annulléiert"
   },
   "auth": {
+    "connexion": "Umellen",
     "deconnexion": "Ofmellen"
   },
   "articles": {

@@ -16,7 +16,7 @@ export const BOUTIQUES: Boutique[] = [
      nom: 'La cuvée de Saulnes',
      descriptionCle: 'boutiques.vin.description',
      theme: 'theme-vin',
-     icone: 'restaurant',
+     icone: 'wine_bar',
      prefixeReference: 'VIN-',
      actif: true
    }

@@ -14,7 +14,8 @@ export const provideKeycloakAngular = () => {
     initOptions: {
       onLoad: 'check-sso',
       pkceMethod: 'S256',
-      checkLoginIframe: false
+      checkLoginIframe: false,
+      silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html'
     },
     features: [withAutoRefreshToken({ onInactivityTimeout: 'logout', sessionTimeout: 30 * 60 * 1000 })],
     providers: [AutoRefreshTokenService, UserActivityService]

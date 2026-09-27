@@ -4,16 +4,12 @@ import Keycloak from 'keycloak-js';
 
 export const authGuard: CanActivateFn = async () => {
   const keycloak = inject(Keycloak) as Keycloak;
-  const router = inject(Router);
 
   if (keycloak.authenticated) {
     return true;
   }
 
-  await keycloak.login({
-    redirectUri: window.location.origin + '/commandes'
-  });
-
+  await keycloak.login({ redirectUri: window.location.origin + '/boutiques' });
   return false;
 };
 
@@ -22,13 +18,11 @@ export const adminGuard: CanActivateFn = async () => {
   const router = inject(Router);
 
   if (!keycloak.authenticated) {
-    await keycloak.login();
+    await keycloak.login({ redirectUri: window.location.origin + '/commandes' });
     return false;
   }
 
-  const hasAdminRole = keycloak.hasResourceRole('ADMIN');
-
-  if (!hasAdminRole) {
+  if (!keycloak.hasResourceRole('ADMIN')) {
     return router.createUrlTree(['/commandes']);
   }
 

@@ -47,4 +47,8 @@ export class App implements OnInit {
     localStorage.setItem('lang', lang);
     this.translate.use(lang);
   }
+
+  async login(): Promise<void> {
+    await this.keycloak.login({ redirectUri: window.location.origin + '/boutiques' });
+  }
 }

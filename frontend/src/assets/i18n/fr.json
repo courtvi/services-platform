@@ -47,6 +47,7 @@
     "ANNULEE": "Annulée"
   },
   "auth": {
+    "connexion": "Connexion",
     "deconnexion": "Se déconnecter"
   },
   "articles": {

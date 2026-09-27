@@ -5,7 +5,7 @@ export const routes: Routes = [
 
   {
     path: '',
-    redirectTo: 'commandes',
+    redirectTo: 'boutiques',
     pathMatch: 'full'
   },
 
