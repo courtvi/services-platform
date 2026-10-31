@@ -53,8 +53,8 @@ spec:
             - name: KC_DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgres-keycloak-secret
-                  key: POSTGRES_PASSWORD
+                  name: keycloak-db-secret
+                  key: KC_DB_PASSWORD
           readinessProbe:
             httpGet:
               path: /realms/master

@@ -13,22 +13,18 @@ public class GatewayApplication {
         SpringApplication.run(GatewayApplication.class, args);
     }
 
+    /**
+     * Une seule route : product-service, découvert via Eureka.
+     * - pas de rewritePath : product-service expose déjà /api/products
+     * - retry(2) : sur GET, rejoue en cas d'erreur réseau / 5xx
+     * - https choisi automatiquement : l'instance Eureka est déclarée "secure"
+     */
     @Bean
     public RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route( r-> r.path("/api/products/**")
-                        .filters(f->f.rewritePath("/api/products/(?<remains>.*)","/${remains}"))
-                        .uri("lb://product-service/")
-
-                )
-                .route( r-> r.path("/api/commandes/**")
-                         .uri("lb://commande-service/")
-
-                )
-                .route(r->r.path("/api/auth/**")
-                        .filters(f->f.rewritePath("/api/auth/(?<remains>.*)","/${remains}"))
-                        .uri("lb://auth-service")
-
-                ).build();
+                .route("product-service", r -> r.path("/api/products", "/api/products/**")
+                        .filters(f -> f.retry(2))
+                        .uri("lb://product-service"))
+                .build();
     }
 }

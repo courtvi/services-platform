@@ -1,9 +1,0 @@
-/mnt/c/Users/bde_v/IdeaProjects/services-platform/product-service/src/main/java/org/gestion/product/ProductServiceApplication.java
-/mnt/c/Users/bde_v/IdeaProjects/services-platform/product-service/src/main/java/org/gestion/product/dto/ProductRequest.java
-/mnt/c/Users/bde_v/IdeaProjects/services-platform/product-service/src/main/java/org/gestion/product/dto/ProductResponse.java
-/mnt/c/Users/bde_v/IdeaProjects/services-platform/product-service/src/main/java/org/gestion/product/mapper/ProductMapper.java
-/mnt/c/Users/bde_v/IdeaProjects/services-platform/product-service/src/main/java/org/gestion/product/model/Product.java
-/mnt/c/Users/bde_v/IdeaProjects/services-platform/product-service/src/main/java/org/gestion/product/reactivewebservice/ProductHandler.java
-/mnt/c/Users/bde_v/IdeaProjects/services-platform/product-service/src/main/java/org/gestion/product/reactivewebservice/ProductRouter.java
-/mnt/c/Users/bde_v/IdeaProjects/services-platform/product-service/src/main/java/org/gestion/product/repository/ProductRepository.java
-/mnt/c/Users/bde_v/IdeaProjects/services-platform/product-service/src/main/java/org/gestion/product/service/ProductService.java

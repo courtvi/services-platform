@@ -1,8 +1,8 @@
+# ===== Config par défaut =====
 spring:
   application:
     name: api-gateway
 
-  # ✅ Keycloak — realm lorrconnect
   security:
     oauth2:
       resourceserver:
@@ -13,63 +13,52 @@ spring:
 server:
   port: 8090
 
-cloud:
-  gateway:
-    # ✅ Propagation automatique du JWT aux microservices
-    default-filters:
-      - TokenRelay=
-    corsConfigurations:
-      '[/**]':
-        allowedOrigins:
-          - "http://localhost:30080"
-        allowedMethods:
-          - GET
-          - POST
-          - PUT
-          - PATCH
-          - DELETE
-          - OPTIONS
-        allowedHeaders:
-          - "*"
-        allowCredentials: true
-    routes:
-      # ✅ Route → commande-service
-      - id: commande-service
-        uri: lb://commande-service
-        predicates:
-        - Path=/api/commandes/**
-        filters:
-        - RewritePath=/api/commandes/(?<segment>.*), /api/commandes/${segment}
-
-      # ✅ Route → product-service
-      - id: product-service
-        uri: lb://product-service
-        predicates:
-        - Path=/api/products/**
-
-      # ✅ Route → client-service
-      - id: client-service
-        uri: lb://client-service
-        predicates:
-        - Path=/api/clients/**
-
 eureka:
   instance:
     prefer-ip-address: true
   client:
     register-with-eureka: true
     fetch-registry: true
-    serviceUrl:
-      defaultZone: http://eureka:8761/eureka
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://eureka:8761/eureka}
 
 management:
+  server:
+    port: 8091
   endpoints:
     web:
       base-path: /manage
       exposure:
-        include: "*"
+        include: health,info,gateway
   endpoint:
     health:
-      show-details: always
+      probes:
+        enabled: true
 
-
+---
+# ===== Profil mtls : la gateway présente son certificat à product-service =====
+spring:
+  config:
+    activate:
+      on-profile: mtls
+  ssl:
+    bundle:
+      jks:
+        product-mtls:
+          keystore:
+            location: file:/etc/mtls/api-gateway.p12
+            password: ${P12_PASSWORD}
+            type: PKCS12
+          key:
+            alias: api-gateway
+          truststore:
+            location: file:/etc/mtls/truststore.p12
+            password: ${P12_PASSWORD}
+            type: PKCS12
+  cloud:
+    gateway:
+      server:
+        webflux:
+          httpclient:
+            ssl:
+              ssl-bundle: product-mtls

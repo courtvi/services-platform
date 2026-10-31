@@ -25,21 +25,15 @@ import java.util.stream.Collectors;
 public class SecurityConfig {
 
     @Bean
-    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
+    public SecurityWebFilterChain loadTestFilterChain(ServerHttpSecurity http) {
         return http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
+                .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                 .authorizeExchange(ex -> ex
                         .pathMatchers("/manage/**").permitAll()
-                        .pathMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
-                        .pathMatchers("/api/**").authenticated()
-                        .anyExchange().authenticated()
-                )
-                .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> jwt
-                                .jwtAuthenticationConverter(keycloakJwtConverter())
-                        )
-                )
+                        .pathMatchers("/api/products", "/api/products/**").permitAll()
+                        .anyExchange().denyAll())
                 .build();
     }
 
@@ -57,32 +51,28 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", config);
         return source;
     }
-
+/*
     @Bean
     public ReactiveJwtAuthenticationConverter keycloakJwtConverter() {
         ReactiveJwtAuthenticationConverter converter = new ReactiveJwtAuthenticationConverter();
-        converter.setJwtGrantedAuthoritiesConverter(jwt ->
-                Flux.fromIterable(extractRoles(jwt))
-        );
+        converter.setJwtGrantedAuthoritiesConverter(jwt -> Flux.fromIterable(extractRoles(jwt)));
         return converter;
     }
 
+    @SuppressWarnings("unchecked")
     private Collection<GrantedAuthority> extractRoles(Jwt jwt) {
         Map<String, Object> resourceAccess = jwt.getClaim("resource_access");
         if (resourceAccess != null && resourceAccess.containsKey("haller")) {
             Map<String, Object> hallerAccess = (Map<String, Object>) resourceAccess.get("haller");
             List<String> roles = (List<String>) hallerAccess.get("roles");
-            return roles.stream()
-                    .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
-                    .collect(Collectors.toList());
+            return roles.stream().map(r -> new SimpleGrantedAuthority("ROLE_" + r)).collect(Collectors.toList());
         }
         Map<String, Object> realmAccess = jwt.getClaim("realm_access");
         if (realmAccess != null && realmAccess.containsKey("roles")) {
             List<String> roles = (List<String>) realmAccess.get("roles");
-            return roles.stream()
-                    .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
-                    .collect(Collectors.toList());
+            return roles.stream().map(r -> new SimpleGrantedAuthority("ROLE_" + r)).collect(Collectors.toList());
         }
         return Collections.emptyList();
     }
+    */
 }

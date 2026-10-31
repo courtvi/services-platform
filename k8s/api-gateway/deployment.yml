@@ -6,7 +6,7 @@ metadata:
   labels:
     app: api-gateway
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: api-gateway
@@ -15,34 +15,73 @@ spec:
       labels:
         app: api-gateway
     spec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          matchLabelKeys:
+            - pod-template-hash
+          labelSelector:
+            matchLabels:
+              app: api-gateway
       containers:
         - name: api-gateway
           image: api-gateway:latest
           imagePullPolicy: Never
           ports:
-            - containerPort: 8090
+            - name: http
+              containerPort: 8090
+            - name: management
+              containerPort: 8091
           env:
             - name: SPRING_PROFILES_ACTIVE
-              value: "kubernetes"
+              value: "kubernetes,mtls"
+            - name: P12_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: api-gateway-mtls
+                  key: P12_PASSWORD
             - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
               value: "http://localhost:30090/realms/lorrconnect"
             - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI
-              value: "http://keycloak:8080/realms/lorrconnect/protocol/openid-connect/certs"
+              value: "http://keycloak.default.svc.cluster.local:8080/realms/lorrconnect/protocol/openid-connect/certs"
             - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
               value: "http://eureka:8761/eureka"
-            - name: SERVER_PORT
-              value: "8090"
+            - name: JAVA_TOOL_OPTIONS
+              value: "-XX:MaxRAMPercentage=75 -XX:+ExitOnOutOfMemoryError"
+          volumeMounts:
+            - name: mtls
+              mountPath: /etc/mtls
+              readOnly: true
           readinessProbe:
             httpGet:
-              path: /manage/health
-              port: 8090
+              path: /manage/health/readiness
+              port: management
             initialDelaySeconds: 30
             periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 5
+          livenessProbe:
+            httpGet:
+              path: /manage/health/liveness
+              port: management
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 3
             failureThreshold: 5
           resources:
             requests:
-              memory: "256Mi"
-              cpu: "200m"
-            limits:
               memory: "512Mi"
               cpu: "500m"
+            limits:
+              memory: "1Gi"
+              cpu: "1500m"
+      volumes:
+        - name: mtls
+          secret:
+            secretName: api-gateway-mtls
+            items:
+              - key: api-gateway.p12
+                path: api-gateway.p12
+              - key: truststore.p12
+                path: truststore.p12

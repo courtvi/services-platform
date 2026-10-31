@@ -29,10 +29,4 @@ public class ClientTest {
         assertEquals("WEBBER", client.getLastName());
     }
 
-    @Test
-    public void getter_setterClientReservationTest() {
-        Client client = new Client();
-        client.setReservation("05B");
-        assertEquals("05B", client.getReservation());
-    }
 }

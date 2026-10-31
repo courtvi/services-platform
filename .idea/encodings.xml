@@ -5,8 +5,9 @@
     <file url="file://$PROJECT_DIR$/api-gateway/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/client-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/commande-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/devis-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/eureka-server/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/product-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/produit-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/singlePageApp/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-boot-angular/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-boot-r2dbc-h2-example/src/main/java" charset="UTF-8" />

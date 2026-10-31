@@ -6,6 +6,9 @@ import org.gestion.client.model.Client;
 import org.gestion.client.repository.ClientRepository;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 
 import java.util.List;
@@ -25,7 +28,7 @@ public class ClientService {
         Client client = new Client();
         client.setFirstName(clientRequest.getFirstName());
         client.setLastName(clientRequest.getLastName());
-        client.setReservation(client.getReservation());
+
 
         clientRepository.save(client);
     }
@@ -36,8 +39,13 @@ public class ClientService {
         clientResponse.setId(client.getId());
         clientResponse.setFirstName(client.getFirstName());
         clientResponse.setLastName(client.getLastName());
-        clientResponse.setReservation(client.getReservation());
+
 
         return clientResponse;
+    }
+
+    public Flux<Client> getAllClients() {
+        return clientRepository.findAll();
+             
     }
 }

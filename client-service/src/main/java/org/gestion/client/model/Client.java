@@ -9,12 +9,15 @@ public class Client {
     private Long id;
     private String lastName;
     private String firstName;
-    private String reservation;
+
 
     public Client() {
     }
 
-    public Client(long id, String firstName, String lastName, String reservation) {
+    public Client(long id, String firstName, String lastName) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     public void setFirstName(String firstName) {
@@ -25,9 +28,7 @@ public class Client {
         this.lastName = lastName;
     }
 
-    public void setReservation(String reservation) {
-        this.reservation = reservation;
-    }
+
 
     public void setId(long id) {
         this.id = id;
@@ -45,7 +46,5 @@ public class Client {
         return lastName;
     }
 
-    public String getReservation() {
-        return reservation;
-    }
+
 }

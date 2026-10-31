@@ -5,6 +5,14 @@ export PATH="$JAVA_HOME/bin:$PATH"
 export NAMESPACE="lorrconnect"
 SERVICE_NAME=commande-service
 
+
+if ! kubectl get secret postgres-commande-secret -n "$NAMESPACE" >/dev/null 2>&1; then
+  kubectl create secret generic postgres-commande-secret -n "$NAMESPACE" \
+    --from-literal=POSTGRES_USER=commande \
+    --from-literal=POSTGRES_PASSWORD="$(openssl rand -base64 24 | tr -d '/+=')" \
+    --from-literal=POSTGRES_DB=commandedb
+fi
+
 echo "📦 Maven build..."
 mvn clean package -DskipTests
 

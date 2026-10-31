@@ -39,4 +39,7 @@ public class ClientRequest {
     public String getReservation() {
         return reservation;
     }
+
+    public Long getId(Long id) { return id;
+    }
 }
