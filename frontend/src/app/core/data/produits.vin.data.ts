@@ -2,7 +2,7 @@ import { Produit } from '../models/produit.model';
 
 export const PRODUITS_VIN: Produit[] = [
   {
-    id: 1,
+    id: 101,
     boutiqueId: 'vin',
     cle: 'vin_rouge',
     origine: 'Saulnes',
@@ -13,7 +13,7 @@ export const PRODUITS_VIN: Produit[] = [
     rupture: true
   },
   {
-    id: 2,
+    id: 102,
     boutiqueId: 'vin',
     cle: 'vin_blanc',
     origine: 'Saulnes',
@@ -25,7 +25,7 @@ export const PRODUITS_VIN: Produit[] = [
     annee: '2026'
   },
   {
-    id: 3,
+    id: 103,
     boutiqueId: 'vin',
     cle: 'cremant',
     origine: 'Saulnes',

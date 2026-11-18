@@ -87,6 +87,7 @@ function creerProduit(prefixe) {
     name: `${prefixe} ${__VU}-${__ITER}`,
     description: 'Créé par le test k6 mTLS',
     price: (Math.random() * 50 + 5).toFixed(2),
+    tauxTVA: '17.00',
   });
   const res = http.post(`${BASE_URL}/api/products`, payload, {
     ...JSON_HEADERS,

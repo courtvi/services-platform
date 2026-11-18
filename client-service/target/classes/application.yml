@@ -1,31 +1,97 @@
 spring:
   application:
     name: client-service
-  config:
-    import: "optional:configserver:"
+
+  r2dbc:
+    url: ${CLIENT_DB_URL:r2dbc:h2:mem:///clientdb;DB_CLOSE_DELAY=-1}
+    username: ${CLIENT_DB_USER:sa}
+    password: ${CLIENT_DB_PASSWORD:}
+
+  sql:
+    init:
+      mode: always                        # crée les tables au démarrage (IF NOT EXISTS)
+      schema-locations: classpath:schema.sql
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:30090/realms/lorrconnect}
+          jwk-set-uri: ${KEYCLOAK_JWK_SET_URI:http://keycloak.default.svc.cluster.local:8080/realms/lorrconnect/protocol/openid-connect/certs}
+
 server:
   port: 8083
 
 eureka:
   instance:
-     prefer-ip-address: true
-     fetch-registry: true
+    prefer-ip-address: true
   client:
-  register-with-eureka: true
-  service-url:
-   defaultZone: http://localhost:9099/eureka
+    enabled: ${EUREKA_ENABLED:false}
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA_URL:http://eureka-service:8761/eureka}
 
-  datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+management:
+  endpoints:
+    web:
+      base-path: /manage
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
 
-  jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    hibernate:
-      ddl-auto: update
+---
+# ===== Profil mtls (k8s) : HTTPS avec certificat client obligatoire =====
+# Le JWT Keycloak reste vérifié en plus : le mTLS authentifie le service appelant (gateway...),
+# le JWT authentifie l'utilisateur.
+spring:
+  config:
+    activate:
+      on-profile: mtls
+  ssl:
+    bundle:
+      jks:
+        mtls:
+          keystore:
+            location: file:/etc/mtls/client-service.p12
+            password: ${P12_PASSWORD}
+            type: PKCS12
+          key:
+            alias: client-service
+          truststore:
+            location: file:/etc/mtls/truststore.p12
+            password: ${P12_PASSWORD}
+            type: PKCS12
 
-  h2:
-    console:
-      enabled: true
+server:
+  port: 8445
+  ssl:
+    enabled: true
+    bundle: mtls
+    client-auth: need
+    enabled-protocols: TLSv1.3,TLSv1.2
+
+# Sondes kubelet sur un port séparé, sans TLS
+management:
+  server:
+    port: 9083
+    ssl:
+      enabled: false
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+# Enregistrement Eureka en HTTPS : la gateway (lb://client-service) appellera https://...:8445
+eureka:
+  client:
+    enabled: true
+  instance:
+    hostname: client-service.lorrconnect.svc.cluster.local
+    prefer-ip-address: false
+    instance-id: ${spring.application.name}:${HOSTNAME}
+    non-secure-port-enabled: false
+    secure-port-enabled: true
+    secure-port: 8445

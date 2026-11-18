@@ -1,49 +1,27 @@
 package org.gestion.devis.dto;
 
+import org.gestion.devis.model.StatutVersion;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.Instant;
-import java.util.Date;
-import org.gestion.client.model.Client;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest
-public class DevisResponseTest {
+class DevisResponseTest {
 
     @Test
-    public void G7DevisResponseNomTest() {
-        DevisResponse devisResponse = new DevisResponse();
-        devisResponse.setNom("Ben");
-        assertEquals("Ben", devisResponse.getNom());
-    }
+    void devisResponseContientSesVersions() {
+        VersionDevisResponse v1 = new VersionDevisResponse(10L, 1, StatutVersion.BROUILLON, null, null, null,
+                BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, List.of());
+        LocalDateTime date = LocalDateTime.of(2026, 11, 18, 22, 0);
 
-    @Test
-    public void G7DevisResponseAdresseTest() {
-        DevisResponse devisResponse = new DevisResponse();
-        devisResponse.setAdresse("1clos du chateau");
-        assertEquals("1clos du chateau", devisResponse.getAdresse());
-    }
+        DevisResponse response = new DevisResponse(1L, "DEV-2026-00001", 7L, date, List.of(v1));
 
-    @Test
-    public void G7DevisResponseDateTest() {
-        Date expected = Date.from(Instant.parse("2026-10-30T10:00:00Z"));
-        DevisResponse devisResponse = new DevisResponse();
-        devisResponse.setDate(expected);
-        assertEquals(expected, devisResponse.getDate());
-    }
-
-    @Test
-    public void G7DevisResponseClientTest() {
-
-        Client client = new Client();
-        client.setId(1L);
-        client.setFirstName("Ben");
-        client.setLastName("WEBER");
-
-        DevisResponse devisResponse = new DevisResponse();
-        devisResponse.setClient(client);
-        assertEquals(client, devisResponse.getClient());
+        assertEquals("DEV-2026-00001", response.reference());
+        assertEquals(7L, response.clientId());
+        assertEquals(1, response.versions().size());
+        assertEquals(StatutVersion.BROUILLON, response.versions().get(0).statut());
     }
 }

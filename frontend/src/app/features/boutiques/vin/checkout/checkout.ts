@@ -108,10 +108,8 @@ export class Checkout implements OnInit {
       dateLivraison: this.form.value.dateLivraison + 'T00:00:00',
 
       lignes: this.lignes().map(l => ({
-        article: l.produit.cle,
-        quantite: l.quantite,
-        prixUnitaire: l.produit.prix,
-        total: l.produit.prix * l.quantite
+        produitId: l.produit.id,
+        quantite: l.quantite
       }))
     };
 

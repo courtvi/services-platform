@@ -26,3 +26,8 @@ CREATE TABLE IF NOT EXISTS "CLIENT_REF" (
    "KEYCLOAK_ID" VARCHAR(255) PRIMARY KEY,
    "NUMERO_CLIENT" VARCHAR(50) NOT NULL
 );
+
+--changeset lignecommandes-produit-id:6
+-- Produit commandé (produit-service). Nullable : les anciennes lignes n'en ont pas.
+ALTER TABLE "LIGNECOMMANDES" ADD COLUMN IF NOT EXISTS "PRODUIT_ID" BIGINT;
+ALTER TABLE "LIGNECOMMANDES" ADD COLUMN IF NOT EXISTS "TAUX_TVA" DECIMAL(5,2);

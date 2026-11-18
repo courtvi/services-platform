@@ -10,6 +10,8 @@ import reactor.core.scheduler.Schedulers;
 
 import org.gestion.commande.model.LigneCommande;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import jakarta.mail.internet.MimeMessage;
@@ -55,7 +57,6 @@ public class MailService {
 
 
 
-// Remplace la ligne 53
         String dateCommande = commande.dateCommande() != null
                 ? commande.dateCommande().format(DATE_FORMATTER)
                 : "-";
@@ -64,8 +65,10 @@ public class MailService {
                 ? commande.dateLivraison().toLocalDate().toString()
                 : "-";
 
-        double totalHT = commande.total() / 1.03;
-        double totalTVA = commande.total() - totalHT;
+        // HT calculé ligne par ligne avec le taux de TVA de chaque produit (5,5 % miel, 20 % vin...).
+        BigDecimal totalTTC = commande.total() != null ? commande.total() : BigDecimal.ZERO;
+        BigDecimal totalHT = calculerTotalHT(lignes, totalTTC);
+        BigDecimal totalTVA = totalTTC.subtract(totalHT);
 
         StringBuilder lignesHtml = new StringBuilder();
         if (lignes != null && !lignes.isEmpty()) {
@@ -150,7 +153,7 @@ public class MailService {
                 "<td style=\"padding: 6px 0; font-size: 13px; text-align: right; color: #333;\">" + String.format("%.2f €", totalHT).replace(".", ",") + "</td>" +
                 "</tr>" +
                 "<tr>" +
-                "<td style=\"padding: 6px 0; font-size: 13px; color: #888;\">TVA (3%)</td>" +
+                "<td style=\"padding: 6px 0; font-size: 13px; color: #888;\">TVA</td>" +
                 "<td style=\"padding: 6px 0; font-size: 13px; text-align: right; color: #333;\">" + String.format("%.2f €", totalTVA).replace(".", ",") + "</td>" +
                 "</tr>" +
                 "<tr style=\"border-top: 1px solid #e0e0e0;\">" +
@@ -168,5 +171,22 @@ public class MailService {
 
                 "</div>" +
                 "</body></html>";
+    }
+
+    /**
+     * Somme des HT de chaque ligne : TTC / (1 + TVA/100).
+     * Une ligne sans taux (commande antérieure au calcul serveur) est comptée sans TVA.
+     */
+    static BigDecimal calculerTotalHT(List<LigneCommande> lignes, BigDecimal totalTTC) {
+        if (lignes == null || lignes.isEmpty()) {
+            return totalTTC;
+        }
+        BigDecimal totalHT = BigDecimal.ZERO;
+        for (LigneCommande ligne : lignes) {
+            BigDecimal ttc = ligne.getTotal() != null ? ligne.getTotal() : BigDecimal.ZERO;
+            BigDecimal taux = ligne.getTauxTVA() != null ? ligne.getTauxTVA() : BigDecimal.ZERO;
+            totalHT = totalHT.add(ttc.divide(BigDecimal.ONE.add(taux.movePointLeft(2)), 2, RoundingMode.HALF_UP));
+        }
+        return totalHT;
     }
 }

@@ -3,29 +3,40 @@ server:
 
 spring:
   application:
-    name: product-service
+    name: product-service      # nom utilisé par la gateway (lb://product-service) et k8s : ne pas changer
 
   r2dbc:
-    url: r2dbc:h2:mem:///testdb;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false
+    url: ${PRODUIT_DB_URL:r2dbc:h2:mem:///produitdb;DB_CLOSE_DELAY=-1}
+    username: ${PRODUIT_DB_USER:sa}
+    password: ${PRODUIT_DB_PASSWORD:}
 
+  sql:
+    init:
+      mode: always                # crée les tables au démarrage (IF NOT EXISTS)
+      schema-locations: classpath:schema.sql
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:30090/realms/lorrconnect}
+          jwk-set-uri: ${KEYCLOAK_JWK_SET_URI:http://keycloak.default.svc.cluster.local:8080/realms/lorrconnect/protocol/openid-connect/certs}
 
 management:
   endpoints:
     web:
       base-path: /manage
       exposure:
-        include: "*"
+        include: health,info
 
 logging:
   level:
-    org.springframework.r2dbc: DEBUG
-    org.springframework.data.r2dbc: DEBUG
-    io.r2dbc.spi: DEBUG
-    io.r2dbc.h2: DEBUG
+    root: INFO
+    org.gestion: INFO
 
 eureka:
   client:
-    enabled: false
+    enabled: ${EUREKA_ENABLED:false}
 ---
 spring:
   config:

@@ -1,3 +1,5 @@
+org\gestion\client\config\SecurityConfig.class
+org\gestion\client\router\ClientRouter.class
 org\gestion\client\ClientServiceApplication.class
 org\gestion\client\repository\ClientRepository.class
 org\gestion\client\model\Client.class

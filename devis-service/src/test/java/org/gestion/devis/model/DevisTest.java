@@ -1,59 +1,30 @@
 package org.gestion.devis.model;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.gestion.client.model.Client;
+
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-@SpringBootTest
-public class DevisTest {
+class DevisTest {
 
     @Test
-    public void g7DevisIdTest() {
-        Devis devis = new Devis();
-        devis.setId(1L);
-        assertEquals(1L, devis.getId());
+    void constructeur() {
+        LocalDateTime maintenant = LocalDateTime.of(2026, 11, 18, 22, 0);
+        Devis devis = new Devis(7L, maintenant);
+
+        assertNull(devis.getId());
+        assertNull(devis.getReference(), "la référence est attribuée après le premier enregistrement");
+        assertEquals(7L, devis.getClientId());
+        assertEquals(maintenant, devis.getDateCreation());
     }
 
     @Test
-    public void g7DevisAddresseTest() {
+    void reference() {
         Devis devis = new Devis();
-        devis.setAdresse("1 clos du chateau");
-        assertEquals("1 clos du chateau", devis.getAdresse());
+        devis.setReference("DEV-2026-00042");
+
+        assertEquals("DEV-2026-00042", devis.getReference());
     }
-
-    @Test
-    public void g7DevisNomTest() {
-        Devis devis = new Devis();
-        devis.setNom("WEBBER");
-        assertEquals("WEBBER", devis.getNom());
-    }
-
-    @Test
-    public void g7DevisReservationTest() {
-        Devis devis = new Devis();
-        devis.setReference("05B");
-        assertEquals("05B", devis.getReference());
-    }
-
-    @Test
-    public void g7DevisClientTest() {
-
-        Client client = new Client();
-        client.setFirstName("Ben");
-        client.setLastName("WEBER");
-        client.setId(1L);
-
-        Devis devis = new Devis();
-        devis.setClient(client);
-
-        assertSame(client, devis.getClient());
-        assertEquals("Ben", devis.getClient().getFirstName());
-        assertEquals("WEBER", devis.getClient().getLastName());
-        assertEquals(1L, devis.getClient().getId());
-    }
-
-
 }

@@ -1,5 +1,6 @@
 package org.gestion.commande.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record CommandeResponse(
@@ -10,5 +11,5 @@ public record CommandeResponse(
         String statut,
         LocalDateTime dateCommande,
         LocalDateTime dateLivraison,
-        Double total
+        BigDecimal total
 ) {}

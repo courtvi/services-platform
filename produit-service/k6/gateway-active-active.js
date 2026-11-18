@@ -36,6 +36,7 @@ export function parcours() {
       name: `Gateway ${__VU}-${__ITER}`,
       description: 'k6 via gateway',
       price: (Math.random() * 50 + 5).toFixed(2),
+      tauxTVA: '17.00',
     });
     const r = http.post(`${BASE_URL}/api/products`, body, { headers: JSON_HEADERS, tags: { name: 'POST /api/products' } });
     check(r, { 'POST 2xx': (x) => x.status >= 200 && x.status < 300 });

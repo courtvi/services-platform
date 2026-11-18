@@ -1,5 +1,6 @@
 package org.gestion.commande.service;
 
+import java.math.BigDecimal;
 import jakarta.mail.internet.MimeMessage;
 import org.gestion.commande.dto.CommandeResponse;
 import org.gestion.commande.model.LigneCommande;
@@ -49,20 +50,20 @@ class MailServiceTest {
                 "CREEE",
                 DATE_COMMANDE,   // ← date fixe
                 DATE_LIVRAISON,  // ← date fixe
-                6.70
+                new BigDecimal("6.70")
         );
 
         LigneCommande ligne1 = new LigneCommande();
         ligne1.setArticle("Baguette");
         ligne1.setQuantite(2);
-        ligne1.setPrixUnitaire(1.10);
-        ligne1.setTotal(2.20);
+        ligne1.setPrixUnitaire(new BigDecimal("1.10"));
+        ligne1.setTotal(new BigDecimal("2.20"));
 
         LigneCommande ligne2 = new LigneCommande();
         ligne2.setArticle("Croissant");
         ligne2.setQuantite(3);
-        ligne2.setPrixUnitaire(1.50);
-        ligne2.setTotal(4.50);
+        ligne2.setPrixUnitaire(new BigDecimal("1.50"));
+        ligne2.setTotal(new BigDecimal("4.50"));
 
         // Act
         mailService.sendConfirmationCommande(
@@ -90,7 +91,7 @@ class MailServiceTest {
                 "CREEE",
                 DATE_COMMANDE,
                 DATE_LIVRAISON,
-                0.0
+                new BigDecimal("0.0")
         );
 
         // Act
@@ -118,7 +119,7 @@ class MailServiceTest {
                 "CREEE",
                 null,   // ← dateCommande null
                 null,   // ← dateLivraison null
-                3.50
+                new BigDecimal("3.50")
         );
 
         // Act & Assert — ne doit pas lever d'exception
@@ -129,5 +130,25 @@ class MailServiceTest {
         ).block();
 
         verify(mailSender, times(1)).send(mimeMessage);
+    }
+
+    @Test
+    void calculerTotalHT_utiliseLeTauxDeChaqueLigne() {
+        org.gestion.commande.model.LigneCommande miel = new org.gestion.commande.model.LigneCommande();
+        miel.setTotal(new java.math.BigDecimal("17.00"));
+        miel.setTauxTVA(new java.math.BigDecimal("5.50"));      // 17,00 / 1,055 = 16,11
+        org.gestion.commande.model.LigneCommande vin = new org.gestion.commande.model.LigneCommande();
+        vin.setTotal(new java.math.BigDecimal("14.00"));
+        vin.setTauxTVA(new java.math.BigDecimal("20.00"));      // 14,00 / 1,20 = 11,67
+
+        java.math.BigDecimal ht = MailService.calculerTotalHT(java.util.List.of(miel, vin), new java.math.BigDecimal("31.00"));
+
+        org.junit.jupiter.api.Assertions.assertEquals(new java.math.BigDecimal("27.78"), ht);
+    }
+
+    @Test
+    void calculerTotalHT_sansLigneRenvoieLeTotal() {
+        java.math.BigDecimal total = new java.math.BigDecimal("6.70");
+        org.junit.jupiter.api.Assertions.assertEquals(total, MailService.calculerTotalHT(java.util.List.of(), total));
     }
 }

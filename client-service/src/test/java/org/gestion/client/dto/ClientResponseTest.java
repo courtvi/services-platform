@@ -1,31 +1,25 @@
 package org.gestion.client.dto;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest
-public class ClientResponseTest {
+class ClientResponseTest {
 
     @Test
-    public void getter_setterClientResponseFirstNameTest() {
-        ClientResponse clientResponse = new ClientResponse();
-        clientResponse.setFirstName("Ben");
-        assertEquals("Ben", clientResponse.getFirstName());
-    }
+    void constructeurEtGetters() {
+        LocalDate naissance = LocalDate.of(1990, 1, 15);
+        ClientResponse response = new ClientResponse(5L, "Ben", "Webber", "+352111",
+                "ben@example.lu", naissance, "Haller");
 
-    @Test
-    public void getter_setterClientResponseLastNameTest() {
-        ClientResponse clientResponse = new ClientResponse();
-        clientResponse.setLastName("WEBBER");
-        assertEquals("WEBBER", clientResponse.getLastName());
-    }
-
-    @Test
-    public void getter_setterClientResponseReservationTest() {
-        ClientResponse clientResponse = new ClientResponse();
-        clientResponse.setReservation("room1");
-        assertEquals("room1", clientResponse.getReservation());
+        assertEquals(5L, response.getId());
+        assertEquals("Ben", response.getFirstName());
+        assertEquals("Webber", response.getLastName());
+        assertEquals("+352111", response.getTelephone());
+        assertEquals("ben@example.lu", response.getMail());
+        assertEquals(naissance, response.getDateNaissance());
+        assertEquals("Haller", response.getAdresse());
     }
 }

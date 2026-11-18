@@ -1,9 +1,12 @@
 package org.gestion.produit.dto;
 
+import java.math.BigDecimal;
 
 public record ProduitResponse(
         Long id,
         String name,
         String description,
-        String price
-) {}
+        BigDecimal price,
+        BigDecimal tauxTVA
+) {
+}

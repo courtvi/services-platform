@@ -17,7 +17,9 @@ import { environment } from '../../../environments/environment';
 
 interface ArticleGroupe {
   key: string;
-  prix: number;
+  prix: number;          // prix TTC affiché (le prix facturé est lu par le serveur dans produit-service)
+  id: number;            // id du produit dans produit-service
+  idCoupe?: number;      // id de la variante « coupé » (+0,10 €), pour les pains qui la proposent
 }
 
 interface Groupe {
@@ -99,8 +101,8 @@ export class CommandeForm {
       label: 'groupe.petits_pains',
       coupe: false,
       articles: [
-        { key: 'petit_pain_blanc', prix: 0.65 },
-        { key: 'petit_pain_cereales', prix: 0.65 }
+        { key: 'petit_pain_blanc', prix: 0.65, id: 201 },
+        { key: 'petit_pain_cereales', prix: 0.65, id: 202 }
       ]
     },
     {
@@ -108,8 +110,8 @@ export class CommandeForm {
       label: 'groupe.baguettes',
       coupe: false,
       articles: [
-        { key: 'baguette_blanche', prix: 1.90 },
-        { key: 'baguette_cereale', prix: 3.00 }
+        { key: 'baguette_blanche', prix: 1.90, id: 203 },
+        { key: 'baguette_cereale', prix: 3.00, id: 204 }
       ]
     },
     {
@@ -117,10 +119,10 @@ export class CommandeForm {
       label: 'groupe.pains',
       coupe: true,
       articles: [
-        { key: 'pain_6_cereales', prix: 3.75 },
-        { key: 'pain_chef', prix: 3.50 },
-        { key: 'pain_campagne', prix: 3.00 },
-        { key: 'pain_blanc', prix: 2.90 }
+        { key: 'pain_6_cereales', prix: 3.75, id: 205, idCoupe: 215 },
+        { key: 'pain_chef', prix: 3.50, id: 206, idCoupe: 216 },
+        { key: 'pain_campagne', prix: 3.00, id: 207, idCoupe: 217 },
+        { key: 'pain_blanc', prix: 2.90, id: 208, idCoupe: 218 }
       ]
     },
     {
@@ -128,8 +130,8 @@ export class CommandeForm {
       label: 'groupe.viennoiseries',
       coupe: false,
       articles: [
-        { key: 'croissant', prix: 1.50 },
-        { key: 'viennoiserie', prix: 1.70 }
+        { key: 'croissant', prix: 1.50, id: 209 },
+        { key: 'viennoiserie', prix: 1.70, id: 210 }
       ]
     }
   ];
@@ -144,6 +146,8 @@ export class CommandeForm {
             groupe: [groupe.key],
             quantite: [0, [Validators.required, Validators.min(0)]],
             prixUnitaire: [a.prix],
+            produitId: [a.id],
+            produitIdCoupe: [a.idCoupe ?? null],
             coupe: [false],
             total: [0]
           })
@@ -215,10 +219,10 @@ export class CommandeForm {
       lignes: this.form.value.articles
         .filter((p: any) => p.quantite > 0)
         .map((p: any) => ({
-          article: p.coupe ? p.article + '_coupe' : p.article,
-          quantite: p.quantite,
-          prixUnitaire: p.coupe ? p.prixUnitaire + 0.10 : p.prixUnitaire,
-          total: p.quantite * (p.coupe ? p.prixUnitaire + 0.10 : p.prixUnitaire)
+          // Le serveur lit le nom et le prix dans produit-service : on envoie seulement
+          // le produit (variante « coupé » si cochée) et la quantité.
+          produitId: p.coupe && p.produitIdCoupe ? p.produitIdCoupe : p.produitId,
+          quantite: p.quantite
         }))
     };
 

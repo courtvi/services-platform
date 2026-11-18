@@ -14,17 +14,24 @@ public class GatewayApplication {
     }
 
     /**
-     * Une seule route : product-service, découvert via Eureka.
-     * - pas de rewritePath : product-service expose déjà /api/products
-     * - retry(2) : sur GET, rejoue en cas d'erreur réseau / 5xx
-     * - https choisi automatiquement : l'instance Eureka est déclarée "secure"
+     * Routes vers les microservices, découverts via Eureka.
+     * - pas de rewritePath : chaque service expose déjà /api/...
+     * - en profil mtls, les instances sont déclarées "secure" dans Eureka : la gateway les appelle
+     *   en https en présentant son certificat (spring.cloud.gateway...httpclient.ssl.ssl-bundle)
+     * - l'en-tête Authorization (JWT) est transmis tel quel : chaque service vérifie les rôles
      */
     @Bean
     public RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route("product-service", r -> r.path("/api/products", "/api/products/**")
-                        .filters(f -> f.retry(2))
+                        .filters(f -> f.retry(2))        // GET uniquement : rejoue en cas d'erreur réseau / 5xx
                         .uri("lb://product-service"))
+                .route("commande-service", r -> r.path("/api/commandes", "/api/commandes/**")
+                        .uri("lb://commande-service"))
+                .route("client-service", r -> r.path("/api/clients", "/api/clients/**")
+                        .uri("lb://client-service"))
+                .route("devis-service", r -> r.path("/api/devis", "/api/devis/**")
+                        .uri("lb://devis-service"))
                 .build();
     }
 }

@@ -8,9 +8,8 @@ Start-Sleep -Seconds 2
 Start-Process powershell -ArgumentList "-NoExit", "-Command", "kubectl port-forward service/eureka-server 8761:8761 -n lorrconnect"
 Start-Sleep -Seconds 2
 
-# ✅ commande-service
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "kubectl port-forward service/commande-service 8082:8082 -n lorrconnect"
-Start-Sleep -Seconds 2
+# commande-service, client-service, devis-service : plus de port-forward direct.
+# Ils sont en mTLS (certificat client obligatoire) : on y accède via l'API Gateway ci-dessous.
 
 # ✅ API Gateway — port 31803
 Start-Process powershell -ArgumentList "-NoExit", "-Command", "kubectl port-forward service/api-gateway 31803:8090 -n lorrconnect"

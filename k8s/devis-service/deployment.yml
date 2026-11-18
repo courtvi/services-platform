@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devis-service
+  namespace: lorrconnect
+  labels:
+    app: devis-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: devis-service
+  template:
+    metadata:
+      labels:
+        app: devis-service
+    spec:
+      containers:
+        - name: devis-service
+          image: devis-service:latest
+          imagePullPolicy: Never
+          ports:
+            - name: https
+              containerPort: 8446
+            - name: management
+              containerPort: 9084
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: mtls
+            - name: P12_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: devis-service-mtls
+                  key: P12_PASSWORD
+            - name: KEYCLOAK_ISSUER_URI
+              value: "http://localhost:30090/realms/lorrconnect"
+            - name: KEYCLOAK_JWK_SET_URI
+              value: "http://keycloak:8080/realms/lorrconnect/protocol/openid-connect/certs"
+            - name: EUREKA_URL
+              value: "http://eureka:8761/eureka"
+          volumeMounts:
+            - name: mtls
+              mountPath: /etc/mtls
+              readOnly: true
+          readinessProbe:
+            httpGet:
+              path: /manage/health/readiness
+              port: management
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            failureThreshold: 5
+          livenessProbe:
+            httpGet:
+              path: /manage/health/liveness
+              port: management
+            initialDelaySeconds: 40
+            periodSeconds: 10
+            failureThreshold: 5
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+      volumes:
+        - name: mtls
+          secret:
+            secretName: devis-service-mtls
+            items:
+              - key: devis-service.p12
+                path: devis-service.p12
+              - key: truststore.p12
+                path: truststore.p12
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: devis-service
+  namespace: lorrconnect
+spec:
+  type: ClusterIP          # accessible uniquement via la gateway (mTLS)
+  selector:
+    app: devis-service
+  ports:
+    - name: https
+      port: 8446
+      targetPort: https

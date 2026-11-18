@@ -106,14 +106,11 @@ export class Checkout implements OnInit {
       reference: this.generateReference(),
       dateCommande: new Date().toISOString().slice(0, 19),
       dateLivraison: this.form.value.dateLivraison + 'T00:00:00',
-      // "article" reprend la clé i18n (comme pour le pain, ex. "petit_pain_blanc") — cela permet
-      // à l'écran générique /commandes/:id d'afficher le nom traduit via 'articles.' + article,
-      // quelle que soit la langue choisie par le client au moment de la commande.
+      // Seuls le produit et la quantité partent : commande-service lit le nom (clé i18n, ex. "miel_printemps")
+      // et le prix dans produit-service. L'écran /commandes/:id affiche toujours le libellé via 'articles.' + article.
       lignes: this.lignes().map(l => ({
-        article: l.produit.cle,
-        quantite: l.quantite,
-        prixUnitaire: l.produit.prix,
-        total: l.produit.prix * l.quantite
+        produitId: l.produit.id,
+        quantite: l.quantite
       }))
     };
 

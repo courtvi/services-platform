@@ -4,7 +4,6 @@ import org.gestion.commande.config.ApplicationConfig;
 import org.gestion.commande.handler.CommandeHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -32,13 +31,6 @@ public class CommandeRouter {
                         .PUT(pathId,    handler::updateCommande)
                         .DELETE(pathId, handler::annulerCommande)
                         .PATCH(pathId + "/en-cours", handler::passerEnCours)
-                        .GET("/debug", request ->
-                                ReactiveSecurityContextHolder.getContext()
-                                        .map(ctx -> ctx.getAuthentication())
-                                        .flatMap(auth ->
-                                                ServerResponse.ok().bodyValue(auth)
-                                        )
-                        )
                 )
                 .build();
     }

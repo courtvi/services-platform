@@ -2,6 +2,8 @@ package org.gestion.gateway;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,16 +26,28 @@ import java.util.stream.Collectors;
 @EnableWebFluxSecurity
 public class SecurityConfig {
 
+    /**
+     * Point d'entrée public de la plateforme.
+     * - catalogue produits : accès libre (comportement inchangé, utilisé par les tests k6)
+     * - commandes, clients, devis : JWT Keycloak valide exigé ici, puis rôles vérifiés par chaque service
+     * - tout le reste : refusé
+     */
     @Bean
-    public SecurityWebFilterChain loadTestFilterChain(ServerHttpSecurity http) {
+    public SecurityWebFilterChain gatewayFilterChain(ServerHttpSecurity http) {
         return http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .cors(Customizer.withDefaults())
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                 .authorizeExchange(ex -> ex
+                        .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .pathMatchers("/manage/**").permitAll()
                         .pathMatchers("/api/products", "/api/products/**").permitAll()
+                        .pathMatchers("/api/commandes", "/api/commandes/**",
+                                "/api/clients", "/api/clients/**",
+                                "/api/devis", "/api/devis/**").authenticated()
                         .anyExchange().denyAll())
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .build();
     }
 

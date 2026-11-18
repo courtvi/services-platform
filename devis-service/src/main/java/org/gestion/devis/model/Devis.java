@@ -2,87 +2,38 @@ package org.gestion.devis.model;
 
 import org.springframework.data.annotation.Id;
 
-import java.util.Date;
-import org.gestion.client.model.Client;
+import java.time.LocalDateTime;
 
+/**
+ * En-tête du devis : stable d'une version à l'autre.
+ * Le contenu (lignes, statut, dates, totaux) est dans {@link VersionDevis}.
+ * Le client est référencé par son id : il vit dans client-service.
+ */
 public class Devis {
 
     @Id
-
     private Long id;
     private String reference;
-    private String nom;
-    private String raisonSociale;
-    private String adresse;
-    private Date date;
-    private Client client;
+    private Long clientId;
+    private LocalDateTime dateCreation;
+
     public Devis() {
     }
 
-    public Devis(Long id, String reference, String nom, String raisonSociale,
-                 String adresse, Date date, Client client) {
-        this.id = id;
-        this.reference = reference;
-        this.nom = nom;
-        this.raisonSociale = raisonSociale;
-        this.adresse = adresse;
-        this.date = date;
-        this.client = client;
+    public Devis(Long clientId, LocalDateTime dateCreation) {
+        this.clientId = clientId;
+        this.dateCreation = dateCreation;
     }
 
-    public void setReference(String reference) {
-        this.reference = reference;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
+    public String getReference() { return reference; }
+    public void setReference(String reference) { this.reference = reference; }
 
-    public void setRaisonSociale(String raisonSociale) {
-        this.raisonSociale = raisonSociale;
-    }
+    public Long getClientId() { return clientId; }
+    public void setClientId(Long clientId) { this.clientId = clientId; }
 
-    public void setAdresse(String adresse) {
-        this.adresse = adresse;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getReference() {
-        return reference;
-    }
-
-    public String getNom() {
-        return nom;
-    }
-
-    public String getRaisonSociale() {
-        return raisonSociale;
-    }
-
-    public String getAdresse() {
-        return adresse;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
-    }
-
-    public Client getClient() {
-        return client;
-    }
+    public LocalDateTime getDateCreation() { return dateCreation; }
+    public void setDateCreation(LocalDateTime dateCreation) { this.dateCreation = dateCreation; }
 }

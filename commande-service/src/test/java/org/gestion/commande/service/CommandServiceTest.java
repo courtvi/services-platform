@@ -1,5 +1,9 @@
 package org.gestion.commande.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.gestion.commande.dto.ProduitInfo;
+import org.mockito.ArgumentCaptor;
+import java.math.BigDecimal;
 import org.gestion.commande.dto.CommandeRequest;
 import org.gestion.commande.dto.LigneCommandeRequest;
 import org.gestion.commande.model.ClientRef;
@@ -42,6 +46,9 @@ class CommandeServiceTest {
     @Mock
     MailService mailService;
 
+    @Mock
+    ProduitClient produitClient;
+
     private TransactionalOperator transactionalOperator;
     private CommandeService commandeService;
 
@@ -50,6 +57,10 @@ class CommandeServiceTest {
     private Commande savedCommande;
     private Commande commandeAnnulee;
     private Commande commandeLivree;
+
+    /** 16,11 € HT à 5,5 % = 17,00 € TTC (prix affiché par le front). */
+    private static final ProduitInfo MIEL_PRINTEMPS =
+            new ProduitInfo(1L, "miel_printemps", "Saulnes - 1kg", new BigDecimal("16.11"), new BigDecimal("5.50"));
 
     @BeforeEach
     void setUp() {
@@ -71,13 +82,14 @@ class CommandeServiceTest {
                 ligneCommandeRepository,
                 transactionalOperator,
                 mailService,
-                clientRefRepository);
+                clientRefRepository,
+                produitClient);
 
         request = new CommandeRequest(
                 "CMD-TEST-001",
                 LocalDateTime.of(2026, 5, 16, 0, 0),
                 LocalDateTime.of(2026, 5, 17, 0, 0),
-                List.of(new LigneCommandeRequest("Baguette", 1, 1.10, 1.10))
+                List.of(new LigneCommandeRequest(1L, 2))
         );
 
         requestSansLignes = new CommandeRequest(
@@ -99,7 +111,7 @@ class CommandeServiceTest {
                         .mapToObj(t -> {
                             LigneCommande l = new LigneCommande();
                             l.setCommandeId(commandeId);
-                            l.setTotal(t);
+                            l.setTotal(BigDecimal.valueOf(t));
                             return l;
                         })
                         .toArray(LigneCommande[]::new)
@@ -118,8 +130,8 @@ class CommandeServiceTest {
     @Test
     void createCommande_shouldReturnResponseWithTotal() {
         when(clientRefRepository.findById("user-123")).thenReturn(Mono.just(new ClientRef("user-123", "CLI-00001")));
-        when(clientRefRepository.save(any())).thenReturn(Mono.just(new ClientRef("user-123", "CLI-00001")));
         when(commandeRepository.save(any())).thenReturn(Mono.just(savedCommande));
+        when(produitClient.getProduit(1L)).thenReturn(Mono.just(MIEL_PRINTEMPS));
         when(ligneCommandeRepository.saveAll(any(Iterable.class))).thenReturn(Flux.empty());
         mockLignes(1L, 1.10);
         when(mailService.sendConfirmationCommande(any(), any(), any())).thenReturn(Mono.empty());
@@ -128,7 +140,7 @@ class CommandeServiceTest {
                         r.reference().equals("CMD-TEST-001") &&
                                 r.statut().equals("CREEE") &&
                                 r.userId().equals("user-123") &&
-                                r.total() == 1.10
+                                r.total().compareTo(new BigDecimal("1.10")) == 0
                 )
                 .verifyComplete();
     }
@@ -137,14 +149,13 @@ class CommandeServiceTest {
     void createCommande_sansLignes_shouldReturnTotalZero() {
         Commande commande = buildCommande(1L, "user-123", "CMD-TEST-002", "CREEE");
         when(clientRefRepository.findById("user-123")).thenReturn(Mono.just(new ClientRef("user-123", "CLI-00001")));
-        when(clientRefRepository.save(any())).thenReturn(Mono.just(new ClientRef("user-123", "CLI-00001")));
         when(commandeRepository.save(any())).thenReturn(Mono.just(commande));
         mockLignesVides(1L);
         when(mailService.sendConfirmationCommande(any(), any(), any())).thenReturn(Mono.empty());
         StepVerifier.create(commandeService.createCommande(requestSansLignes, "user-123", "user@test.com", "CLI-00001"))
                 .expectNextMatches(r ->
                         r.reference().equals("CMD-TEST-002") &&
-                                r.total() == 0.0
+                                r.total().compareTo(new BigDecimal("0.0")) == 0
                 )
                 .verifyComplete();
 
@@ -164,6 +175,71 @@ class CommandeServiceTest {
     }
 
     // ─────────────────────────────────────────────
+    // createCommande : prix lus dans produit-service
+    // ─────────────────────────────────────────────
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void createCommande_calculeLePrixDepuisProduitService() {
+        when(clientRefRepository.findById("user-123")).thenReturn(Mono.just(new ClientRef("user-123", "CLI-00001")));
+        when(produitClient.getProduit(1L)).thenReturn(Mono.just(MIEL_PRINTEMPS));
+        when(commandeRepository.save(any())).thenReturn(Mono.just(savedCommande));
+        when(ligneCommandeRepository.saveAll(any(Iterable.class))).thenReturn(Flux.empty());
+        mockLignesVides(1L);
+        when(mailService.sendConfirmationCommande(any(), any(), any())).thenReturn(Mono.empty());
+
+        StepVerifier.create(commandeService.createCommande(request, "user-123", "user@test.com", "CLI-00001"))
+                .expectNextCount(1)
+                .verifyComplete();
+
+        ArgumentCaptor<Iterable<LigneCommande>> captor = ArgumentCaptor.forClass(Iterable.class);
+        verify(ligneCommandeRepository).saveAll(captor.capture());
+        LigneCommande ligne = captor.getValue().iterator().next();
+        assertEquals(1L, ligne.getProduitId());
+        assertEquals("miel_printemps", ligne.getArticle());
+        assertEquals(new BigDecimal("17.00"), ligne.getPrixUnitaire());
+        assertEquals(new BigDecimal("34.00"), ligne.getTotal());
+        assertEquals(1L, ligne.getCommandeId());
+        assertEquals(new BigDecimal("5.50"), ligne.getTauxTVA());
+    }
+
+    @Test
+    void createCommande_refuseUnProduitInconnu_sansRienEnregistrer() {
+        when(clientRefRepository.findById("user-123")).thenReturn(Mono.just(new ClientRef("user-123", "CLI-00001")));
+        when(produitClient.getProduit(1L)).thenReturn(Mono.error(new IllegalArgumentException("Produit inconnu : 1")));
+
+        StepVerifier.create(commandeService.createCommande(request, "user-123", "user@test.com", "CLI-00001"))
+                .expectError(IllegalArgumentException.class)
+                .verify();
+
+        verify(commandeRepository, never()).save(any());
+    }
+
+    @Test
+    void createCommande_refuseUneQuantiteInvalide() {
+        CommandeRequest quantiteNulle = new CommandeRequest(
+                "CMD-TEST-003",
+                LocalDateTime.of(2026, 5, 16, 0, 0),
+                LocalDateTime.of(2026, 5, 17, 0, 0),
+                List.of(new LigneCommandeRequest(1L, 0)));
+        when(clientRefRepository.findById("user-123")).thenReturn(Mono.just(new ClientRef("user-123", "CLI-00001")));
+
+        StepVerifier.create(commandeService.createCommande(quantiteNulle, "user-123", "user@test.com", "CLI-00001"))
+                .expectError(IllegalArgumentException.class)
+                .verify();
+
+        verify(produitClient, never()).getProduit(any());
+        verify(commandeRepository, never()).save(any());
+    }
+
+    @Test
+    void prixTTC_arrondiAuCentime() {
+        assertEquals(new BigDecimal("17.00"), CommandeService.prixTTC(MIEL_PRINTEMPS));
+        assertEquals(new BigDecimal("7.00"), CommandeService.prixTTC(
+                new ProduitInfo(101L, "vin_rouge", null, new BigDecimal("5.83"), new BigDecimal("20.00"))));
+    }
+
+    // ─────────────────────────────────────────────
     // getCommandeByIdForUser
     // ─────────────────────────────────────────────
 
@@ -178,7 +254,7 @@ class CommandeServiceTest {
         StepVerifier.create(commandeService.getCommandeByIdForUser(1L, "user-123"))
                 .expectNextMatches(r ->
                         r.id().equals(1L) &&
-                                r.total() == 6.70
+                                r.total().compareTo(new BigDecimal("6.70")) == 0
                 )
                 .verifyComplete();
     }
@@ -209,8 +285,8 @@ class CommandeServiceTest {
         mockLignes(2L, 7.00);
 
         StepVerifier.create(commandeService.getCommandesByUser("user-123"))
-                .expectNextMatches(r -> r.id().equals(1L) && r.total() == 6.70)
-                .expectNextMatches(r -> r.id().equals(2L) && r.total() == 7.00)
+                .expectNextMatches(r -> r.id().equals(1L) && r.total().compareTo(new BigDecimal("6.70")) == 0)
+                .expectNextMatches(r -> r.id().equals(2L) && r.total().compareTo(new BigDecimal("7.00")) == 0)
                 .verifyComplete();
     }
 
@@ -238,8 +314,8 @@ class CommandeServiceTest {
         mockLignes(2L, 3.50, 7.00);
 
         StepVerifier.create(commandeService.getAllCommandes())
-                .expectNextMatches(r -> r.id().equals(1L) && r.total() == 1.10)
-                .expectNextMatches(r -> r.id().equals(2L) && r.total() == 10.50)
+                .expectNextMatches(r -> r.id().equals(1L) && r.total().compareTo(new BigDecimal("1.10")) == 0)
+                .expectNextMatches(r -> r.id().equals(2L) && r.total().compareTo(new BigDecimal("10.50")) == 0)
                 .verifyComplete();
     }
 
@@ -263,7 +339,7 @@ class CommandeServiceTest {
         StepVerifier.create(commandeService.updateCommande(1L, updateRequest, "user-123"))
                 .expectNextMatches(r ->
                         r.reference().equals("CMD-UPDATED") &&
-                                r.total() == 2.20
+                                r.total().compareTo(new BigDecimal("2.20")) == 0
                 )
                 .verifyComplete();
     }
@@ -354,7 +430,7 @@ class CommandeServiceTest {
         StepVerifier.create(commandeService.passerEnCours(1L))
                 .expectNextMatches(r ->
                         r.statut().equals("EN_COURS") &&
-                                r.total() == 6.70
+                                r.total().compareTo(new BigDecimal("6.70")) == 0
                 )
                 .verifyComplete();
     }
@@ -388,8 +464,8 @@ class CommandeServiceTest {
         ligne.setCommandeId(1L);
         ligne.setArticle("Baguette");
         ligne.setQuantite(1);
-        ligne.setPrixUnitaire(1.10);
-        ligne.setTotal(1.10);
+        ligne.setPrixUnitaire(new BigDecimal("1.10"));
+        ligne.setTotal(new BigDecimal("1.10"));
 
         when(clientRefRepository.findById("user-123"))
                 .thenReturn(Mono.just(new ClientRef("user-123", "CLI-00001")));
@@ -412,6 +488,35 @@ class CommandeServiceTest {
 
         StepVerifier.create(commandeService.getCommande(99L))
                 .verifyComplete();
+    }
+
+    @Test
+    void getCommandeAvecLignesPourUtilisateur_renvoieSaCommande() {
+        LigneCommande ligne = new LigneCommande();
+        ligne.setCommandeId(1L);
+        ligne.setArticle("Baguette");
+        ligne.setQuantite(1);
+        ligne.setPrixUnitaire(new BigDecimal("1.10"));
+        ligne.setTotal(new BigDecimal("1.10"));
+
+        when(commandeRepository.findByIdAndUserId(1L, "user-123")).thenReturn(Mono.just(savedCommande));
+        when(clientRefRepository.findById("user-123"))
+                .thenReturn(Mono.just(new ClientRef("user-123", "CLI-00001")));
+        when(ligneCommandeRepository.findByCommandeId(1L)).thenReturn(Flux.just(ligne));
+
+        StepVerifier.create(commandeService.getCommandeAvecLignesPourUtilisateur(1L, "user-123"))
+                .expectNextMatches(result ->
+                        result.commande().id().equals(1L) && result.lignes().size() == 1)
+                .verifyComplete();
+    }
+
+    @Test
+    void getCommandeAvecLignesPourUtilisateur_videSiCommandeDUnAutre() {
+        when(commandeRepository.findByIdAndUserId(1L, "intrus")).thenReturn(Mono.empty());
+
+        StepVerifier.create(commandeService.getCommandeAvecLignesPourUtilisateur(1L, "intrus"))
+                .verifyComplete();
+        verify(ligneCommandeRepository, never()).findByCommandeId(any());
     }
 
     // ─────────────────────────────────────────────

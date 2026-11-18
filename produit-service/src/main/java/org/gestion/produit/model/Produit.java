@@ -1,66 +1,46 @@
 package org.gestion.produit.model;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
 
-@Table("product")
+import org.springframework.data.annotation.Id;
+
+import java.math.BigDecimal;
+
 public class Produit {
 
     @Id
     private Long id;
-
-    @Column("name")
     private String name;
-
-    @Column("description")
     private String description;
-
-    @Column("price")
-    private String price;
+    private BigDecimal price;
+    private BigDecimal tauxTVA;
 
     public Produit() {}
 
-    public Produit(Long id, String name, String description, String price) {
+    public Produit(Long id, String name, String description, BigDecimal price, BigDecimal tauxTVA) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
+        this.tauxTVA = tauxTVA;
     }
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public String getName() {
-        return name;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public BigDecimal getPrice() { return price; }
+    public void setPrice(BigDecimal price) { this.price = price; }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
-    }
+    public BigDecimal getTauxTVA() { return tauxTVA; }
+    public void setTauxTVA(BigDecimal tauxTVA) { this.tauxTVA = tauxTVA; }
 
     @Override
     public String toString() {
-        return "Product [id=" + id + ", name=" + name + ", desc=" + description + ", price=" + price + "]";
+        return "Produit [id=" + id + ", name=" + name + ", description=" + description
+                + ", price=" + price + ", tauxTVA=" + tauxTVA + "]";
     }
 }

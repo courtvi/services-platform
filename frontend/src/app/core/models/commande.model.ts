@@ -20,10 +20,10 @@ export interface Commande {
 export type CommandeStatut = 'CREEE' | 'EN_COURS' | 'LIVREE' | 'ANNULEE';
 
 export interface LigneCommandeRequest {
-  article: string;
+  // Seuls le produit et la quantité sont envoyés : le nom et le prix sont lus par
+  // commande-service dans produit-service (le client ne peut plus fixer son prix).
+  produitId: number;
   quantite: number;
-  prixUnitaire: number;
-  total: number;
 }
 
 export interface CommandeRequest {

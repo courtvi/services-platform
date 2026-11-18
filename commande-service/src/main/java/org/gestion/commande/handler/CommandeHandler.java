@@ -51,6 +51,10 @@ public class CommandeHandler {
                 })
                 .flatMap(response ->
                         ServerResponse.status(201).bodyValue(response)
+                )
+                // produit inconnu, quantité invalide...
+                .onErrorResume(IllegalArgumentException.class, e ->
+                        ServerResponse.badRequest().bodyValue(e.getMessage())
                 );
     }
 
@@ -81,17 +85,26 @@ public class CommandeHandler {
                 );
     }
 
-    // GET /api/commandes/{id}/detail — avec lignes
+    // GET /api/commandes/{id}/detail — un admin voit toutes les commandes, un client seulement les siennes.
+    // Commande d'un autre client : 404 (et non 403) pour ne pas révéler qu'elle existe.
     public Mono<ServerResponse> getCommandeAvecLignes(ServerRequest request) {
-        Long id = Long.parseLong(request.pathVariable("id"));
-
-        return commandeService.getCommande(id)
-                .flatMap(response ->
-                        ServerResponse.ok().bodyValue(response)
-                )
-                .onErrorResume(e ->
-                        ServerResponse.status(404).bodyValue(e.getMessage())
-                );
+        return Mono.fromCallable(() -> Long.parseLong(request.pathVariable("id")))
+                .zipWith(extractAuthentication(request))
+                .flatMap(t -> {
+                    Long id = t.getT1();
+                    Authentication auth = t.getT2();
+                    boolean isAdmin = auth.getAuthorities().stream()
+                            .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+                    if (isAdmin) {
+                        return commandeService.getCommande(id);
+                    }
+                    String userId = ((JwtAuthenticationToken) auth).getToken().getSubject();
+                    return commandeService.getCommandeAvecLignesPourUtilisateur(id, userId);
+                })
+                .flatMap(detail -> ServerResponse.ok().bodyValue(detail))
+                .switchIfEmpty(ServerResponse.notFound().build())
+                .onErrorResume(NumberFormatException.class,
+                        e -> ServerResponse.badRequest().bodyValue("Identifiant invalide"));
     }
 
     public Mono<ServerResponse> getCommandeById(ServerRequest request) {

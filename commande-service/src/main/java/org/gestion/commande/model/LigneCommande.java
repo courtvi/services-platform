@@ -4,7 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
 
 @Table(name = "LIGNECOMMANDES")
 public class LigneCommande {
@@ -16,6 +16,9 @@ public class LigneCommande {
     @Column("COMMANDE_ID")
     private Long commandeId;
 
+    @Column("PRODUIT_ID")
+    private Long produitId;
+
     @Column("ARTICLE")
     private String article;
 
@@ -23,14 +26,17 @@ public class LigneCommande {
     private Integer quantite;
 
     @Column("PRIX_UNITAIRE")
-    private Double prixUnitaire;
+    private BigDecimal prixUnitaire;   // prix unitaire TTC, figé à la commande
 
     @Column("TOTAL")
-    private Double total;
+    private BigDecimal total;          // total TTC de la ligne
+
+    @Column("TAUX_TVA")
+    private BigDecimal tauxTVA;        // taux de TVA du produit au moment de la commande
 
 
 
-    public LigneCommande(Long id, String article, Integer quantite, Double prixUnitaire, Double total) {
+    public LigneCommande(Long id, String article, Integer quantite, BigDecimal prixUnitaire, BigDecimal total) {
         this.id = id;
         this.article = article;
         this.quantite = quantite;
@@ -48,6 +54,12 @@ public class LigneCommande {
         this.commandeId = commandeId;
     }
 
+    public BigDecimal getTauxTVA() { return tauxTVA; }
+    public void setTauxTVA(BigDecimal tauxTVA) { this.tauxTVA = tauxTVA; }
+
+    public Long getProduitId() { return produitId; }
+    public void setProduitId(Long produitId) { this.produitId = produitId; }
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -57,10 +69,10 @@ public class LigneCommande {
     public Integer getQuantite() { return quantite; }
     public void setQuantite(Integer quantite) { this.quantite = quantite; }
 
-    public Double getPrixUnitaire() { return prixUnitaire; }
-    public void setPrixUnitaire(Double prixUnitaire) { this.prixUnitaire = prixUnitaire; }
+    public BigDecimal getPrixUnitaire() { return prixUnitaire; }
+    public void setPrixUnitaire(BigDecimal prixUnitaire) { this.prixUnitaire = prixUnitaire; }
 
-    public Double getTotal() { return total; }
-    public void setTotal(Double total) { this.total = total; }
+    public BigDecimal getTotal() { return total; }
+    public void setTotal(BigDecimal total) { this.total = total; }
 
 }

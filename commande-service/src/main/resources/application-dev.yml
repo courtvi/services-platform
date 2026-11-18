@@ -1,3 +1,7 @@
+app:
+  produit-service:
+    url: ${PRODUIT_SERVICE_URL:http://localhost:8071}   # lecture des prix (GET /api/products/{id})
+
 spring:
   application:
     name: commande-service

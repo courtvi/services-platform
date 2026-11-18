@@ -1,31 +1,107 @@
 spring:
   application:
-    name: client-service
-  config:
-    import: "optional:configserver:"
+    name: devis-service
+
+  r2dbc:
+    url: ${DEVIS_DB_URL:r2dbc:h2:mem:///devisdb;DB_CLOSE_DELAY=-1}
+    username: ${DEVIS_DB_USER:sa}
+    password: ${DEVIS_DB_PASSWORD:}
+
+  sql:
+    init:
+      mode: always                        # crée les tables au démarrage (IF NOT EXISTS)
+      schema-locations: classpath:schema.sql
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:30090/realms/lorrconnect}
+          jwk-set-uri: ${KEYCLOAK_JWK_SET_URI:http://keycloak.default.svc.cluster.local:8080/realms/lorrconnect/protocol/openid-connect/certs}
+
+app:
+  produit-service:
+    url: ${PRODUIT_SERVICE_URL:http://localhost:8071}   # lecture des prix (GET /api/products/{id}, public)
+
 server:
-  port: 8083
+  port: 8084                              # 8083 est pris par client-service
 
 eureka:
   instance:
-     prefer-ip-address: true
-     fetch-registry: true
+    prefer-ip-address: true
   client:
-  register-with-eureka: true
-  service-url:
-   defaultZone: http://localhost:9099/eureka
+    enabled: ${EUREKA_ENABLED:false}
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA_URL:http://eureka-service:8761/eureka}
 
-  datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+management:
+  endpoints:
+    web:
+      base-path: /manage
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
 
-  jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    hibernate:
-      ddl-auto: update
+---
+# ===== Profil mtls (k8s) : HTTPS avec certificat client obligatoire =====
+# Le JWT Keycloak reste vérifié en plus : le mTLS authentifie le service appelant (gateway...),
+# le JWT authentifie l'utilisateur.
+spring:
+  config:
+    activate:
+      on-profile: mtls
+  ssl:
+    bundle:
+      jks:
+        mtls:
+          keystore:
+            location: file:/etc/mtls/devis-service.p12
+            password: ${P12_PASSWORD}
+            type: PKCS12
+          key:
+            alias: devis-service
+          truststore:
+            location: file:/etc/mtls/truststore.p12
+            password: ${P12_PASSWORD}
+            type: PKCS12
 
-  h2:
-    console:
-      enabled: true
+app:
+  produit-service:
+    # Appel direct à produit-service (namespace default) en mTLS, avec le certificat de ce service.
+    url: ${PRODUIT_SERVICE_URL:https://product-service.default.svc.cluster.local:8443}
+    ssl-bundle: mtls
+
+server:
+  port: 8446
+  ssl:
+    enabled: true
+    bundle: mtls
+    client-auth: need
+    enabled-protocols: TLSv1.3,TLSv1.2
+
+# Sondes kubelet sur un port séparé, sans TLS
+management:
+  server:
+    port: 9084
+    ssl:
+      enabled: false
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+# Enregistrement Eureka en HTTPS : la gateway (lb://devis-service) appellera https://...:8446
+eureka:
+  client:
+    enabled: true
+  instance:
+    hostname: devis-service.lorrconnect.svc.cluster.local
+    prefer-ip-address: false
+    instance-id: ${spring.application.name}:${HOSTNAME}
+    non-secure-port-enabled: false
+    secure-port-enabled: true
+    secure-port: 8446

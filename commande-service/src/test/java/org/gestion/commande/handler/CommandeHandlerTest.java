@@ -1,5 +1,7 @@
 package org.gestion.commande.handler;
 
+import java.math.BigDecimal;
+import org.gestion.commande.dto.CommandeAvecLignes;
 import org.gestion.commande.dto.CommandeRequest;
 import org.gestion.commande.dto.CommandeResponse;
 import org.gestion.commande.dto.LigneCommandeRequest;
@@ -44,7 +46,7 @@ class CommandeHandlerTest {
                 "CMD-TEST-001",
                 LocalDateTime.of(2026, 5, 16, 0, 0),
                 LocalDateTime.of(2026, 5, 17, 0, 0),
-                List.of(new LigneCommandeRequest("Baguette", 1, 1.10, 1.10))
+                List.of(new LigneCommandeRequest(1L, 1))
         );
 
         response = new CommandeResponse(
@@ -55,7 +57,7 @@ class CommandeHandlerTest {
                 "CREEE",
                 LocalDateTime.of(2026, 5, 16, 0, 0),
                 LocalDateTime.of(2026, 5, 17, 0, 0),
-                6.70
+                new BigDecimal("6.70")
        );
 
         Jwt jwt = Jwt.withTokenValue("token")
@@ -170,7 +172,7 @@ class CommandeHandlerTest {
                 "CREEE",
                 LocalDateTime.of(2026, 5, 21, 20, 52),
                 LocalDateTime.of(2026, 5, 22, 20, 52),
-                6.70
+                new BigDecimal("6.70")
         );
 
         when(commandeService.getAllCommandes()).thenReturn(Flux.just(avecTotal));
@@ -209,7 +211,7 @@ class CommandeHandlerTest {
                 "CREEE",
                 LocalDateTime.of(2026, 5, 16, 0, 0),
                 LocalDateTime.of(2026, 5, 17, 0, 0),
-                1.10
+                new BigDecimal("1.10")
         );
 
         when(commandeService.createCommande(any(), eq("user-123"), eq("user@test.com"), eq("CLI-00001")))
@@ -224,4 +226,89 @@ class CommandeHandlerTest {
                 .verifyComplete();
     }
 
+    // ─────────────────────────────────────────────
+    // GET /{id}/detail : contrôle du propriétaire
+    // ─────────────────────────────────────────────
+
+    private JwtAuthenticationToken adminToken() {
+        Jwt jwt = Jwt.withTokenValue("token")
+                .header("alg", "RS256")
+                .claim("sub", "admin-123")
+                .build();
+        return new JwtAuthenticationToken(jwt, List.of(() -> "ROLE_ADMIN"));
+    }
+
+    @Test
+    void getCommandeAvecLignes_clientVoitSaPropreCommande() {
+        when(commandeService.getCommandeAvecLignesPourUtilisateur(1L, "user-123"))
+                .thenReturn(Mono.just(new CommandeAvecLignes(response, List.of())));
+
+        MockServerRequest serverRequest = MockServerRequest.builder()
+                .principal(authToken)
+                .pathVariable("id", "1")
+                .build();
+
+        StepVerifier.create(commandeHandler.getCommandeAvecLignes(serverRequest))
+                .expectNextMatches(r -> r.statusCode().value() == 200)
+                .verifyComplete();
+        verify(commandeService, never()).getCommande(any());
+    }
+
+    @Test
+    void getCommandeAvecLignes_clientNeVoitPasLaCommandeDUnAutre() {
+        when(commandeService.getCommandeAvecLignesPourUtilisateur(2L, "user-123"))
+                .thenReturn(Mono.empty());
+
+        MockServerRequest serverRequest = MockServerRequest.builder()
+                .principal(authToken)
+                .pathVariable("id", "2")
+                .build();
+
+        StepVerifier.create(commandeHandler.getCommandeAvecLignes(serverRequest))
+                .expectNextMatches(r -> r.statusCode().value() == 404)
+                .verifyComplete();
+        verify(commandeService, never()).getCommande(any());
+    }
+
+    @Test
+    void getCommandeAvecLignes_adminVoitToutesLesCommandes() {
+        when(commandeService.getCommande(2L))
+                .thenReturn(Mono.just(new CommandeAvecLignes(response, List.of())));
+
+        MockServerRequest serverRequest = MockServerRequest.builder()
+                .principal(adminToken())
+                .pathVariable("id", "2")
+                .build();
+
+        StepVerifier.create(commandeHandler.getCommandeAvecLignes(serverRequest))
+                .expectNextMatches(r -> r.statusCode().value() == 200)
+                .verifyComplete();
+        verify(commandeService, never()).getCommandeAvecLignesPourUtilisateur(any(), any());
+    }
+
+    @Test
+    void getCommandeAvecLignes_idInvalide_400() {
+        MockServerRequest serverRequest = MockServerRequest.builder()
+                .principal(authToken)
+                .pathVariable("id", "abc")
+                .build();
+
+        StepVerifier.create(commandeHandler.getCommandeAvecLignes(serverRequest))
+                .expectNextMatches(r -> r.statusCode().value() == 400)
+                .verifyComplete();
+    }
+
+    @Test
+    void createCommande_produitInconnu_400() {
+        when(commandeService.createCommande(any(), eq("user-123"), eq("user@test.com"), eq("CLI-00001")))
+                .thenReturn(Mono.error(new IllegalArgumentException("Produit inconnu : 1")));
+
+        MockServerRequest serverRequest = MockServerRequest.builder()
+                .principal(authToken)
+                .body(Mono.just(request));
+
+        StepVerifier.create(commandeHandler.createCommande(serverRequest))
+                .expectNextMatches(r -> r.statusCode().value() == 400)
+                .verifyComplete();
+    }
 }

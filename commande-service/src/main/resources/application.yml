@@ -1,4 +1,6 @@
 app:
+  produit-service:
+    url: ${PRODUIT_SERVICE_URL:http://localhost:8071}   # lecture des prix (GET /api/products/{id})
   routes:
     base-path: /api/commandes
     path-id: /{id}
@@ -70,3 +72,63 @@ logging:
     root: ERROR
     org.gestion: INFO
     org.springframework.boot.sql.init: DEBUG
+
+---
+# ===== Profil mtls (k8s) : HTTPS avec certificat client obligatoire =====
+# Le JWT Keycloak reste vérifié en plus : le mTLS authentifie le service appelant (gateway...),
+# le JWT authentifie l'utilisateur.
+spring:
+  config:
+    activate:
+      on-profile: mtls
+  ssl:
+    bundle:
+      jks:
+        mtls:
+          keystore:
+            location: file:/etc/mtls/commande-service.p12
+            password: ${P12_PASSWORD}
+            type: PKCS12
+          key:
+            alias: commande-service
+          truststore:
+            location: file:/etc/mtls/truststore.p12
+            password: ${P12_PASSWORD}
+            type: PKCS12
+
+app:
+  produit-service:
+    # Appel direct à produit-service (namespace default) en mTLS, avec le certificat de ce service.
+    url: ${PRODUIT_SERVICE_URL:https://product-service.default.svc.cluster.local:8443}
+    ssl-bundle: mtls
+
+server:
+  port: 8444
+  ssl:
+    enabled: true
+    bundle: mtls
+    client-auth: need
+    enabled-protocols: TLSv1.3,TLSv1.2
+
+# Sondes kubelet sur un port séparé, sans TLS
+management:
+  server:
+    port: 9082
+    ssl:
+      enabled: false
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+# Enregistrement Eureka en HTTPS : la gateway (lb://commande-service) appellera https://...:8444
+eureka:
+  client:
+    enabled: true
+  instance:
+    hostname: commande-service.lorrconnect.svc.cluster.local
+    prefer-ip-address: false
+    instance-id: ${spring.application.name}:${HOSTNAME}
+    non-secure-port-enabled: false
+    secure-port-enabled: true
+    secure-port: 8444
