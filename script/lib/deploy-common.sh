@@ -132,6 +132,12 @@ wait_platform() {
   wait_for devis-service     "$NS" 240s
   wait_for api-gateway       "$NS" 240s
   wait_for frontend          "$NS" 120s
+  # L'observabilité ne bloque pas le déploiement : les services fonctionnent sans elle
+  if kubectl rollout status deployment/otel-lgtm -n "$NS" --timeout=300s >/dev/null 2>&1; then
+    ok "otel-lgtm"
+  else
+    echo -e "\033[1;33m! otel-lgtm pas encore prêt (traces/métriques indisponibles) : kubectl logs -n $NS deploy/otel-lgtm\033[0m"
+  fi
 }
 
 # --- Keycloak -------------------------------------------------------------------
@@ -167,6 +173,7 @@ print_status() {
   echo "  Front     : http://$TARGET_HOST:30080"
   echo "  Keycloak  : http://$TARGET_HOST:30090  (console admin : admin / admin)"
   echo "  Gateway   : http://$TARGET_HOST:31803"
+  echo "  Grafana   : kubectl port-forward -n $NS service/otel-lgtm 3000:3000  →  http://localhost:3000"
   if [ -n "${JENKINS_URL:-}" ]; then
     # pas de mot de passe dans la console Jenkins
     echo "  Connexion : $APP_USER (mot de passe dans $MTLS_OUT_DIR/.app-credentials)"

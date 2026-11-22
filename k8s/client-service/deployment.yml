@@ -25,6 +25,15 @@ spec:
             - name: management
               containerPort: 9083
           env:
+            # OpenTelemetry : l'agent est dans l'image, activé ici ; export vers otel-lgtm (k8s/observability)
+            - name: JAVA_TOOL_OPTIONS
+              value: "-javaagent:/otel/grafana-opentelemetry-java.jar"
+            - name: OTEL_SERVICE_NAME
+              value: client-service
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: http://otel-lgtm.lorrconnect.svc.cluster.local:4318
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: deployment.environment=k3s
             - name: SPRING_PROFILES_ACTIVE
               value: mtls
             - name: P12_PASSWORD
@@ -70,7 +79,7 @@ spec:
               memory: "256Mi"
               cpu: "200m"
             limits:
-              memory: "512Mi"
+              memory: "768Mi"
               cpu: "500m"
       volumes:
         - name: mtls

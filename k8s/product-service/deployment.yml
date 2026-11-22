@@ -28,6 +28,15 @@ spec:
           image: product-service:mtls
           imagePullPolicy: Never
           env:
+            # OpenTelemetry : l'agent est dans l'image, activé ici ; export vers otel-lgtm (k8s/observability)
+            - name: JAVA_TOOL_OPTIONS
+              value: "-javaagent:/otel/grafana-opentelemetry-java.jar"
+            - name: OTEL_SERVICE_NAME
+              value: product-service
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: http://otel-lgtm.lorrconnect.svc.cluster.local:4318
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: deployment.environment=k3s
             - name: SPRING_PROFILES_ACTIVE
               value: mtls
             - name: P12_PASSWORD

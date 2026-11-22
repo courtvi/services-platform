@@ -34,6 +34,13 @@ spec:
             - name: management
               containerPort: 8091
           env:
+            # OpenTelemetry : l'agent est dans l'image, activé ici ; export vers otel-lgtm (k8s/observability)
+            - name: OTEL_SERVICE_NAME
+              value: api-gateway
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: http://otel-lgtm.lorrconnect.svc.cluster.local:4318
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: deployment.environment=k3s
             - name: SPRING_PROFILES_ACTIVE
               value: "kubernetes,mtls"
             - name: P12_PASSWORD
@@ -48,7 +55,7 @@ spec:
             - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
               value: "http://eureka:8761/eureka"
             - name: JAVA_TOOL_OPTIONS
-              value: "-XX:MaxRAMPercentage=75 -XX:+ExitOnOutOfMemoryError"
+              value: "-javaagent:/otel/grafana-opentelemetry-java.jar -XX:MaxRAMPercentage=75 -XX:+ExitOnOutOfMemoryError"
           volumeMounts:
             - name: mtls
               mountPath: /etc/mtls

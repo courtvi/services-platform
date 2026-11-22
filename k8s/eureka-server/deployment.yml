@@ -22,6 +22,15 @@ spec:
           ports:
             - containerPort: 8761
           env:
+            # OpenTelemetry : l'agent est dans l'image, activé ici ; export vers otel-lgtm (k8s/observability)
+            - name: JAVA_TOOL_OPTIONS
+              value: "-javaagent:/otel/grafana-opentelemetry-java.jar"
+            - name: OTEL_SERVICE_NAME
+              value: eureka-server
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: http://otel-lgtm.lorrconnect.svc.cluster.local:4318
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: deployment.environment=k3s
             - name: SPRING_PROFILES_ACTIVE
               value: "kubernetes"
             # ✅ Empêche Eureka de s'enregistrer lui-même
@@ -42,5 +51,5 @@ spec:
               memory: "256Mi"
               cpu: "200m"
             limits:
-              memory: "512Mi"
+              memory: "768Mi"
               cpu: "500m"

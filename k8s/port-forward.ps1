@@ -19,8 +19,13 @@ Start-Sleep -Seconds 2
 Start-Process powershell -ArgumentList "-NoExit", "-Command", "kubectl port-forward service/frontend 30080:80 -n lorrconnect"
 Start-Sleep -Seconds 2
 
+# Grafana (traces, métriques, logs) — uniquement en local
+Start-Process powershell -ArgumentList "-NoExit", "-Command", "kubectl port-forward service/otel-lgtm 3000:3000 -n lorrconnect"
+Start-Sleep -Seconds 2
+
 Write-Host "Tous les port-forwards sont actifs !" -ForegroundColor Green
 Write-Host "Frontend    : http://localhost:30080" -ForegroundColor Cyan
 Write-Host "Keycloak    : http://localhost:30090" -ForegroundColor Cyan
 Write-Host "Eureka      : http://localhost:8761"  -ForegroundColor Cyan
 Write-Host "API Gateway : http://localhost:31803" -ForegroundColor Cyan
+Write-Host "Grafana     : http://localhost:3000"  -ForegroundColor Cyan

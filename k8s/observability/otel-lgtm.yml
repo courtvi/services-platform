@@ -1,0 +1,100 @@
+# =============================================================================
+# Observabilité : grafana/otel-lgtm (collecteur OpenTelemetry + Prometheus + Tempo + Loki + Grafana)
+# dans un seul pod. Image prévue pour le développement et les tests, pas pour la production.
+#
+#   - Les services y envoient traces, métriques et logs en OTLP/HTTP :
+#       http://otel-lgtm.lorrconnect.svc.cluster.local:4318
+#   - Grafana n'est PAS exposé (ClusterIP, aucune route Cloudflare) : on y accède en local
+#       kubectl port-forward -n lorrconnect service/otel-lgtm 3000:3000   →  http://localhost:3000
+#     (k8s/port-forward.ps1 le fait aussi)
+#   - Données sur un volume persistant : elles survivent aux redémarrages du pod.
+# =============================================================================
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: otel-lgtm-data
+  namespace: lorrconnect
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otel-lgtm
+  namespace: lorrconnect
+  labels:
+    app: otel-lgtm
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate              # volume ReadWriteOnce : jamais deux pods en même temps
+  selector:
+    matchLabels:
+      app: otel-lgtm
+  template:
+    metadata:
+      labels:
+        app: otel-lgtm
+    spec:
+      containers:
+        - name: otel-lgtm
+          image: grafana/otel-lgtm:0.29.2
+          ports:
+            - name: grafana
+              containerPort: 3000
+            - name: otlp-grpc
+              containerPort: 4317
+            - name: otlp-http
+              containerPort: 4318
+          env:
+            # Métriques conservées 7 jours
+            - name: PROMETHEUS_EXTRA_ARGS
+              value: "--storage.tsdb.retention.time=7d"
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          startupProbe:
+            httpGet:
+              path: /api/health
+              port: grafana
+            periodSeconds: 10
+            failureThreshold: 30
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: grafana
+            periodSeconds: 15
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "200m"
+            limits:
+              memory: "2Gi"
+              cpu: "1"
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: otel-lgtm-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: otel-lgtm
+  namespace: lorrconnect
+spec:
+  type: ClusterIP
+  selector:
+    app: otel-lgtm
+  ports:
+    - name: grafana
+      port: 3000
+      targetPort: grafana
+    - name: otlp-grpc
+      port: 4317
+      targetPort: otlp-grpc
+    - name: otlp-http
+      port: 4318
+      targetPort: otlp-http

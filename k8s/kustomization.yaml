@@ -26,6 +26,7 @@ resources:
   - api-gateway/service.yml
   - front-end/deployment.yml
   - front-end/service.yml
+  - observability/otel-lgtm.yml             # traces / métriques / logs (Grafana en local)
 
 # Images locales des manifestes → images du registry
 images:
