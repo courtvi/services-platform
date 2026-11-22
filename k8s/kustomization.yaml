@@ -1,0 +1,73 @@
+# =============================================================================
+# Déploiement de la plateforme à partir du registry (ghcr.io/courtvi).
+#   kubectl kustomize k8s/   → manifestes avec les images du registry
+# Utilisé par script/deploy-registry.sh, qui remplace le tag « latest » par le commit déployé.
+#
+# Les manifestes de base (k8s/<service>/*.yml) restent inchangés : ils servent aussi au
+# déploiement sans registry (deploy-ubuntu.sh, images importées localement, pullPolicy Never).
+# Pour une autre cible (autre cluster, autres réglages), copier ce fichier en l'adaptant.
+# =============================================================================
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - keycloak/postgres.yml
+  - keycloak/deployment.yml
+  - keycloak/service.yml
+  - eureka-server/deployment.yml
+  - eureka-server/service.yml
+  - commande-service/postgres.yml
+  - commande-service/deployment.yml
+  - commande-service/service.yml
+  - product-service/deployment.yml          # namespace default
+  - client-service/deployment.yml
+  - devis-service/deployment.yml
+  - api-gateway/deployment.yml
+  - api-gateway/service.yml
+  - front-end/deployment.yml
+  - front-end/service.yml
+
+# Images locales des manifestes → images du registry
+images:
+  - name: eureka-server
+    newName: ghcr.io/courtvi/eureka-server
+    newTag: latest
+  - name: api-gateway
+    newName: ghcr.io/courtvi/api-gateway
+    newTag: latest
+  - name: product-service
+    newName: ghcr.io/courtvi/product-service
+    newTag: latest
+  - name: client-service
+    newName: ghcr.io/courtvi/client-service
+    newTag: latest
+  - name: commande-service
+    newName: ghcr.io/courtvi/commande-service
+    newTag: latest
+  - name: devis-service
+    newName: ghcr.io/courtvi/devis-service
+    newTag: latest
+  - name: frontend
+    newName: ghcr.io/courtvi/frontend
+    newTag: latest
+
+patches:
+  # Les images sont tirées du registry (et non plus importées localement)
+  - target:
+      kind: Deployment
+    patch: |-
+      - op: add
+        path: /spec/template/spec/imagePullSecrets
+        value:
+          - name: ghcr-pull
+      - op: add
+        path: /spec/template/spec/containers/0/imagePullPolicy
+        value: IfNotPresent
+  # Cluster d'une seule machine : une réplique suffit pour la gateway et produit
+  - target:
+      kind: Deployment
+      name: api-gateway|product-service
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 1

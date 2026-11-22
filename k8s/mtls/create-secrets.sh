@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
-# Crée (ou remplace) les secrets k8s mTLS à partir de out/ (généré par gen-certs.sh).
+# Crée (ou remplace) les secrets k8s mTLS à partir de $MTLS_OUT_DIR (défaut : out/, généré par gen-certs.sh).
 # Usage : P12_PASSWORD=... ./create-secrets.sh
 set -euo pipefail
 cd "$(dirname "$0")"
 : "${P12_PASSWORD:?exporte P12_PASSWORD (le même que pour gen-certs.sh)}"
+OUT="${MTLS_OUT_DIR:-out}"
 
 secret() {  # secret <nom> <namespace> <clé-du-p12-dans-le-secret> <fichier-p12>
   kubectl create secret generic "$1" -n "$2" \
-    --from-file="$3=out/$4" \
-    --from-file=truststore.p12=out/truststore.p12 \
+    --from-file="$3=$OUT/$4" \
+    --from-file=truststore.p12="$OUT/truststore.p12" \
+    --from-file=ca.crt="$OUT/ca.crt" \
     --from-literal=P12_PASSWORD="$P12_PASSWORD" \
     --dry-run=client -o yaml | kubectl apply -f -
 }

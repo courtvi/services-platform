@@ -7,3 +7,6 @@ target/
 
 k8s/.ovh-env
 **/target/
+
+# Identifiants locaux de déploiement (IntelliJ) et certificats mTLS générés
+script/.deploy.env

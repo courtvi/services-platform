@@ -1,0 +1,133 @@
+# =============================================================================
+# Plateforme exposée sur une adresse publique (ex. https://lorrconnect.com via le tunnel Cloudflare).
+# Reprend k8s/kustomization.yaml (images ghcr.io, mTLS...) et ne change que ce qui dépend de l'adresse :
+#   - Keycloak se présente sous l'adresse publique (et garde sa console d'admin en local)
+#   - les services vérifient que les JWT sont émis par <adresse publique>/realms/lorrconnect
+#   - le front reçoit l'adresse publique au démarrage (PUBLIC_URL → assets/env.js)
+# __PUBLIC_URL__ (site), __KEYCLOAK_URL__ (Keycloak, éventuellement un sous-domaine) et
+# __ADMIN_URL__ (console d'admin locale) sont remplacés par script/deploy-registry.sh.
+# =============================================================================
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../k8s          # dossier voisin : kustomize interdit qu'une variante soit rangée DANS le dossier qu'elle réutilise
+
+patches:
+  - target:
+      kind: Deployment
+      name: keycloak
+    patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: keycloak
+      spec:
+        template:
+          spec:
+            containers:
+              - name: keycloak
+                env:
+                  - name: KC_HOSTNAME
+                    value: "__KEYCLOAK_URL__"
+                  # console d'administration : uniquement en local, jamais publiée sur Internet
+                  - name: KC_HOSTNAME_ADMIN
+                    value: "__ADMIN_URL__"
+                  # les services appellent Keycloak en interne (http://keycloak:8080)
+                  - name: KC_HOSTNAME_BACKCHANNEL_DYNAMIC
+                    value: "true"
+                  # derrière Cloudflare : le protocole d'origine (https) arrive dans X-Forwarded-Proto
+                  - name: KC_PROXY_HEADERS
+                    value: "xforwarded"
+                  - name: KC_HOSTNAME_PORT
+                    $patch: delete
+                  - name: KC_HOSTNAME_STRICT_BACKCHANNEL
+                    $patch: delete
+
+  # Issuer des JWT : celui que Keycloak inscrit désormais dans les jetons
+  - target:
+      kind: Deployment
+      name: api-gateway
+    patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: api-gateway
+      spec:
+        template:
+          spec:
+            containers:
+              - name: api-gateway
+                env:
+                  - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
+                    value: "__KEYCLOAK_URL__/realms/lorrconnect"
+
+  - target:
+      kind: Deployment
+      name: commande-service
+    patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: commande-service
+      spec:
+        template:
+          spec:
+            containers:
+              - name: commande-service
+                env:
+                  - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
+                    value: "__KEYCLOAK_URL__/realms/lorrconnect"
+
+  - target:
+      kind: Deployment
+      name: client-service
+    patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: client-service
+      spec:
+        template:
+          spec:
+            containers:
+              - name: client-service
+                env:
+                  - name: KEYCLOAK_ISSUER_URI
+                    value: "__KEYCLOAK_URL__/realms/lorrconnect"
+
+  - target:
+      kind: Deployment
+      name: devis-service
+    patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: devis-service
+      spec:
+        template:
+          spec:
+            containers:
+              - name: devis-service
+                env:
+                  - name: KEYCLOAK_ISSUER_URI
+                    value: "__KEYCLOAK_URL__/realms/lorrconnect"
+
+  - target:
+      kind: Deployment
+      name: frontend
+    patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: frontend
+      spec:
+        template:
+          spec:
+            containers:
+              - name: frontend
+                env:
+                  - name: PUBLIC_URL
+                    value: "__PUBLIC_URL__"
+                  - name: KEYCLOAK_PUBLIC_URL
+                    value: "__KEYCLOAK_URL__"

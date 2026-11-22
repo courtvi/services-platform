@@ -5,7 +5,8 @@ WORKDIR /app
 RUN addgroup -S app && adduser -S app -G app
 USER app
 
-COPY target/product-service-*.jar app.jar
+# le pom produit un jar "exec" (classifier) : c'est lui qui est exécutable
+COPY target/produit-service-*-exec.jar app.jar
 
 EXPOSE 8071 8443 8081
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
