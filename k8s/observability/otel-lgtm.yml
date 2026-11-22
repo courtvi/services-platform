@@ -128,7 +128,7 @@ spec:
         app: otel-lgtm
       annotations:
         # à incrémenter quand la ConfigMap change : redémarre le pod au déploiement suivant
-        services-platform/collector-config: "1"
+        services-platform/collector-config: "2"
     spec:
       containers:
         - name: otel-lgtm
@@ -141,9 +141,9 @@ spec:
             - name: otlp-http
               containerPort: 4318
           env:
-            # Métriques conservées 7 jours
+            # Métriques conservées 30 jours : la fenêtre des SLO (tableau « SLI / SLO »)
             - name: PROMETHEUS_EXTRA_ARGS
-              value: "--storage.tsdb.retention.time=7d"
+              value: "--storage.tsdb.retention.time=30d"
           volumeMounts:
             - name: data
               mountPath: /data
@@ -151,6 +151,13 @@ spec:
             - name: collector-config
               mountPath: /otel-lgtm/otelcol-config.yaml
               subPath: otelcol-config.yaml
+            # tableaux de bord du projet (k8s/observability/grafana-dashboards.yml)
+            - name: dashboards-provider
+              mountPath: /otel-lgtm/grafana/conf/provisioning/dashboards/custom.yaml
+              subPath: custom.yaml
+            - name: dashboards
+              mountPath: /otel-lgtm/grafana/conf/provisioning/dashboards/custom
+              readOnly: true
           startupProbe:
             httpGet:
               path: /api/health
@@ -176,6 +183,12 @@ spec:
         - name: collector-config
           configMap:
             name: otel-lgtm-collector
+        - name: dashboards-provider
+          configMap:
+            name: grafana-dashboards-provider
+        - name: dashboards
+          configMap:
+            name: grafana-dashboards
 ---
 apiVersion: v1
 kind: Service

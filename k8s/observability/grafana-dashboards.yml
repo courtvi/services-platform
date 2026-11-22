@@ -1,0 +1,2431 @@
+# =============================================================================
+# FICHIER GÉNÉRÉ par k8s/observability/gen-dashboards.py : ne pas modifier à la main.
+# Tableaux de bord Grafana provisionnés dans otel-lgtm (dossier « services-platform »).
+# Grafana relit les tableaux toutes les 30 s : pas besoin de redémarrer le pod.
+# =============================================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboards-provider
+  namespace: lorrconnect
+data:
+  custom.yaml: |
+    apiVersion: 1
+    providers:
+      - name: services-platform
+        folder: services-platform
+        type: file
+        disableDeletion: true
+        allowUiUpdates: false
+        updateIntervalSeconds: 30
+        options:
+          path: /otel-lgtm/grafana/conf/provisioning/dashboards/custom
+          foldersFromFilesStructure: false
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboards
+  namespace: lorrconnect
+data:
+  golden-signals.json: |
+    {
+      "uid": "sp-golden-signals",
+      "title": "Golden signals",
+      "description": "Trafic, erreurs, latence et saturation par service",
+      "tags": [
+        "services-platform"
+      ],
+      "timezone": "browser",
+      "schemaVersion": 39,
+      "version": 1,
+      "editable": true,
+      "refresh": "30s",
+      "time": {
+        "from": "now-6h",
+        "to": "now"
+      },
+      "templating": {
+        "list": [
+          {
+            "name": "datasource",
+            "label": "Source",
+            "type": "datasource",
+            "query": "prometheus",
+            "current": {},
+            "hide": 0
+          },
+          {
+            "name": "job",
+            "label": "Service",
+            "type": "query",
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "query": {
+              "query": "label_values(http_server_request_duration_seconds_count, job)",
+              "refId": "job"
+            },
+            "definition": "label_values(http_server_request_duration_seconds_count, job)",
+            "refresh": 2,
+            "sort": 1,
+            "multi": true,
+            "includeAll": true,
+            "current": {
+              "text": [
+                "All"
+              ],
+              "value": [
+                "$__all"
+              ]
+            },
+            "hide": 0
+          }
+        ]
+      },
+      "annotations": {
+        "list": []
+      },
+      "panels": [
+        {
+          "type": "row",
+          "title": "Vue d'ensemble (services sélectionnés)",
+          "id": 1,
+          "collapsed": false,
+          "panels": [],
+          "gridPos": {
+            "x": 0,
+            "y": 0,
+            "w": 24,
+            "h": 1
+          }
+        },
+        {
+          "type": "stat",
+          "title": "Trafic",
+          "description": "Requêtes par seconde (hors sondes Kubernetes), moyenne sur 5 min",
+          "id": 2,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "x": 0,
+            "y": 1,
+            "w": 6,
+            "h": 4
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "sum(rate(http_server_request_duration_seconds_count{job=~\"$job\", http_route!~\"/manage.*\"}[5m]))",
+              "legendFormat": "",
+              "refId": "A",
+              "range": false,
+              "instant": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "reqps",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "color": {
+                "mode": "thresholds"
+              },
+              "decimals": 2
+            },
+            "overrides": []
+          },
+          "options": {
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "colorMode": "background",
+            "graphMode": "none",
+            "textMode": "value",
+            "justifyMode": "center",
+            "orientation": "auto"
+          }
+        },
+        {
+          "type": "stat",
+          "title": "Erreurs 5xx",
+          "description": "Part des requêtes en erreur serveur (5xx) sur 5 min",
+          "id": 3,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "x": 6,
+            "y": 1,
+            "w": 6,
+            "h": 4
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "(sum(rate(http_server_request_duration_seconds_count{job=~\"$job\", http_route!~\"/manage.*\", http_response_status_code=~\"5..\"}[5m])) or vector(0)) / sum(rate(http_server_request_duration_seconds_count{job=~\"$job\", http_route!~\"/manage.*\"}[5m]))",
+              "legendFormat": "",
+              "refId": "A",
+              "range": false,
+              "instant": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 0.01
+                  },
+                  {
+                    "color": "red",
+                    "value": 0.05
+                  }
+                ]
+              },
+              "color": {
+                "mode": "thresholds"
+              },
+              "decimals": 2
+            },
+            "overrides": []
+          },
+          "options": {
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "colorMode": "background",
+            "graphMode": "none",
+            "textMode": "value",
+            "justifyMode": "center",
+            "orientation": "auto"
+          }
+        },
+        {
+          "type": "stat",
+          "title": "Latence p95",
+          "description": "95 % des requêtes répondent en moins de cette durée (5 min)",
+          "id": 4,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "x": 12,
+            "y": 1,
+            "w": 6,
+            "h": 4
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "histogram_quantile(0.95, sum by (le) (rate(http_server_request_duration_seconds_bucket{job=~\"$job\", http_route!~\"/manage.*\"}[5m])))",
+              "legendFormat": "",
+              "refId": "A",
+              "range": false,
+              "instant": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 0.5
+                  },
+                  {
+                    "color": "red",
+                    "value": 1
+                  }
+                ]
+              },
+              "color": {
+                "mode": "thresholds"
+              },
+              "decimals": 3
+            },
+            "overrides": []
+          },
+          "options": {
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "colorMode": "background",
+            "graphMode": "none",
+            "textMode": "value",
+            "justifyMode": "center",
+            "orientation": "auto"
+          }
+        },
+        {
+          "type": "stat",
+          "title": "Saturation mémoire (max)",
+          "description": "Instance la plus chargée : heap utilisé / heap maximum",
+          "id": 5,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "x": 18,
+            "y": 1,
+            "w": 6,
+            "h": 4
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "max(sum by (job, instance) ({__name__=~\"jvm_memory_used_bytes|jvm_memory_used\", jvm_memory_type=\"heap\", job=~\"$job\"}) / sum by (job, instance) ({__name__=~\"jvm_memory_limit_bytes|jvm_memory_limit\", jvm_memory_type=\"heap\", job=~\"$job\"}))",
+              "legendFormat": "",
+              "refId": "A",
+              "range": false,
+              "instant": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 0.75
+                  },
+                  {
+                    "color": "red",
+                    "value": 0.9
+                  }
+                ]
+              },
+              "color": {
+                "mode": "thresholds"
+              },
+              "decimals": 1
+            },
+            "overrides": []
+          },
+          "options": {
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "colorMode": "background",
+            "graphMode": "none",
+            "textMode": "value",
+            "justifyMode": "center",
+            "orientation": "auto"
+          }
+        },
+        {
+          "type": "row",
+          "title": "Trafic et erreurs",
+          "id": 6,
+          "collapsed": false,
+          "panels": [],
+          "gridPos": {
+            "x": 0,
+            "y": 5,
+            "w": 24,
+            "h": 1
+          }
+        },
+        {
+          "type": "timeseries",
+          "title": "Trafic par service",
+          "description": "Requêtes par seconde, hors sondes Kubernetes",
+          "id": 7,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "x": 0,
+            "y": 6,
+            "w": 12,
+            "h": 8
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "sum by (job) (rate(http_server_request_duration_seconds_count{job=~\"$job\", http_route!~\"/manage.*\"}[5m]))",
+              "legendFormat": "{{job}}",
+              "refId": "A",
+              "range": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "reqps",
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "lineWidth": 2,
+                "fillOpacity": 10,
+                "showPoints": "never",
+                "spanNulls": true,
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "table",
+              "placement": "bottom",
+              "calcs": [
+                "lastNotNull",
+                "max"
+              ]
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          }
+        },
+        {
+          "type": "timeseries",
+          "title": "Taux d'erreur 5xx par service",
+          "description": "Erreurs serveur : ce qui consomme le budget d'erreur",
+          "id": 8,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "x": 12,
+            "y": 6,
+            "w": 12,
+            "h": 8
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "(sum by (job) (rate(http_server_request_duration_seconds_count{job=~\"$job\", http_route!~\"/manage.*\", http_response_status_code=~\"5..\"}[5m])) or (sum by (job) (rate(http_server_request_duration_seconds_count{job=~\"$job\", http_route!~\"/manage.*\"}[5m])) * 0)) / sum by (job) (rate(http_server_request_duration_seconds_count{job=~\"$job\", http_route!~\"/manage.*\"}[5m]))",
+              "legendFormat": "{{job}}",
+              "refId": "A",
+              "range": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit",
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "lineWidth": 2,
+                "fillOpacity": 10,
+                "showPoints": "never",
+                "spanNulls": true,
+                "thresholdsStyle": {
+                  "mode": "dashed"
+                }
+              },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 0.01
+                  }
+                ]
+              },
+              "min": 0
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "table",
+              "placement": "bottom",
+              "calcs": [
+                "lastNotNull",
+                "max"
+              ]
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          }
+        },
+        {
+          "type": "timeseries",
+          "title": "Erreurs 4xx par service",
+          "description": "Erreurs client (401, 403, 404…) : souvent normales, à surveiller en cas de pic",
+          "id": 9,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "x": 0,
+            "y": 14,
+            "w": 12,
+            "h": 8
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "sum by (job) (rate(http_server_request_duration_seconds_count{job=~\"$job\", http_route!~\"/manage.*\", http_response_status_code=~\"4..\"}[5m]))",
+              "legendFormat": "{{job}}",
+              "refId": "A",
+              "range": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "reqps",
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "lineWidth": 2,
+                "fillOpacity": 10,
+                "showPoints": "never",
+                "spanNulls": true,
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "table",
+              "placement": "bottom",
+              "calcs": [
+                "lastNotNull",
+                "max"
+              ]
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          }
+        },
+        {
+          "type": "timeseries",
+          "title": "Trafic par code HTTP",
+          "description": "Répartition des réponses par code HTTP",
+          "id": 10,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "x": 12,
+            "y": 14,
+            "w": 12,
+            "h": 8
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "sum by (http_response_status_code) (rate(http_server_request_duration_seconds_count{job=~\"$job\", http_route!~\"/manage.*\"}[5m]))",
+              "legendFormat": "{{http_response_status_code}}",
+              "refId": "A",
+              "range": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "reqps",
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "lineWidth": 2,
+                "fillOpacity": 10,
+                "showPoints": "never",
+                "spanNulls": true,
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "table",
+              "placement": "bottom",
+              "calcs": [
+                "lastNotNull",
+                "max"
+              ]
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          }
+        },
+        {
+          "type": "row",
+          "title": "Latence",
+          "id": 11,
+          "collapsed": false,
+          "panels": [],
+          "gridPos": {
+            "x": 0,
+            "y": 22,
+            "w": 24,
+            "h": 1
+          }
+        },
+        {
+          "type": "timeseries",
+          "title": "Latence p95 par service",
+          "description": "95 % des requêtes répondent en moins de cette durée",
+          "id": 12,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "x": 0,
+            "y": 23,
+            "w": 12,
+            "h": 8
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "histogram_quantile(0.95, sum by (job, le) (rate(http_server_request_duration_seconds_bucket{job=~\"$job\", http_route!~\"/manage.*\"}[5m])))",
+              "legendFormat": "{{job}}",
+              "refId": "A",
+              "range": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s",
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "lineWidth": 2,
+                "fillOpacity": 10,
+                "showPoints": "never",
+                "spanNulls": true,
+                "thresholdsStyle": {
+                  "mode": "dashed"
+                }
+              },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 0.5
+                  }
+                ]
+              },
+              "min": 0
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "table",
+              "placement": "bottom",
+              "calcs": [
+                "lastNotNull",
+                "max"
+              ]
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          }
+        },
+        {
+          "type": "timeseries",
+          "title": "Latence p50 / p95 / p99 (services sélectionnés)",
+          "description": "",
+          "id": 13,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "x": 12,
+            "y": 23,
+            "w": 12,
+            "h": 8
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "histogram_quantile(0.5, sum by (le) (rate(http_server_request_duration_seconds_bucket{job=~\"$job\", http_route!~\"/manage.*\"}[5m])))",
+              "legendFormat": "p50",
+              "refId": "A",
+              "range": true
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "histogram_quantile(0.95, sum by (le) (rate(http_server_request_duration_seconds_bucket{job=~\"$job\", http_route!~\"/manage.*\"}[5m])))",
+              "legendFormat": "p95",
+              "refId": "B",
+              "range": true
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "histogram_quantile(0.99, sum by (le) (rate(http_server_request_duration_seconds_bucket{job=~\"$job\", http_route!~\"/manage.*\"}[5m])))",
+              "legendFormat": "p99",
+              "refId": "C",
+              "range": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s",
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "lineWidth": 2,
+                "fillOpacity": 10,
+                "showPoints": "never",
+                "spanNulls": true,
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "min": 0
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "table",
+              "placement": "bottom",
+              "calcs": [
+                "lastNotNull",
+                "max"
+              ]
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          }
+        },
+        {
+          "type": "timeseries",
+          "title": "Latence p95 par route",
+          "description": "Les routes les plus lentes",
+          "id": 14,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "x": 0,
+            "y": 31,
+            "w": 24,
+            "h": 8
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "histogram_quantile(0.95, sum by (job, http_route, le) (rate(http_server_request_duration_seconds_bucket{job=~\"$job\", http_route!~\"/manage.*\"}[5m])))",
+              "legendFormat": "{{job}} {{http_route}}",
+              "refId": "A",
+              "range": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s",
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "lineWidth": 2,
+                "fillOpacity": 10,
+                "showPoints": "never",
+                "spanNulls": true,
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "min": 0
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "table",
+              "placement": "bottom",
+              "calcs": [
+                "lastNotNull",
+                "max"
+              ]
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          }
+        },
+        {
+          "type": "row",
+          "title": "Saturation",
+          "id": 15,
+          "collapsed": false,
+          "panels": [],
+          "gridPos": {
+            "x": 0,
+            "y": 39,
+            "w": 24,
+            "h": 1
+          }
+        },
+        {
+          "type": "timeseries",
+          "title": "CPU par instance",
+          "description": "Utilisation CPU récente de la JVM",
+          "id": 16,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "x": 0,
+            "y": 40,
+            "w": 8,
+            "h": 8
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "max by (job, instance) ({__name__=~\"jvm_cpu_recent_utilization_ratio|jvm_cpu_recent_utilization\", job=~\"$job\"})",
+              "legendFormat": "{{instance}}",
+              "refId": "A",
+              "range": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit",
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "lineWidth": 2,
+                "fillOpacity": 10,
+                "showPoints": "never",
+                "spanNulls": true,
+                "thresholdsStyle": {
+                  "mode": "dashed"
+                }
+              },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 0.8
+                  }
+                ]
+              },
+              "min": 0
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "table",
+              "placement": "bottom",
+              "calcs": [
+                "lastNotNull",
+                "max"
+              ]
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          }
+        },
+        {
+          "type": "timeseries",
+          "title": "Heap par instance",
+          "description": "Heap utilisé / heap maximum",
+          "id": 17,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "x": 8,
+            "y": 40,
+            "w": 8,
+            "h": 8
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "sum by (job, instance) ({__name__=~\"jvm_memory_used_bytes|jvm_memory_used\", jvm_memory_type=\"heap\", job=~\"$job\"}) / sum by (job, instance) ({__name__=~\"jvm_memory_limit_bytes|jvm_memory_limit\", jvm_memory_type=\"heap\", job=~\"$job\"})",
+              "legendFormat": "{{instance}}",
+              "refId": "A",
+              "range": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit",
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "lineWidth": 2,
+                "fillOpacity": 10,
+                "showPoints": "never",
+                "spanNulls": true,
+                "thresholdsStyle": {
+                  "mode": "dashed"
+                }
+              },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 0.9
+                  }
+                ]
+              },
+              "min": 0,
+              "max": 1
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "table",
+              "placement": "bottom",
+              "calcs": [
+                "lastNotNull",
+                "max"
+              ]
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          }
+        },
+        {
+          "type": "timeseries",
+          "title": "Threads par instance",
+          "description": "",
+          "id": 18,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "x": 16,
+            "y": 40,
+            "w": 8,
+            "h": 8
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "max by (job, instance) ({__name__=~\"jvm_thread_count|process_runtime_jvm_threads_count\", job=~\"$job\"})",
+              "legendFormat": "{{instance}}",
+              "refId": "A",
+              "range": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "lineWidth": 2,
+                "fillOpacity": 10,
+                "showPoints": "never",
+                "spanNulls": true,
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "min": 0
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "table",
+              "placement": "bottom",
+              "calcs": [
+                "lastNotNull",
+                "max"
+              ]
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          }
+        },
+        {
+          "type": "timeseries",
+          "title": "Connexions Postgres utilisées",
+          "description": "Connexions ouvertes / max_connections, par base",
+          "id": 19,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "x": 0,
+            "y": 48,
+            "w": 12,
+            "h": 8
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "sum by (database) (pg_stat_activity_count) / max by (database) (pg_settings_max_connections)",
+              "legendFormat": "{{database}}",
+              "refId": "A",
+              "range": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit",
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "lineWidth": 2,
+                "fillOpacity": 10,
+                "showPoints": "never",
+                "spanNulls": true,
+                "thresholdsStyle": {
+                  "mode": "dashed"
+                }
+              },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 0.8
+                  }
+                ]
+              },
+              "min": 0,
+              "max": 1
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "table",
+              "placement": "bottom",
+              "calcs": [
+                "lastNotNull",
+                "max"
+              ]
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          }
+        },
+        {
+          "type": "timeseries",
+          "title": "Disponibilité des bases (exporteurs)",
+          "description": "1 = l'exporteur joint la base",
+          "id": 20,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "x": 12,
+            "y": 48,
+            "w": 12,
+            "h": 8
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "pg_up",
+              "legendFormat": "{{database}}",
+              "refId": "A",
+              "range": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "lineWidth": 2,
+                "fillOpacity": 10,
+                "showPoints": "never",
+                "spanNulls": true,
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "min": 0,
+              "max": 1
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "table",
+              "placement": "bottom",
+              "calcs": [
+                "lastNotNull",
+                "max"
+              ]
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          }
+        }
+      ]
+    }
+  sli-slo.json: |
+    {
+      "uid": "sp-sli-slo",
+      "title": "SLI / SLO",
+      "description": "Objectifs de service : disponibilité et latence, budget d'erreur et burn rate. Par défaut sur api-gateway, le point d'entrée des utilisateurs.",
+      "tags": [
+        "services-platform"
+      ],
+      "timezone": "browser",
+      "schemaVersion": 39,
+      "version": 1,
+      "editable": true,
+      "refresh": "30s",
+      "time": {
+        "from": "now-24h",
+        "to": "now"
+      },
+      "templating": {
+        "list": [
+          {
+            "name": "datasource",
+            "label": "Source",
+            "type": "datasource",
+            "query": "prometheus",
+            "current": {},
+            "hide": 0
+          },
+          {
+            "name": "job",
+            "label": "Service",
+            "type": "query",
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "query": {
+              "query": "label_values(http_server_request_duration_seconds_count, job)",
+              "refId": "job"
+            },
+            "definition": "label_values(http_server_request_duration_seconds_count, job)",
+            "refresh": 2,
+            "sort": 1,
+            "multi": false,
+            "includeAll": false,
+            "current": {
+              "text": "api-gateway",
+              "value": "api-gateway"
+            },
+            "hide": 0
+          },
+          {
+            "name": "slo_dispo",
+            "label": "SLO disponibilité (%)",
+            "type": "custom",
+            "query": "99,99.5,99.9",
+            "current": {
+              "text": "99.5",
+              "value": "99.5"
+            },
+            "options": [
+              {
+                "text": "99",
+                "value": "99",
+                "selected": false
+              },
+              {
+                "text": "99.5",
+                "value": "99.5",
+                "selected": true
+              },
+              {
+                "text": "99.9",
+                "value": "99.9",
+                "selected": false
+              }
+            ],
+            "hide": 0
+          },
+          {
+            "name": "slo_latence",
+            "label": "SLO latence (%)",
+            "type": "custom",
+            "query": "95,99,99.5",
+            "current": {
+              "text": "99",
+              "value": "99"
+            },
+            "options": [
+              {
+                "text": "95",
+                "value": "95",
+                "selected": false
+              },
+              {
+                "text": "99",
+                "value": "99",
+                "selected": true
+              },
+              {
+                "text": "99.5",
+                "value": "99.5",
+                "selected": false
+              }
+            ],
+            "hide": 0
+          },
+          {
+            "name": "seuil",
+            "label": "Seuil de latence (s)",
+            "type": "custom",
+            "query": "0.1,0.25,0.5,1",
+            "current": {
+              "text": "0.5",
+              "value": "0.5"
+            },
+            "options": [
+              {
+                "text": "0.1",
+                "value": "0.1",
+                "selected": false
+              },
+              {
+                "text": "0.25",
+                "value": "0.25",
+                "selected": false
+              },
+              {
+                "text": "0.5",
+                "value": "0.5",
+                "selected": true
+              },
+              {
+                "text": "1",
+                "value": "1",
+                "selected": false
+              }
+            ],
+            "hide": 0
+          },
+          {
+            "name": "fenetre",
+            "label": "Fenêtre du SLO",
+            "type": "custom",
+            "query": "7d,30d",
+            "current": {
+              "text": "30d",
+              "value": "30d"
+            },
+            "options": [
+              {
+                "text": "7d",
+                "value": "7d",
+                "selected": false
+              },
+              {
+                "text": "30d",
+                "value": "30d",
+                "selected": true
+              }
+            ],
+            "hide": 0
+          }
+        ]
+      },
+      "annotations": {
+        "list": []
+      },
+      "panels": [
+        {
+          "type": "row",
+          "title": "Disponibilité",
+          "id": 1,
+          "collapsed": false,
+          "panels": [],
+          "gridPos": {
+            "x": 0,
+            "y": 0,
+            "w": 24,
+            "h": 1
+          }
+        },
+        {
+          "type": "stat",
+          "title": "SLI disponibilité ($fenetre)",
+          "description": "Part des requêtes sans erreur serveur (5xx), sondes exclues",
+          "id": 2,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "x": 0,
+            "y": 1,
+            "w": 5,
+            "h": 4
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "1 - ((sum(increase(http_server_request_duration_seconds_count{job=~\"$job\", http_route!~\"/manage.*\", http_response_status_code=~\"5..\"}[$fenetre])) or vector(0)) / sum(increase(http_server_request_duration_seconds_count{job=~\"$job\", http_route!~\"/manage.*\"}[$fenetre])))",
+              "legendFormat": "",
+              "refId": "A",
+              "range": false,
+              "instant": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "red",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 0.99
+                  },
+                  {
+                    "color": "green",
+                    "value": 0.995
+                  }
+                ]
+              },
+              "color": {
+                "mode": "thresholds"
+              },
+              "decimals": 3
+            },
+            "overrides": []
+          },
+          "options": {
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "colorMode": "background",
+            "graphMode": "none",
+            "textMode": "value",
+            "justifyMode": "center",
+            "orientation": "auto"
+          }
+        },
+        {
+          "type": "stat",
+          "title": "Objectif (SLO)",
+          "description": "",
+          "id": 3,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "x": 5,
+            "y": 1,
+            "w": 4,
+            "h": 4
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "vector($slo_dispo / 100)",
+              "legendFormat": "",
+              "refId": "A",
+              "range": false,
+              "instant": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "color": {
+                "mode": "thresholds"
+              },
+              "decimals": 2
+            },
+            "overrides": []
+          },
+          "options": {
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "colorMode": "background",
+            "graphMode": "none",
+            "textMode": "value",
+            "justifyMode": "center",
+            "orientation": "auto"
+          }
+        },
+        {
+          "type": "stat",
+          "title": "Budget d'erreur restant",
+          "description": "Part du budget d'erreur encore disponible sur la fenêtre. Négatif : SLO non tenu.",
+          "id": 4,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "x": 9,
+            "y": 1,
+            "w": 5,
+            "h": 4
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "1 - ((sum(increase(http_server_request_duration_seconds_count{job=~\"$job\", http_route!~\"/manage.*\", http_response_status_code=~\"5..\"}[$fenetre])) or vector(0)) / sum(increase(http_server_request_duration_seconds_count{job=~\"$job\", http_route!~\"/manage.*\"}[$fenetre]))) / (1 - $slo_dispo / 100)",
+              "legendFormat": "",
+              "refId": "A",
+              "range": false,
+              "instant": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "red",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 0.25
+                  },
+                  {
+                    "color": "green",
+                    "value": 0.5
+                  }
+                ]
+              },
+              "color": {
+                "mode": "thresholds"
+              },
+              "decimals": 1
+            },
+            "overrides": []
+          },
+          "options": {
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "colorMode": "background",
+            "graphMode": "none",
+            "textMode": "value",
+            "justifyMode": "center",
+            "orientation": "auto"
+          }
+        },
+        {
+          "type": "stat",
+          "title": "Burn rate 1 h",
+          "description": "Vitesse de consommation du budget sur la dernière heure. 1 = budget épuisé pile en fin de fenêtre ; ≥ 14,4 = alerte rapide (2 % du budget de 30 jours brûlé en 1 h)",
+          "id": 5,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "x": 14,
+            "y": 1,
+            "w": 5,
+            "h": 4
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "((sum(increase(http_server_request_duration_seconds_count{job=~\"$job\", http_route!~\"/manage.*\", http_response_status_code=~\"5..\"}[1h])) or vector(0)) / sum(increase(http_server_request_duration_seconds_count{job=~\"$job\", http_route!~\"/manage.*\"}[1h]))) / (1 - $slo_dispo / 100)",
+              "legendFormat": "",
+              "refId": "A",
+              "range": false,
+              "instant": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "suffix: ×",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 6
+                  },
+                  {
+                    "color": "red",
+                    "value": 14.4
+                  }
+                ]
+              },
+              "color": {
+                "mode": "thresholds"
+              },
+              "decimals": 1
+            },
+            "overrides": []
+          },
+          "options": {
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "colorMode": "background",
+            "graphMode": "none",
+            "textMode": "value",
+            "justifyMode": "center",
+            "orientation": "auto"
+          }
+        },
+        {
+          "type": "stat",
+          "title": "Burn rate 6 h",
+          "description": "Sur 6 h ; ≥ 6 = alerte (5 % du budget de 30 jours brûlé en 6 h)",
+          "id": 6,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "x": 19,
+            "y": 1,
+            "w": 5,
+            "h": 4
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "((sum(increase(http_server_request_duration_seconds_count{job=~\"$job\", http_route!~\"/manage.*\", http_response_status_code=~\"5..\"}[6h])) or vector(0)) / sum(increase(http_server_request_duration_seconds_count{job=~\"$job\", http_route!~\"/manage.*\"}[6h]))) / (1 - $slo_dispo / 100)",
+              "legendFormat": "",
+              "refId": "A",
+              "range": false,
+              "instant": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "suffix: ×",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 6
+                  },
+                  {
+                    "color": "red",
+                    "value": 14.4
+                  }
+                ]
+              },
+              "color": {
+                "mode": "thresholds"
+              },
+              "decimals": 1
+            },
+            "overrides": []
+          },
+          "options": {
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "colorMode": "background",
+            "graphMode": "none",
+            "textMode": "value",
+            "justifyMode": "center",
+            "orientation": "auto"
+          }
+        },
+        {
+          "type": "timeseries",
+          "title": "SLI disponibilité glissant (1 h) et objectif",
+          "description": "",
+          "id": 7,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "x": 0,
+            "y": 5,
+            "w": 12,
+            "h": 8
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "1 - ((sum(increase(http_server_request_duration_seconds_count{job=~\"$job\", http_route!~\"/manage.*\", http_response_status_code=~\"5..\"}[1h])) or vector(0)) / sum(increase(http_server_request_duration_seconds_count{job=~\"$job\", http_route!~\"/manage.*\"}[1h])))",
+              "legendFormat": "SLI (1 h)",
+              "refId": "A",
+              "range": true
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "vector($slo_dispo / 100)",
+              "legendFormat": "objectif",
+              "refId": "B",
+              "range": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit",
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "lineWidth": 2,
+                "fillOpacity": 10,
+                "showPoints": "never",
+                "spanNulls": true,
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "max": 1
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "table",
+              "placement": "bottom",
+              "calcs": [
+                "lastNotNull",
+                "max"
+              ]
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          }
+        },
+        {
+          "type": "timeseries",
+          "title": "Burn rate (1 h et 6 h)",
+          "description": "Seuils : 6 (6 h) et 14,4 (1 h), méthode multi-fenêtres du SRE workbook de Google",
+          "id": 8,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "x": 12,
+            "y": 5,
+            "w": 12,
+            "h": 8
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "((sum(increase(http_server_request_duration_seconds_count{job=~\"$job\", http_route!~\"/manage.*\", http_response_status_code=~\"5..\"}[1h])) or vector(0)) / sum(increase(http_server_request_duration_seconds_count{job=~\"$job\", http_route!~\"/manage.*\"}[1h]))) / (1 - $slo_dispo / 100)",
+              "legendFormat": "1 h",
+              "refId": "A",
+              "range": true
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "((sum(increase(http_server_request_duration_seconds_count{job=~\"$job\", http_route!~\"/manage.*\", http_response_status_code=~\"5..\"}[6h])) or vector(0)) / sum(increase(http_server_request_duration_seconds_count{job=~\"$job\", http_route!~\"/manage.*\"}[6h]))) / (1 - $slo_dispo / 100)",
+              "legendFormat": "6 h",
+              "refId": "B",
+              "range": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "suffix: ×",
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "lineWidth": 2,
+                "fillOpacity": 10,
+                "showPoints": "never",
+                "spanNulls": true,
+                "thresholdsStyle": {
+                  "mode": "dashed"
+                }
+              },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 6
+                  },
+                  {
+                    "color": "red",
+                    "value": 14.4
+                  }
+                ]
+              },
+              "min": 0
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "table",
+              "placement": "bottom",
+              "calcs": [
+                "lastNotNull",
+                "max"
+              ]
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          }
+        },
+        {
+          "type": "row",
+          "title": "Latence",
+          "id": 9,
+          "collapsed": false,
+          "panels": [],
+          "gridPos": {
+            "x": 0,
+            "y": 13,
+            "w": 24,
+            "h": 1
+          }
+        },
+        {
+          "type": "stat",
+          "title": "SLI latence ($fenetre)",
+          "description": "Part des requêtes servies en moins de $seuil s, sondes exclues",
+          "id": 10,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "x": 0,
+            "y": 14,
+            "w": 5,
+            "h": 4
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "1 - (1 - (sum(increase(http_server_request_duration_seconds_bucket{job=~\"$job\", http_route!~\"/manage.*\", le=\"$seuil\"}[$fenetre])) / sum(increase(http_server_request_duration_seconds_count{job=~\"$job\", http_route!~\"/manage.*\"}[$fenetre]))))",
+              "legendFormat": "",
+              "refId": "A",
+              "range": false,
+              "instant": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "red",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 0.99
+                  },
+                  {
+                    "color": "green",
+                    "value": 0.995
+                  }
+                ]
+              },
+              "color": {
+                "mode": "thresholds"
+              },
+              "decimals": 3
+            },
+            "overrides": []
+          },
+          "options": {
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "colorMode": "background",
+            "graphMode": "none",
+            "textMode": "value",
+            "justifyMode": "center",
+            "orientation": "auto"
+          }
+        },
+        {
+          "type": "stat",
+          "title": "Objectif (SLO)",
+          "description": "",
+          "id": 11,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "x": 5,
+            "y": 14,
+            "w": 4,
+            "h": 4
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "vector($slo_latence / 100)",
+              "legendFormat": "",
+              "refId": "A",
+              "range": false,
+              "instant": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "color": {
+                "mode": "thresholds"
+              },
+              "decimals": 2
+            },
+            "overrides": []
+          },
+          "options": {
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "colorMode": "background",
+            "graphMode": "none",
+            "textMode": "value",
+            "justifyMode": "center",
+            "orientation": "auto"
+          }
+        },
+        {
+          "type": "stat",
+          "title": "Budget d'erreur restant",
+          "description": "Part du budget d'erreur encore disponible sur la fenêtre. Négatif : SLO non tenu.",
+          "id": 12,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "x": 9,
+            "y": 14,
+            "w": 5,
+            "h": 4
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "1 - (1 - (sum(increase(http_server_request_duration_seconds_bucket{job=~\"$job\", http_route!~\"/manage.*\", le=\"$seuil\"}[$fenetre])) / sum(increase(http_server_request_duration_seconds_count{job=~\"$job\", http_route!~\"/manage.*\"}[$fenetre])))) / (1 - $slo_latence / 100)",
+              "legendFormat": "",
+              "refId": "A",
+              "range": false,
+              "instant": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "red",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 0.25
+                  },
+                  {
+                    "color": "green",
+                    "value": 0.5
+                  }
+                ]
+              },
+              "color": {
+                "mode": "thresholds"
+              },
+              "decimals": 1
+            },
+            "overrides": []
+          },
+          "options": {
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "colorMode": "background",
+            "graphMode": "none",
+            "textMode": "value",
+            "justifyMode": "center",
+            "orientation": "auto"
+          }
+        },
+        {
+          "type": "stat",
+          "title": "Burn rate 1 h",
+          "description": "Vitesse de consommation du budget sur la dernière heure. 1 = budget épuisé pile en fin de fenêtre ; ≥ 14,4 = alerte rapide (2 % du budget de 30 jours brûlé en 1 h)",
+          "id": 13,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "x": 14,
+            "y": 14,
+            "w": 5,
+            "h": 4
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "(1 - (sum(increase(http_server_request_duration_seconds_bucket{job=~\"$job\", http_route!~\"/manage.*\", le=\"$seuil\"}[1h])) / sum(increase(http_server_request_duration_seconds_count{job=~\"$job\", http_route!~\"/manage.*\"}[1h])))) / (1 - $slo_latence / 100)",
+              "legendFormat": "",
+              "refId": "A",
+              "range": false,
+              "instant": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "suffix: ×",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 6
+                  },
+                  {
+                    "color": "red",
+                    "value": 14.4
+                  }
+                ]
+              },
+              "color": {
+                "mode": "thresholds"
+              },
+              "decimals": 1
+            },
+            "overrides": []
+          },
+          "options": {
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "colorMode": "background",
+            "graphMode": "none",
+            "textMode": "value",
+            "justifyMode": "center",
+            "orientation": "auto"
+          }
+        },
+        {
+          "type": "stat",
+          "title": "Burn rate 6 h",
+          "description": "Sur 6 h ; ≥ 6 = alerte (5 % du budget de 30 jours brûlé en 6 h)",
+          "id": 14,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "x": 19,
+            "y": 14,
+            "w": 5,
+            "h": 4
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "(1 - (sum(increase(http_server_request_duration_seconds_bucket{job=~\"$job\", http_route!~\"/manage.*\", le=\"$seuil\"}[6h])) / sum(increase(http_server_request_duration_seconds_count{job=~\"$job\", http_route!~\"/manage.*\"}[6h])))) / (1 - $slo_latence / 100)",
+              "legendFormat": "",
+              "refId": "A",
+              "range": false,
+              "instant": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "suffix: ×",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 6
+                  },
+                  {
+                    "color": "red",
+                    "value": 14.4
+                  }
+                ]
+              },
+              "color": {
+                "mode": "thresholds"
+              },
+              "decimals": 1
+            },
+            "overrides": []
+          },
+          "options": {
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "colorMode": "background",
+            "graphMode": "none",
+            "textMode": "value",
+            "justifyMode": "center",
+            "orientation": "auto"
+          }
+        },
+        {
+          "type": "timeseries",
+          "title": "SLI latence glissant (1 h) et objectif",
+          "description": "",
+          "id": 15,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "x": 0,
+            "y": 18,
+            "w": 12,
+            "h": 8
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "1 - (1 - (sum(increase(http_server_request_duration_seconds_bucket{job=~\"$job\", http_route!~\"/manage.*\", le=\"$seuil\"}[1h])) / sum(increase(http_server_request_duration_seconds_count{job=~\"$job\", http_route!~\"/manage.*\"}[1h]))))",
+              "legendFormat": "SLI (1 h)",
+              "refId": "A",
+              "range": true
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "vector($slo_latence / 100)",
+              "legendFormat": "objectif",
+              "refId": "B",
+              "range": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit",
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "lineWidth": 2,
+                "fillOpacity": 10,
+                "showPoints": "never",
+                "spanNulls": true,
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "max": 1
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "table",
+              "placement": "bottom",
+              "calcs": [
+                "lastNotNull",
+                "max"
+              ]
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          }
+        },
+        {
+          "type": "timeseries",
+          "title": "Burn rate (1 h et 6 h)",
+          "description": "Seuils : 6 (6 h) et 14,4 (1 h), méthode multi-fenêtres du SRE workbook de Google",
+          "id": 16,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "x": 12,
+            "y": 18,
+            "w": 12,
+            "h": 8
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "(1 - (sum(increase(http_server_request_duration_seconds_bucket{job=~\"$job\", http_route!~\"/manage.*\", le=\"$seuil\"}[1h])) / sum(increase(http_server_request_duration_seconds_count{job=~\"$job\", http_route!~\"/manage.*\"}[1h])))) / (1 - $slo_latence / 100)",
+              "legendFormat": "1 h",
+              "refId": "A",
+              "range": true
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "(1 - (sum(increase(http_server_request_duration_seconds_bucket{job=~\"$job\", http_route!~\"/manage.*\", le=\"$seuil\"}[6h])) / sum(increase(http_server_request_duration_seconds_count{job=~\"$job\", http_route!~\"/manage.*\"}[6h])))) / (1 - $slo_latence / 100)",
+              "legendFormat": "6 h",
+              "refId": "B",
+              "range": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "suffix: ×",
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "lineWidth": 2,
+                "fillOpacity": 10,
+                "showPoints": "never",
+                "spanNulls": true,
+                "thresholdsStyle": {
+                  "mode": "dashed"
+                }
+              },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 6
+                  },
+                  {
+                    "color": "red",
+                    "value": 14.4
+                  }
+                ]
+              },
+              "min": 0
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "table",
+              "placement": "bottom",
+              "calcs": [
+                "lastNotNull",
+                "max"
+              ]
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          }
+        }
+      ]
+    }

@@ -100,6 +100,7 @@ apply api-gateway/deployment.yml
 apply api-gateway/service.yml
 apply front-end/deployment.yml
 apply front-end/service.yml
+apply observability/grafana-dashboards.yml
 apply observability/otel-lgtm.yml
 
 # En local, une réplique suffit (les manifestes en prévoient 2 pour la gateway et produit)

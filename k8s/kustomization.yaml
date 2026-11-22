@@ -26,6 +26,7 @@ resources:
   - api-gateway/service.yml
   - front-end/deployment.yml
   - front-end/service.yml
+  - observability/grafana-dashboards.yml       # Golden signals, SLI / SLO
   - observability/otel-lgtm.yml             # traces / métriques / logs (Grafana en local)
 
 # Images locales des manifestes → images du registry
@@ -53,7 +54,6 @@ images:
     newTag: latest
 
 patches:
-  # Les images sont tirées du registry (et non plus importées localement)
   - target:
       kind: Deployment
     patch: |-
@@ -64,7 +64,6 @@ patches:
       - op: add
         path: /spec/template/spec/containers/0/imagePullPolicy
         value: IfNotPresent
-  # Cluster d'une seule machine : une réplique suffit pour la gateway et produit
   - target:
       kind: Deployment
       name: api-gateway|product-service
