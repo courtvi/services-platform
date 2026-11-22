@@ -101,7 +101,7 @@ pipeline {
                     bat '''
                         @echo off
                         for %%m in (eureka-server api-gateway produit-service client-service commande-service devis-service) do (
-                            call %MVN% -pl %%m %SONAR_MVN% -Dsonar.projectKey=%%m -Dsonar.projectName=%%m || exit /b 1
+                            call %MVN% -f %%m\pom.xml %SONAR_MVN% -Dsonar.projectKey=%%m -Dsonar.projectName=%%m || exit /b 1
                         )
                     '''
                 }
