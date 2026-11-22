@@ -144,6 +144,7 @@ wait_platform() {
 setup_keycloak() {
   log "Keycloak (realm, clients du front, rôles, compte de connexion)"
   local cred_file="$MTLS_OUT_DIR/.app-credentials"
+  mkdir -p "$MTLS_OUT_DIR"     # absent quand les certificats du cluster ont été conservés
   APP_USER="${APP_USER:-admin@lorrconnect.local}"
   # Le mot de passe du compte n'est imposé que s'il est connu (fourni, ou conservé par un déploiement
   # précédent depuis cette machine). Un mot de passe tiré au hasard ne sert qu'à créer le compte :
