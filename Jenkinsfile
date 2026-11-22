@@ -11,6 +11,9 @@
 //   - JDK 21, Maven, Docker Desktop (conteneurs Linux), Git pour Windows, kubectl, Python 3
 //     dans le PATH du service Jenkins ; plugin SonarQube (serveur nommé « SonarQube »).
 //   - Si Git Bash n'est pas dans C:\Program Files\Git, adapter GIT_BASH ci-dessous.
+//   - Un JDK 21 déclaré dans Jenkins : Administrer Jenkins → Tools → JDK installations → Add JDK,
+//     nom « jdk21 », JAVA_HOME = dossier du JDK (ex. C:\Users\bde_v\.jdks\openjdk-21.0.2),
+//     sans « Install automatically ».
 //   - Le service Jenkins doit tourner sous TON compte Windows (services.msc → Jenkins → Connexion),
 //     pas sous « Système local » : sinon il n'a accès ni à Docker Desktop ni à tes outils.
 // Credentials Jenkins :
@@ -23,6 +26,12 @@
 // =============================================================================
 pipeline {
     agent any
+
+    // JDK déclaré dans Jenkins (Administrer Jenkins → Tools → JDK installations, nom « jdk21 ») :
+    // JAVA_HOME et PATH sont fixés pour tout le build, quelles que soient les variables de Windows
+    tools {
+        jdk 'jdk21'
+    }
 
     options {
         timestamps()
