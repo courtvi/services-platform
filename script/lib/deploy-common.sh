@@ -31,6 +31,10 @@ fi
 export MTLS_OUT_DIR
 MTLS_OUT_DIR="$(native_path "${MTLS_OUT_DIR:-$MTLS_DIR/out}")"
 
+# Python écrit en UTF-8 même sans console (Jenkins sous Windows utilise sinon cp1252,
+# qui ne sait pas encoder ✓ et casse les accents)
+export PYTHONUTF8=1 PYTHONIOENCODING=utf-8
+
 python_cmd() {  # premier Python 3 réellement utilisable (sous Windows, « python » peut être un raccourci du Store)
   local p
   for p in python3 python; do
