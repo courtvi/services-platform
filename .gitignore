@@ -10,3 +10,7 @@ k8s/.ovh-env
 
 # Identifiants locaux de déploiement (IntelliJ) et certificats mTLS générés
 script/.deploy.env
+
+# Fichiers compilés Python
+__pycache__/
+*.pyc
