@@ -13,3 +13,18 @@ spec:
     - port: 8080
       targetPort: 8080
       nodePort: 30090
+---
+# Port de management de Keycloak (métriques) : ClusterIP, jamais exposé hors du cluster
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak-management
+  namespace: lorrconnect
+spec:
+  type: ClusterIP
+  selector:
+    app: keycloak
+  ports:
+    - name: management
+      port: 9000
+      targetPort: management

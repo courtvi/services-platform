@@ -74,8 +74,44 @@ create_app_secrets() {
   secret_if_absent keycloak-db-secret --from-literal=KC_DB_PASSWORD="$kc_db_pwd"
   secret_if_absent postgres-commande-secret \
     --from-literal=POSTGRES_USER=commande --from-literal=POSTGRES_PASSWORD="$(openssl rand -hex 16)" --from-literal=POSTGRES_DB=commandedb
+  # Compte « monitoring » des exporteurs Postgres (lecture seule, rôle pg_monitor)
+  secret_if_absent postgres-exporter-secret --from-literal=DATA_SOURCE_PASS="$(openssl rand -hex 16)"
   secret_if_absent mail-secret \
     --from-literal=MAIL_USERNAME="${MAIL_USERNAME:-}" --from-literal=MAIL_PASSWORD="${MAIL_PASSWORD:-}"
+}
+
+# Les bases Postgres passent en stratégie Recreate (jamais deux Postgres sur les mêmes données).
+# kubectl apply ne sait pas retirer seul le bloc rollingUpdate ajouté par Kubernetes : on bascule
+# la stratégie une fois, avant d'appliquer les manifestes (sans redémarrer les pods).
+prepare_postgres_strategy() {
+  local d
+  for d in postgres-keycloak postgres-commande; do
+    if [ "$(kubectl get deployment "$d" -n "$NS" -o jsonpath='{.spec.strategy.type}' 2>/dev/null)" = "RollingUpdate" ]; then
+      kubectl patch deployment "$d" -n "$NS" --type=json \
+        -p '[{"op":"remove","path":"/spec/strategy/rollingUpdate"},{"op":"replace","path":"/spec/strategy/type","value":"Recreate"}]' >/dev/null
+      echo "  ✓ $d : stratégie Recreate"
+    fi
+  done
+}
+
+# Compte « monitoring » (rôle pg_monitor, lecture seule) utilisé par les exporteurs de métriques.
+# Créé s'il manque, mot de passe resynchronisé avec le secret à chaque déploiement.
+setup_db_monitoring() {
+  log "Supervision des bases Postgres (compte monitoring, lecture seule)"
+  local pass d
+  pass=$(kubectl get secret postgres-exporter-secret -n "$NS" -o jsonpath='{.data.DATA_SOURCE_PASS}' | base64 -d)
+  [[ "$pass" =~ ^[0-9a-f]+$ ]] || fail "mot de passe du compte monitoring inattendu (secret postgres-exporter-secret)"
+  for d in postgres-keycloak postgres-commande; do
+    # SQL passé par l'entrée standard : le mot de passe n'apparaît pas dans la ligne de commande
+    kubectl exec -i -n "$NS" deploy/"$d" -c "$d" -- sh -c 'psql -q -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d postgres' >/dev/null <<SQL \
+      && ok "$d" || fail "$d : création du compte monitoring impossible"
+\\set pass '$pass'
+SET client_min_messages = warning;
+SELECT 'CREATE ROLE monitoring LOGIN' WHERE NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'monitoring') \\gexec
+ALTER ROLE monitoring WITH LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE PASSWORD :'pass';
+GRANT pg_monitor TO monitoring;
+SQL
+  done
 }
 
 # --- Certificats et secrets mTLS ----------------------------------------------

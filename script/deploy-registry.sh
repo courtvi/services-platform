@@ -65,6 +65,7 @@ log "Manifestes (images $REGISTRY/*:$IMAGE_TAG${PUBLIC_URL:+, adresse publique $
 # kustomize réécrit les images vers ghcr.io/courtvi/<image>:latest ; on y met le registry et le tag déployés,
 # puis l'adresse publique à la place des marqueurs de la variante « public ».
 # Un changement d'image ou de configuration redéploie les pods concernés.
+prepare_postgres_strategy
 kubectl kustomize "$(native_path "$KUSTOMIZE_DIR")" \
   | sed -E -e "s#image: ghcr\.io/courtvi/([a-z0-9-]+):latest#image: ${REGISTRY}/\1:${IMAGE_TAG}#" \
            -e "s#__PUBLIC_URL__#${PUBLIC_URL:-}#g" \
@@ -72,5 +73,6 @@ kubectl kustomize "$(native_path "$KUSTOMIZE_DIR")" \
   | kubectl apply -f -
 
 wait_platform
+setup_db_monitoring
 setup_keycloak
 print_status

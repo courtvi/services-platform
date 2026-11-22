@@ -25,6 +25,8 @@ spec:
           args: ["start-dev"]
           ports:
             - containerPort: 8080
+            - name: management     # métriques (/metrics), interne au cluster
+              containerPort: 9000
           env:
             - name: KEYCLOAK_ADMIN
               value: admin
@@ -40,6 +42,13 @@ spec:
               value: "localhost"
             - name: KC_HOSTNAME_PORT
               value: "30090"
+            # Observabilité : métriques sur le port de management, traces (et requêtes JDBC) vers otel-lgtm
+            - name: KC_METRICS_ENABLED
+              value: "true"
+            - name: KC_TRACING_ENABLED
+              value: "true"
+            - name: KC_TRACING_ENDPOINT
+              value: http://otel-lgtm.lorrconnect.svc.cluster.local:4317
             # PostgreSQL
             - name: KC_DB
               value: postgres

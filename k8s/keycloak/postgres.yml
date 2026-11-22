@@ -20,6 +20,10 @@ metadata:
     app: postgres-keycloak
 spec:
   replicas: 1
+  # Recreate : l'ancien pod s'arrête avant que le nouveau démarre. Deux Postgres ne doivent
+  # jamais ouvrir le même répertoire de données (risque de corruption)
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: postgres-keycloak
@@ -56,6 +60,30 @@ spec:
             limits:
               memory: "512Mi"
               cpu: "250m"
+        # Exporteur de métriques Postgres (lu par otel-lgtm) : compte « monitoring » en lecture seule
+        # (rôle pg_monitor), créé par le script de déploiement
+        - name: postgres-exporter
+          image: quay.io/prometheuscommunity/postgres-exporter:v0.17.1
+          ports:
+            - name: metrics
+              containerPort: 9187
+          env:
+            - name: DATA_SOURCE_URI
+              value: "localhost:5432/postgres?sslmode=disable"
+            - name: DATA_SOURCE_USER
+              value: monitoring
+            - name: DATA_SOURCE_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-exporter-secret
+                  key: DATA_SOURCE_PASS
+          resources:
+            requests:
+              memory: "32Mi"
+              cpu: "20m"
+            limits:
+              memory: "64Mi"
+              cpu: "100m"
       volumes:
         - name: postgres-keycloak-data
           persistentVolumeClaim:
@@ -71,5 +99,9 @@ spec:
   selector:
     app: postgres-keycloak
   ports:
-    - port: 5432
+    - name: postgres
+      port: 5432
       targetPort: 5432
+    - name: metrics
+      port: 9187
+      targetPort: metrics

@@ -84,6 +84,7 @@ fi
 log "Manifestes Kubernetes (images locales)"
 # -----------------------------------------------------------------------------
 apply() { kubectl apply -f "$ROOT/k8s/$1" >/dev/null && echo "  ✓ $1"; }
+prepare_postgres_strategy
 apply keycloak/postgres.yml
 apply keycloak/deployment.yml
 apply keycloak/service.yml
@@ -112,5 +113,6 @@ done
 kubectl rollout restart deployment/product-service -n default >/dev/null
 
 wait_platform
+setup_db_monitoring
 setup_keycloak
 print_status
