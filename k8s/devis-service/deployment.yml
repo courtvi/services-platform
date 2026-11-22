@@ -49,6 +49,15 @@ spec:
             initialDelaySeconds: 20
             periodSeconds: 10
             failureThreshold: 5
+          # Laisse jusqu'à 5 min au démarrage (tous les pods démarrent en même temps au reboot) ;
+          # la liveness ne prend le relais qu'une fois le démarrage réussi
+          startupProbe:
+            httpGet:
+              path: /manage/health/liveness
+              port: management
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 30
           livenessProbe:
             httpGet:
               path: /manage/health/liveness
