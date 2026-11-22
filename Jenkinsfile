@@ -52,6 +52,8 @@ pipeline {
     environment {
         GIT_BASH     = 'C:\\Program Files\\Git\\bin\\bash.exe'
         MVN          = 'mvn --batch-mode --no-transfer-progress'
+        // Coordonnées complètes : le préfixe « sonar: » n'est pas résolu par Maven sans pluginGroups
+        SONAR_MVN    = 'org.sonarsource.scanner.maven:sonar-maven-plugin:5.9.0.7382:sonar'
         REGISTRY     = 'ghcr.io/courtvi'
         MTLS_OUT_DIR = "${env.JENKINS_HOME}\\mtls"     // certificats conservés hors du workspace
         TARGET_HOST  = "${params.TARGET_HOST}"
@@ -99,7 +101,7 @@ pipeline {
                     bat '''
                         @echo off
                         for %%m in (eureka-server api-gateway produit-service client-service commande-service devis-service) do (
-                            call %MVN% -pl %%m sonar:sonar -Dsonar.projectKey=%%m -Dsonar.projectName=%%m || exit /b 1
+                            call %MVN% -pl %%m %SONAR_MVN% -Dsonar.projectKey=%%m -Dsonar.projectName=%%m || exit /b 1
                         )
                     '''
                 }
